@@ -1,0 +1,32 @@
+{
+  "title": "Kannada",
+  "nativeName": "ಕನ್ನಡ",
+  "locale": "kn",
+  "description": "Kannada lessons for script, greetings, useful words, and daily sentences.",
+  "pages": [
+    {
+      "slug": "basics",
+      "title": "Basics",
+      "description": "Learn the shape of the Kannada script and first sounds.",
+      "order": 1
+    },
+    {
+      "slug": "greetings",
+      "title": "Greetings",
+      "description": "Practice common greetings and polite phrases.",
+      "order": 2
+    },
+    {
+      "slug": "words",
+      "title": "Words",
+      "description": "Build everyday Kannada vocabulary.",
+      "order": 3
+    },
+    {
+      "slug": "sentences",
+      "title": "Sentences",
+      "description": "Read and form short daily sentences.",
+      "order": 4
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "title": "Sanskrit",
+  "nativeName": "संस्कृतम्",
+  "locale": "sa",
+  "description": "Classical language lessons with script, grammar, vocabulary, and sentence practice.",
+  "pages": [
+    {
+      "slug": "basics",
+      "title": "Basics",
+      "description": "Start with sounds, script habits, and the shape of simple words.",
+      "order": 1
+    },
+    {
+      "slug": "grammar",
+      "title": "Grammar",
+      "description": "Understand nouns, verbs, agreement, and sentence structure.",
+      "order": 2
+    },
+    {
+      "slug": "words",
+      "title": "Words",
+      "description": "Build a small, reliable vocabulary.",
+      "order": 3
+    },
+    {
+      "slug": "sentences",
+      "title": "Sentences",
+      "description": "Practice reading and forming complete sentences.",
+      "order": 4
+    }
+  ]
+}

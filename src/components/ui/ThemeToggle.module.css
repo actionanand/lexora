@@ -1,0 +1,16 @@
+.toggle {
+  width: 40px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
