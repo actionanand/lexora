@@ -27,7 +27,7 @@ export function LandingPageClient({
         <a className={styles.brand} href={withBasePath("/")}>
           <Image
             className={styles.brandLogo}
-            src="/images/lexora.png"
+            src={withBasePath("/images/lexora.png")}
             width={38}
             height={38}
             alt=""
@@ -78,7 +78,7 @@ export function LandingPageClient({
         <div className={styles.heroMedia} aria-hidden>
           <Image
             className={styles.heroImage}
-            src="/images/lexora.png"
+            src={withBasePath("/images/lexora.png")}
             width={430}
             height={430}
             alt=""
