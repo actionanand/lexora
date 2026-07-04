@@ -21,6 +21,11 @@ The same content refresh also creates:
 - `public/sitemap.xml`
 - typed generated indexes in `src/generated/`
 
+## Live Urls
+
+1. https://actionanand.github.io/lexora/
+2. https://ar-lexora.pages.dev/
+
 ## Content
 
 Current languages live in:
