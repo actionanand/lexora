@@ -8,7 +8,7 @@
     "generate-content": "node scripts/generate-content.mjs",
     "build": "node scripts/generate-content.mjs && next build",
     "build:github": "NEXT_PUBLIC_BASE_PATH=/lexora NEXT_PUBLIC_SITE_URL=https://actionanand.github.io node scripts/generate-content.mjs && NEXT_PUBLIC_BASE_PATH=/lexora NEXT_PUBLIC_SITE_URL=https://actionanand.github.io next build",
-    "build:cloudflare": "NEXT_PUBLIC_BASE_PATH= NEXT_PUBLIC_SITE_URL=https://lexora.pages.dev node scripts/generate-content.mjs && NEXT_PUBLIC_BASE_PATH= NEXT_PUBLIC_SITE_URL=https://lexora.pages.dev next build",
+    "build:cloudflare": "NEXT_PUBLIC_BASE_PATH= NEXT_PUBLIC_SITE_URL=https://ar-lexora.pages.dev node scripts/generate-content.mjs && NEXT_PUBLIC_BASE_PATH= NEXT_PUBLIC_SITE_URL=https://ar-lexora.pages.dev next build",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

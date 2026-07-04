@@ -3,7 +3,7 @@
 Use Cloudflare Pages when deploying Lexora at the root URL:
 
 ```text
-https://lexora.pages.dev/
+https://ar-lexora.pages.dev/
 ```
 
 ## Build Settings

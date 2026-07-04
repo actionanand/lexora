@@ -20,7 +20,7 @@ function normalizeBasePath(value) {
 }
 
 function normalizeSiteUrl(value) {
-  const fallback = "https://lexora.pages.dev";
+  const fallback = "https://ar-lexora.pages.dev";
   const trimmed = value?.trim() || fallback;
 
   return trimmed.replace(/\/+$/g, "");
