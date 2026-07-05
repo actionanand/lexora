@@ -58,6 +58,14 @@ function revealText(value) {
   return `${template} ${answer}`;
 }
 
+function highlightText(value) {
+  return value.split("|")[0].trim();
+}
+
+function stripHighlightSyntax(value) {
+  return value.replace(/==(.+?)==/g, (_, inner) => highlightText(inner));
+}
+
 function normalizeImageWordKey(value) {
   return value
     .trim()
@@ -218,7 +226,7 @@ function directiveText(name, value, attributes = "") {
     name === "textWord" ||
     name === "sentence"
   ) {
-    return [value.replace(/==(.+?)==/g, "$1"), label, transliteration, meaning, meaningTamil]
+    return [stripHighlightSyntax(value), label, transliteration, meaning, meaningTamil]
       .filter(Boolean)
       .join(" ");
   }
@@ -236,6 +244,7 @@ function stripMarkdown(markdown) {
       directiveText(name, value, attributes)
     )
     .replace(/\[\[([^\]]+)\]\]/g, (_, value) => revealText(value))
+    .replace(/==(.+?)==/g, (_, value) => highlightText(value))
     .replace(/\|/g, " ")
     .replace(/[#*_>~-]/g, " ")
     .replace(/\s+/g, " ")

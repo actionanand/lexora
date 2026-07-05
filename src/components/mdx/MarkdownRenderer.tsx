@@ -9,6 +9,7 @@ import {
   remarkCallouts,
   remarkCharacterDialogues,
   remarkEmojiCards,
+  remarkHighlights,
   remarkImageWords,
   remarkIcons,
   remarkRevealBlanks,
@@ -310,6 +311,168 @@ function TextWordCard({
   );
 }
 
+const highlightModes = new Set(["bg", "fg", "dual", "lightbg", "light-bg", "lightBg", "format"]);
+const textAlignments = new Set(["left", "center", "right", "justify", "start", "end"]);
+
+function normalizedHighlightMode(value?: string) {
+  const normalized = value?.trim();
+
+  if (!normalized) {
+    return "";
+  }
+
+  if (normalized === "lightBg" || normalized === "light-bg" || normalized.toLowerCase() === "lightbg") {
+    return "lightBg";
+  }
+
+  return normalized.toLowerCase();
+}
+
+function isHighlightMode(value?: string) {
+  return highlightModes.has(value ?? "") || highlightModes.has(normalizedHighlightMode(value));
+}
+
+function safeCssColor(value?: string) {
+  const trimmed = value?.trim();
+
+  if (!trimmed) {
+    return undefined;
+  }
+
+  if (
+    /^(#[0-9a-f]{3,8}|[a-zA-Z]+|rgba?\([0-9\s,%.]+\)|hsla?\([0-9\s,%.degturnrad+-]+\))$/i.test(trimmed)
+  ) {
+    return trimmed;
+  }
+
+  return undefined;
+}
+
+function safeFontWeight(value?: string) {
+  const trimmed = value?.trim();
+
+  if (!trimmed) {
+    return undefined;
+  }
+
+  return /^(normal|bold|lighter|bolder|[1-9]00)$/i.test(trimmed) ? trimmed : undefined;
+}
+
+function safeFontStyle(value?: string) {
+  const trimmed = value?.trim();
+
+  if (!trimmed) {
+    return undefined;
+  }
+
+  return /^(normal|italic|oblique)$/i.test(trimmed) ? trimmed : undefined;
+}
+
+function safeTextAlign(value?: string): CSSProperties["textAlign"] | undefined {
+  const trimmed = value?.trim();
+
+  if (!trimmed) {
+    return undefined;
+  }
+
+  return textAlignments.has(trimmed) ? (trimmed as CSSProperties["textAlign"]) : undefined;
+}
+
+function parseHighlight(raw?: string) {
+  const [text = "", ...options] = (raw ?? "").split("|");
+  let mode = options.length > 0 ? "bg" : "default";
+  let color = options[0] ?? "";
+  let backgroundColor = "";
+  let styleStart = 1;
+
+  if (normalizedHighlightMode(options[2]) === "dual") {
+    mode = "dual";
+    backgroundColor = options[1] ?? "";
+    styleStart = 3;
+  } else if (isHighlightMode(options[1])) {
+    mode = normalizedHighlightMode(options[1]);
+    styleStart = 2;
+
+    if (mode === "dual") {
+      backgroundColor = options[2] ?? "";
+      styleStart = 3;
+    }
+  }
+
+  const styleParts = options.slice(styleStart);
+  let fontWeight = safeFontWeight(styleParts[0]);
+  let fontStyle = safeFontStyle(styleParts[1]);
+  let textAlign = safeTextAlign(styleParts[2] || styleParts[3]);
+
+  if (!fontWeight && !fontStyle && !textAlign) {
+    textAlign = safeTextAlign(styleParts[0]);
+    fontStyle = safeFontStyle(styleParts[0]);
+  }
+
+  return {
+    text,
+    mode,
+    color,
+    backgroundColor,
+    fontWeight,
+    fontStyle,
+    textAlign
+  };
+}
+
+function HighlightText({ raw }: { raw?: string }) {
+  const highlight = parseHighlight(raw);
+  const color = safeCssColor(highlight.color);
+  const backgroundColor = safeCssColor(highlight.backgroundColor);
+  const style: CSSProperties = {
+    fontWeight: highlight.fontWeight,
+    fontStyle: highlight.fontStyle,
+    textAlign: highlight.textAlign
+  };
+
+  if (highlight.mode === "bg" && color) {
+    style.backgroundColor = color;
+    style.color = "#fff";
+  }
+
+  if (highlight.mode === "fg" && color) {
+    style.color = color;
+  }
+
+  if (highlight.mode === "dual") {
+    style.color = color;
+    style.backgroundColor = backgroundColor;
+  }
+
+  if (highlight.mode === "lightBg") {
+    style.backgroundColor = color ?? "#d1ffbd";
+    style.color = "#4b0082";
+  }
+
+  if (highlight.mode === "format" && color) {
+    style.color = color;
+  }
+
+  const className = [
+    styles.highlight,
+    highlight.mode === "default" ? styles.highlightDefault : "",
+    highlight.mode === "bg" ? styles.highlightBg : "",
+    highlight.mode === "fg" ? styles.highlightFg : "",
+    highlight.mode === "dual" ? styles.highlightDual : "",
+    highlight.mode === "lightBg" ? styles.highlightLightBg : "",
+    highlight.mode === "format" ? styles.highlightFormat : "",
+    highlight.textAlign ? styles.highlightBlock : ""
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span className={className} style={style}>
+      {highlight.text}
+    </span>
+  );
+}
+
 function highlightedParts(value: string) {
   const parts: ReactNode[] = [];
   const pattern = /==(.+?)==/g;
@@ -321,11 +484,7 @@ function highlightedParts(value: string) {
       parts.push(value.slice(cursor, match.index));
     }
 
-    parts.push(
-      <span className={styles.sentenceHighlight} key={`${match.index}-${match[1]}`}>
-        {match[1]}
-      </span>
-    );
+    parts.push(<HighlightText raw={match[1]} key={`${match.index}-${match[1]}`} />);
     cursor = match.index + match[0].length;
   }
 
@@ -348,7 +507,7 @@ function SentenceCard({
   transliteration?: string;
 }) {
   const splitLayout = Boolean(transliteration && meaning && meaningTamil);
-  const readableLabel = [sentence?.replace(/==(.+?)==/g, "$1"), transliteration, meaning, meaningTamil]
+  const readableLabel = [sentence?.replace(/==(.+?)==/g, (_, value) => parseHighlight(value).text), transliteration, meaning, meaningTamil]
     .filter(Boolean)
     .join(" ");
 
@@ -559,6 +718,9 @@ const markdownComponents = {
   "lexora-icon"({ node }: NodeProps) {
     return <InlineIcon name={nodeProperty(node, "name")} />;
   },
+  "lexora-highlight"({ node }: NodeProps) {
+    return <HighlightText raw={nodeProperty(node, "raw")} />;
+  },
   "lexora-emoji"({ node }: NodeProps) {
     return (
       <EmojiCard
@@ -636,6 +798,7 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkCallouts,
           remarkCharacterDialogues,
           remarkEmojiCards,
+          remarkHighlights,
           remarkImageWords,
           remarkIcons,
           remarkRevealBlanks,

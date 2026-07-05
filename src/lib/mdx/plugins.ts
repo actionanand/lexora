@@ -56,6 +56,51 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
+export function remarkHighlights() {
+  return (tree: MdxNode) => {
+    visit(tree, "text", (node: MdxNode, index: number | undefined, parent: Parent) => {
+      if (
+        typeof index !== "number" ||
+        !parent ||
+        !node.value?.includes("==") ||
+        parent.type === "textDirective"
+      ) {
+        return;
+      }
+
+      const pieces = [];
+      const pattern = /==(.+?)==/g;
+      let cursor = 0;
+      let match;
+
+      while ((match = pattern.exec(node.value)) !== null) {
+        if (match.index > cursor) {
+          pieces.push({
+            type: "text",
+            value: node.value.slice(cursor, match.index)
+          });
+        }
+
+        pieces.push({
+          type: "html",
+          value: `<lexora-highlight raw="${escapeHtml(match[1])}"></lexora-highlight>`
+        });
+
+        cursor = match.index + match[0].length;
+      }
+
+      if (cursor < node.value.length) {
+        pieces.push({
+          type: "text",
+          value: node.value.slice(cursor)
+        });
+      }
+
+      parent.children.splice(index, 1, ...pieces);
+    });
+  };
+}
+
 function revealParts(value: string) {
   const separatorIndex = value.indexOf("|");
 

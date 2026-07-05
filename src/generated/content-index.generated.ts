@@ -87,6 +87,12 @@ export const languages = [
         "title": "Media",
         "description": "Use large exercise images, base64 illustrations, and SVG diagrams in lessons.",
         "order": 5
+      },
+      {
+        "slug": "highlights",
+        "title": "Highlights",
+        "description": "Color and style important words in lessons.",
+        "order": 6
       }
     ]
   }
