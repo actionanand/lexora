@@ -55,6 +55,25 @@ function InlineIcon({ name }: { name?: string }) {
   return <Component className={styles.inlineIcon} size={18} aria-hidden />;
 }
 
+function CalloutIcon({ type }: { type: string }) {
+  const iconProps = { className: styles.calloutIcon, size: 22, "aria-hidden": true };
+
+  switch (type) {
+    case "tip":
+      return <Icons.Rocket {...iconProps} />;
+    case "info":
+      return <Icons.Info {...iconProps} />;
+    case "caution":
+    case "warning":
+      return <Icons.TriangleAlert {...iconProps} />;
+    case "danger":
+      return <Icons.Flame {...iconProps} />;
+    case "note":
+    default:
+      return <Icons.Bookmark {...iconProps} />;
+  }
+}
+
 type MarkdownNode = {
   properties?: Record<string, unknown>;
 };
@@ -93,10 +112,14 @@ const markdownComponents = {
   },
   aside({ children, node }: NodeProps) {
     const calloutType = nodeProperty(node, "dataCallout") || "note";
+    const calloutTitle = nodeProperty(node, "dataCalloutTitle") || calloutType;
 
     return (
       <aside className={`${styles.callout} ${styles[calloutType] ?? ""}`}>
-        <strong>{calloutType}</strong>
+        <div className={styles.calloutTitle}>
+          <CalloutIcon type={calloutType} />
+          <strong>{calloutTitle}</strong>
+        </div>
         <div>{children}</div>
       </aside>
     );

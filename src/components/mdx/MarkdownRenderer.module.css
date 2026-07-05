@@ -86,37 +86,89 @@
 }
 
 .callout {
-  display: grid;
-  grid-template-columns: 88px 1fr;
-  gap: 16px;
+  --callout-color: var(--accent);
+  --callout-bg: color-mix(in srgb, var(--accent) 12%, var(--surface-1));
   margin: 24px 0;
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
-  border-radius: 8px;
-  background: var(--surface-2);
+  padding: 18px 20px;
+  border-left: 5px solid var(--callout-color);
+  background: var(--callout-bg);
+  color: var(--text);
+}
+
+.calloutTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: var(--callout-color);
+}
+
+.calloutIcon {
+  flex: 0 0 auto;
+  color: currentColor;
 }
 
 .callout strong {
-  color: var(--heading);
-  font-size: 0.78rem;
-  text-transform: uppercase;
+  color: currentColor;
+  font-size: 1rem;
+  font-weight: 750;
+  text-transform: none;
 }
 
 .callout p:last-child {
   margin-bottom: 0;
 }
 
-.tip {
-  border-left-color: var(--success);
+.note {
+  --callout-color: #a83df0;
+  --callout-bg: #edd4fb;
 }
 
+.tip {
+  --callout-color: #16b957;
+  --callout-bg: #e4f6e6;
+}
+
+.caution,
 .warning {
-  border-left-color: var(--warning);
+  --callout-color: #eba52a;
+  --callout-bg: #fce9bf;
+}
+
+.danger {
+  --callout-color: #f0447f;
+  --callout-bg: #f8cddd;
 }
 
 .info {
-  border-left-color: var(--info);
+  --callout-color: #3295f4;
+  --callout-bg: #cfe7fb;
+}
+
+:global([data-theme="dark"]) .note {
+  --callout-color: #c264f4;
+  --callout-bg: #3d224a;
+}
+
+:global([data-theme="dark"]) .tip {
+  --callout-color: #43d47d;
+  --callout-bg: #1b3b24;
+}
+
+:global([data-theme="dark"]) .caution,
+:global([data-theme="dark"]) .warning {
+  --callout-color: #f0bc55;
+  --callout-bg: #4d3d20;
+}
+
+:global([data-theme="dark"]) .danger {
+  --callout-color: #f36b9c;
+  --callout-bg: #4d2232;
+}
+
+:global([data-theme="dark"]) .info {
+  --callout-color: #58aaf8;
+  --callout-bg: #18344f;
 }
 
 .revealPractice {
@@ -192,7 +244,6 @@
 
 @media (max-width: 720px) {
   .callout {
-    grid-template-columns: 1fr;
-    gap: 6px;
+    padding: 16px;
   }
 }

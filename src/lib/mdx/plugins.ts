@@ -1,7 +1,7 @@
 import { visit } from "unist-util-visit";
 import type { Node, Parent } from "unist";
 
-const CALLOUTS = new Set(["note", "tip", "warning", "info"]);
+const CALLOUTS = new Set(["note", "tip", "info", "caution", "warning", "danger"]);
 
 type MdxNode = Node & {
   name?: string;
@@ -11,6 +11,7 @@ type MdxNode = Node & {
   data?: {
     hName?: string;
     hProperties?: Record<string, unknown>;
+    directiveLabel?: boolean;
   };
 };
 
@@ -52,6 +53,38 @@ function revealParts(value: string) {
   };
 }
 
+function calloutTitle(type: string) {
+  switch (type) {
+    case "tip":
+      return "Tip";
+    case "info":
+      return "Info";
+    case "caution":
+    case "warning":
+      return "Caution";
+    case "danger":
+      return "Danger";
+    case "note":
+    default:
+      return "Note";
+  }
+}
+
+function readDirectiveLabel(node: MdxNode) {
+  const label = node.children?.find(
+    (child) =>
+      child.type === "paragraph" &&
+      (child.data?.directiveLabel === true || child.data?.hProperties?.directiveLabel === true)
+  );
+  const text = label?.children?.[0]?.value?.trim();
+
+  if (label) {
+    node.children = node.children?.filter((child) => child !== label);
+  }
+
+  return text || null;
+}
+
 export function remarkCallouts() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {
@@ -59,11 +92,14 @@ export function remarkCallouts() {
         return;
       }
 
+      const title = readDirectiveLabel(node) ?? calloutTitle(node.name);
+
       node.data = {
         hName: "aside",
         hProperties: {
           className: `callout callout-${node.name}`,
-          "data-callout": node.name
+          "data-callout": node.name,
+          "data-callout-title": title
         }
       };
     });
