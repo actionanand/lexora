@@ -44,13 +44,27 @@ function revealText(value) {
   return `${template} ${answer}`;
 }
 
+function directiveText(name, value, attributes = "") {
+  const label = /label="([^"]+)"/.exec(attributes)?.[1];
+  const meaning = /meaning="([^"]+)"/.exec(attributes)?.[1];
+  const transliteration = /transliteration="([^"]+)"/.exec(attributes)?.[1];
+
+  if (name === "emoji") {
+    return [value, label, transliteration, meaning].filter(Boolean).join(" ");
+  }
+
+  return value;
+}
+
 function stripMarkdown(markdown) {
   return markdown
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`([^`]+)`/g, "$1")
     .replace(/:::\w+/g, " ")
     .replace(/:::/g, " ")
-    .replace(/:\w+\[([^\]]+)\]/g, "$1")
+    .replace(/:(\w+)\[([^\]]+)\](\{[^}]+\})?/g, (_, name, value, attributes = "") =>
+      directiveText(name, value, attributes)
+    )
     .replace(/\[\[([^\]]+)\]\]/g, (_, value) => revealText(value))
     .replace(/\|/g, " ")
     .replace(/[#*_>~-]/g, " ")

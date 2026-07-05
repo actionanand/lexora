@@ -2,6 +2,39 @@ import { visit } from "unist-util-visit";
 import type { Node, Parent } from "unist";
 
 const CALLOUTS = new Set(["note", "tip", "info", "caution", "warning", "danger"]);
+const CHARACTERS = new Set(["mentor", "learner", "guide", "owl", "unicorn", "duck"]);
+
+const EMOJI_NAMES: Record<string, string> = {
+  apple: "🍎",
+  book: "📘",
+  boy: "👦",
+  calendar: "📅",
+  city: "🏙️",
+  family: "👨‍👩‍👧‍👦",
+  flower: "🌸",
+  food: "🍚",
+  friend: "🤝",
+  girl: "👧",
+  hello: "🙏",
+  house: "🏠",
+  leaf: "🍃",
+  light: "💡",
+  listen: "👂",
+  moon: "🌙",
+  mountain: "⛰️",
+  pen: "✍️",
+  question: "❓",
+  read: "📖",
+  school: "🏫",
+  sound: "🔊",
+  speak: "🗣️",
+  star: "⭐",
+  sun: "☀️",
+  teacher: "🧑‍🏫",
+  tree: "🌳",
+  water: "💧",
+  word: "🔤"
+};
 
 type MdxNode = Node & {
   name?: string;
@@ -100,6 +133,56 @@ export function remarkCallouts() {
           className: `callout callout-${node.name}`,
           "data-callout": node.name,
           "data-callout-title": title
+        }
+      };
+    });
+  };
+}
+
+export function remarkCharacterDialogues() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "containerDirective" || !node.name || !CHARACTERS.has(node.name)) {
+        return;
+      }
+
+      const align = node.attributes?.align;
+
+      node.data = {
+        hName: "aside",
+        hProperties: {
+          className: `character-dialogue${align === "right" ? " align-right" : align === "left" ? " align-left" : ""}`,
+          "data-character": node.name,
+          "data-align": align === "right" || align === "left" ? align : ""
+        }
+      };
+    });
+  };
+}
+
+export function remarkEmojiCards() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "emoji") {
+        return;
+      }
+
+      const rawValue = node.children?.[0]?.value?.trim() ?? node.attributes?.name ?? "";
+      const emoji = EMOJI_NAMES[rawValue.toLowerCase()] ?? rawValue;
+      const size = node.attributes?.size ?? "medium";
+      const label = node.attributes?.label ?? node.attributes?.text ?? rawValue;
+      const meaning = node.attributes?.meaning ?? "";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-emoji",
+        hProperties: {
+          emoji,
+          label,
+          meaning,
+          transliteration,
+          size
         }
       };
     });

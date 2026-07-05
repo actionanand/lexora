@@ -108,3 +108,104 @@ flowchart TD
   consonants --> marks[Vowel marks]
   marks --> reading[Simple reading]
 ```
+
+Here is a richer Mermaid example for planning a study loop:
+
+```mermaid
+flowchart LR
+  start([Choose a sound]) --> listen[Listen carefully]
+  listen --> speak{Can you say it clearly?}
+  speak -- Not yet --> repeat[Repeat slowly]
+  repeat --> listen
+  speak -- Yes --> write[Write the letter]
+  write --> read[Read it inside a word]
+  read --> check{Did meaning stay clear?}
+  check -- Review --> listen
+  check -- Clear --> next([Move to the next pattern])
+```
+
+## Markdown Features
+
+Lexora articles support familiar markdown plus a few learning-focused helpers.
+
+Use Lucide icons inline with `:icon[IconName]`.
+
+```md
+Great for practice :icon[Sparkles] and review :icon[BookOpen].
+```
+
+Great for practice :icon[Sparkles] and review :icon[BookOpen].
+
+Find more icon names at [lucide.dev/icons](https://lucide.dev/icons). Use the PascalCase name shown by Lucide, such as `BookOpen`, `Languages`, `Brain`, `Volume2`, or `House`.
+
+Use tables for compact vocabulary:
+
+| Kannada | Transliteration | Meaning |
+| --- | --- | --- |
+| ನೀರು | neeru | water |
+| ಮನೆ | mane | house |
+
+Use code fences for examples, including Mermaid diagrams:
+
+````md
+```mermaid
+flowchart LR
+  word[Word] --> meaning[Meaning]
+```
+````
+
+Use reveal blanks for practice:
+
+```md
+[[water|The Kannada word ನೀರು means]]
+[[ಮನೆ|The Kannada word ___ means house.]]
+```
+
+Use emoji labels for image-assisted reading. You can use built-in names like `house`, `water`, and `book`, or paste any emoji directly inside the brackets. Sizes are `normal`, `medium`, `big`, and `huge`.
+
+```md
+:emoji[house]{label="ಮನೆ" transliteration="mane" meaning="home" size="normal"}
+:emoji[water]{label="ನೀರು" transliteration="neeru" meaning="water" size="medium"}
+:emoji[book]{label="ಪುಸ್ತಕ" transliteration="pustaka" meaning="book" size="big"}
+:emoji[🌳]{label="ಮರ" transliteration="mara" meaning="tree" size="huge"}
+```
+
+:emoji[house]{label="ಮನೆ" transliteration="mane" meaning="home" size="normal"} :emoji[water]{label="ನೀರು" transliteration="neeru" meaning="water" size="medium"} :emoji[book]{label="ಪುಸ್ತಕ" transliteration="pustaka" meaning="book" size="big"} :emoji[🌳]{label="ಮರ" transliteration="mara" meaning="tree" size="huge"}
+
+For more emoji, use your OS emoji picker or a Unicode emoji list such as [unicode.org/emoji/charts/full-emoji-list.html](https://unicode.org/emoji/charts/full-emoji-list.html), then paste the emoji directly into `:emoji[😀]{...}`.
+
+## Character Conversations
+
+Character conversations are useful for short teaching moments. Consecutive messages alternate sides automatically.
+
+Write it like this:
+
+```md
+:::owl
+Try reading the word slowly before guessing the meaning.
+:::
+
+:::unicorn
+So I should notice the sound first, then the word?
+:::
+```
+
+:::owl
+Try reading the word slowly before guessing the meaning.
+:::
+
+:::unicorn
+So I should notice the sound first, then the word?
+:::
+
+You can force a side with `align="right"` or `align="left"`.
+
+```md
+:::duck{align="right"}
+Keep this reminder near the practice question.
+:::
+```
+
+:::duck{align="right"}
+Keep this reminder near the practice question.
+:::

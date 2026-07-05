@@ -16,6 +16,7 @@ import styles from "@/components/docs/DocsShell.module.css";
 import { useAuth } from "@/components/auth/AuthProvider";
 import {
   ArrowRight,
+  ArrowLeft,
   ArrowUp,
   BookOpen,
   ChevronRight,
@@ -320,17 +321,21 @@ function PreviousNext({ language, slug }: { language: string; slug: string }) {
   return (
     <div className={styles.previousNext}>
       {previous ? (
-        <Link href={`/docs/${language}/${previous.slug}`}>
-          <span>Previous</span>
-          {previous.title}
+        <Link href={`/docs/${language}/${previous.slug}`} aria-label={`Previous lesson: ${previous.title}`}>
+          <span className={styles.previousNextIcon}>
+            <ArrowLeft size={18} aria-hidden />
+          </span>
+          <strong>{previous.title}</strong>
         </Link>
       ) : (
         <span />
       )}
       {next ? (
-        <Link href={`/docs/${language}/${next.slug}`}>
-          <span>Next</span>
-          {next.title}
+        <Link href={`/docs/${language}/${next.slug}`} aria-label={`Next lesson: ${next.title}`}>
+          <strong>{next.title}</strong>
+          <span className={styles.previousNextIcon}>
+            <ArrowRight size={18} aria-hidden />
+          </span>
         </Link>
       ) : (
         <span />

@@ -228,6 +228,146 @@
   color: var(--accent-strong);
 }
 
+.characterDialogue {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.characterDialogue:nth-of-type(even) {
+  flex-direction: row-reverse;
+}
+
+.characterLeft {
+  flex-direction: row !important;
+}
+
+.characterRight {
+  flex-direction: row-reverse !important;
+}
+
+.characterAvatar {
+  width: 86px;
+  height: 86px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 16px color-mix(in srgb, var(--heading) 14%, transparent));
+}
+
+.characterBubble {
+  position: relative;
+  min-width: min(100%, 180px);
+  max-width: min(540px, calc(100% - 92px));
+  padding: 18px 20px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface-3) 70%, var(--surface-1));
+  color: var(--text);
+}
+
+.characterBubble::before {
+  content: "";
+  position: absolute;
+  top: 24px;
+  left: -9px;
+  width: 18px;
+  height: 18px;
+  background: inherit;
+  transform: rotate(45deg);
+}
+
+.characterDialogue:nth-of-type(even) .characterBubble::before,
+.characterRight .characterBubble::before {
+  right: -9px;
+  left: auto;
+}
+
+.characterLeft .characterBubble::before {
+  right: auto;
+  left: -9px;
+}
+
+.characterBubble p:last-child {
+  margin-bottom: 0;
+}
+
+.emojiCard {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 8px 8px 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.emojiSymbol {
+  line-height: 1;
+}
+
+.emojiLabel {
+  color: var(--heading);
+  font-weight: 750;
+}
+
+.emojiText {
+  display: inline-grid;
+  gap: 1px;
+  line-height: 1.2;
+}
+
+.emojiTransliteration {
+  color: var(--muted);
+  font-size: 0.82em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.emojiMeaning {
+  color: var(--accent-strong);
+  font-size: 0.82em;
+  font-weight: 700;
+}
+
+.emojiNormal .emojiSymbol {
+  font-size: 1.05rem;
+}
+
+.emojiNormal .emojiLabel {
+  font-size: 0.88rem;
+}
+
+.emojiMedium .emojiSymbol {
+  font-size: 1.45rem;
+}
+
+.emojiMedium .emojiLabel {
+  font-size: 0.95rem;
+}
+
+.emojiBig {
+  gap: 10px;
+}
+
+.emojiBig .emojiSymbol {
+  font-size: 2.1rem;
+}
+
+.emojiBig .emojiLabel {
+  font-size: 1.05rem;
+}
+
+.emojiHuge {
+  gap: 12px;
+}
+
+.emojiHuge .emojiSymbol {
+  font-size: 3rem;
+}
+
+.emojiHuge .emojiLabel {
+  font-size: 1.18rem;
+}
+
 .mermaid {
   margin: 24px 0;
   padding: 18px;
@@ -235,15 +375,43 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface-1);
+  display: grid;
+  justify-items: center;
 }
 
 .mermaid svg {
+  display: block;
+  width: auto !important;
   max-width: 100%;
   height: auto;
+  margin: 0 auto;
 }
 
 @media (max-width: 720px) {
   .callout {
     padding: 16px;
+  }
+
+  .characterDialogue,
+  .characterDialogue:nth-of-type(even),
+  .characterLeft,
+  .characterRight {
+    flex-direction: row !important;
+  }
+
+  .characterAvatar {
+    width: 58px;
+    height: 58px;
+  }
+
+  .characterBubble {
+    max-width: calc(100% - 68px);
+    padding: 14px 16px;
+  }
+
+  .characterDialogue:nth-of-type(even) .characterBubble::before,
+  .characterRight .characterBubble::before {
+    right: auto;
+    left: -9px;
   }
 }
