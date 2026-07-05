@@ -19,7 +19,7 @@ export const docsContent = {
     "basics": {
       "title": "Basics",
       "description": "Learn Kannada script basics and early reading patterns.",
-      "body": "# Kannada Basics :icon[BookOpen]\n\nKannada is written with a rounded script. Start by recognizing vowels, then combine consonants and vowel marks.\n\n:::note\nRead slowly at first. Accuracy matters more than speed while the script is still new.\n:::\n\n## Script Shape\n\n| Letter | Sound | Example Hint |\n| --- | --- | --- |\n| ಅ | a | short vowel |\n| ಆ | aa | long vowel |\n| ಕ | ka | consonant with vowel |\n| ಕಿ | ki | consonant plus vowel mark |\n\n## Reveal Practice\n\nUse double brackets around the answer and a sentence template to make reveal practice. If the template does not include `___`, Lexora places the blank at the end of the sentence.\n\nWrite it like this:\n\n- Blank at the end: `[[Kannada|The Kannada word ಕನ್ನಡ means]]`\n- Blank anywhere: `[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]`\n\nIt appears like this:\n\n[[Kannada|The Kannada word ಕನ್ನಡ means]]\n\n[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]\n\n## Learning Flow\n\n```mermaid\nflowchart TD\n  vowels[Vowels] --> consonants[Consonants]\n  consonants --> marks[Vowel marks]\n  marks --> reading[Simple reading]\n```",
+      "body": "# Kannada Basics :icon[BookOpen]\n\nKannada is written with a rounded script. Start by recognizing vowels, then combine consonants and vowel marks.\n\n:::note\nRead slowly at first. Accuracy matters more than speed while the script is still new.\n:::\n\n## Script Shape\n\n| Letter | Sound | Example Hint |\n| --- | --- | --- |\n| ಅ | a | short vowel |\n| ಆ | aa | long vowel |\n| ಕ | ka | consonant with vowel |\n| ಕಿ | ki | consonant plus vowel mark |\n\n## Reveal Practice\n\nUse double brackets around the answer and a sentence template to make reveal practice. If the template does not include `___`, Lexora places the blank at the end of the sentence.\n\nWrite it like this:\n\n- Blank at the end: `[[Kannada|The Kannada word ಕನ್ನಡ means]]`\n- Blank anywhere: `[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]`\n\nIt appears like this:\n\n[[Kannada|The Kannada word ಕನ್ನಡ means]]\n\n[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]\n\n## Callout Examples\n\nUse callouts to mark learning hints, pronunciation reminders, and practice warnings.\n\nWrite a simple note like this:\n\n```md\n:::note\nRead each new word aloud before writing it.\n:::\n```\n\n:::note\nRead each new word aloud before writing it.\n:::\n\nAdd a custom title when the callout needs a clearer label:\n\n```md\n:::tip[Pronunciation Tip]\nSay the vowel slowly, then attach it to the consonant.\n:::\n```\n\n:::tip[Pronunciation Tip]\nSay the vowel slowly, then attach it to the consonant.\n:::\n\nUse caution for mistakes learners should notice early:\n\n```md\n:::caution[Common Mix-up]\nDo not treat long and short vowel sounds as the same sound.\n:::\n```\n\n:::caution[Common Mix-up]\nDo not treat long and short vowel sounds as the same sound.\n:::\n\nUse info for helpful context:\n\n```md\n:::info[Study Habit]\nA small daily reading habit is better than one long weekly session.\n:::\n```\n\n:::info[Study Habit]\nA small daily reading habit is better than one long weekly session.\n:::\n\nUse danger sparingly for a serious warning:\n\n```md\n:::danger[Avoid This]\nDo not memorize random word lists without reading them in sentences.\n:::\n```\n\n:::danger[Avoid This]\nDo not memorize random word lists without reading them in sentences.\n:::\n\n## Learning Flow\n\n```mermaid\nflowchart TD\n  vowels[Vowels] --> consonants[Consonants]\n  consonants --> marks[Vowel marks]\n  marks --> reading[Simple reading]\n```",
       "toc": [
         {
           "id": "script-shape",
@@ -29,6 +29,11 @@ export const docsContent = {
         {
           "id": "reveal-practice",
           "text": "Reveal Practice",
+          "depth": 2
+        },
+        {
+          "id": "callout-examples",
+          "text": "Callout Examples",
           "depth": 2
         },
         {
