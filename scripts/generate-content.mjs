@@ -8,6 +8,10 @@ const rootDir = path.resolve(__dirname, "..");
 const contentDir = path.join(rootDir, "content");
 const generatedDir = path.join(rootDir, "src", "generated");
 const publicDir = path.join(rootDir, "public");
+const dataImageDirs = {
+  png: path.join(rootDir, "src", "app", "dataImg", "png"),
+  svg: path.join(rootDir, "src", "app", "dataImg", "svg")
+};
 
 function normalizeBasePath(value) {
   const trimmed = value?.trim();
@@ -26,14 +30,142 @@ function normalizeSiteUrl(value) {
   return trimmed.replace(/\/+$/g, "");
 }
 
+function revealText(value) {
+  const separatorIndex = value.indexOf("|");
+
+  if (separatorIndex === -1) {
+    return value;
+  }
+
+  const answer = value.slice(0, separatorIndex).trim();
+  const template = value.slice(separatorIndex + 1);
+  const blankPattern = /_{3,}/;
+
+  if (blankPattern.test(template)) {
+    return template.replace(blankPattern, answer);
+  }
+
+  return `${template} ${answer}`;
+}
+
+function normalizeImageWordKey(value) {
+  return value
+    .trim()
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, "-")
+    .replace(/[^A-Za-z0-9-]/g, "")
+    .toLowerCase();
+}
+
+function extractImageWordNames(markdown) {
+  const names = new Set();
+  const pattern = /:(imageWord|svgWord)\[([^\]]+)\]/g;
+  let match;
+
+  while ((match = pattern.exec(markdown)) !== null) {
+    const [, directive, name] = match;
+    const format = directive === "svgWord" ? "svg" : "png";
+    const imageName = normalizeImageWordKey(name);
+
+    names.add(`${format}:${imageName}`);
+  }
+
+  return names;
+}
+
+function modulePathFromExport(value) {
+  return value.endsWith(".ts") ? value : `${value}.ts`;
+}
+
+function normalizeImageSource(value, format) {
+  const trimmed = value.trim();
+
+  if (trimmed.startsWith("data:")) {
+    return trimmed;
+  }
+
+  if (format === "svg" || trimmed.startsWith("<svg") || trimmed.startsWith("<?xml")) {
+    return `data:image/svg+xml;utf8,${encodeURIComponent(trimmed)}`;
+  }
+
+  return trimmed;
+}
+
+async function readDataImageExportsFromDir(format, dataImageDir, usedNames) {
+  const sources = {};
+  let indexSource = "";
+
+  try {
+    indexSource = await readFile(path.join(dataImageDir, "index.ts"), "utf8");
+  } catch {
+    return sources;
+  }
+
+  const exportPaths = new Set();
+  const starExportPattern = /export\s+\*\s+from\s+["'](.+?)["'];?/g;
+  const namedExportPattern = /export\s+\{[^}]+\}\s+from\s+["'](.+?)["'];?/g;
+  let exportMatch;
+
+  while ((exportMatch = starExportPattern.exec(indexSource)) !== null) {
+    exportPaths.add(modulePathFromExport(exportMatch[1]));
+  }
+
+  while ((exportMatch = namedExportPattern.exec(indexSource)) !== null) {
+    exportPaths.add(modulePathFromExport(exportMatch[1]));
+  }
+
+  for (const exportPath of exportPaths) {
+    const source = await readFile(path.join(dataImageDir, exportPath), "utf8");
+    const constPattern = /export\s+const\s+([A-Za-z0-9_]+)\s*=\s*`([^`]+)`/g;
+    let constMatch;
+
+    while ((constMatch = constPattern.exec(source)) !== null) {
+      const [, exportName, rawImageSource] = constMatch;
+      const imageSource = normalizeImageSource(rawImageSource, format);
+      const normalized = normalizeImageWordKey(exportName);
+      const formatted = `${format}:${normalized}`;
+
+      if (usedNames.has(formatted)) {
+        sources[formatted] = imageSource;
+      }
+    }
+  }
+
+  return sources;
+}
+
+async function readDataImageExports(usedNames) {
+  const pngSources = await readDataImageExportsFromDir("png", dataImageDirs.png, usedNames);
+  const svgSources = await readDataImageExportsFromDir("svg", dataImageDirs.svg, usedNames);
+
+  return {
+    ...svgSources,
+    ...pngSources
+  };
+}
+
+function directiveText(name, value, attributes = "") {
+  const label = /label="([^"]+)"/.exec(attributes)?.[1];
+  const meaning = /meaning="([^"]+)"/.exec(attributes)?.[1];
+  const transliteration = /transliteration="([^"]+)"/.exec(attributes)?.[1];
+
+  if (name === "emoji" || name === "imageWord" || name === "svgWord" || name === "textWord") {
+    return [value, label, transliteration, meaning].filter(Boolean).join(" ");
+  }
+
+  return value;
+}
+
 function stripMarkdown(markdown) {
   return markdown
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`([^`]+)`/g, "$1")
     .replace(/:::\w+/g, " ")
     .replace(/:::/g, " ")
-    .replace(/:\w+\[([^\]]+)\]/g, "$1")
-    .replace(/\[\[([^\]]+)\]\]/g, "$1")
+    .replace(/:(\w+)\[([^\]]+)\](\{[^}]+\})?/g, (_, name, value, attributes = "") =>
+      directiveText(name, value, attributes)
+    )
+    .replace(/\[\[([^\]]+)\]\]/g, (_, value) => revealText(value))
     .replace(/\|/g, " ")
     .replace(/[#*_>~-]/g, " ")
     .replace(/\s+/g, " ")
@@ -146,6 +278,7 @@ async function build() {
   const languages = [];
   const docsContent = {};
   const searchIndex = [];
+  const usedImageWords = new Set();
   const languageDirs = await readdir(contentDir, { withFileTypes: true });
 
   for (const dirent of languageDirs.filter((item) => item.isDirectory())) {
@@ -165,6 +298,10 @@ async function build() {
       const title = data.title ?? configuredPage.title ?? titleFromSlug(slug);
       const description = data.description ?? configuredPage.description ?? "";
       const order = pageOrder(config, slug, data.order, index);
+
+      for (const imageWordName of extractImageWordNames(body)) {
+        usedImageWords.add(imageWordName);
+      }
 
       pages.push({
         slug,
@@ -225,6 +362,8 @@ async function build() {
   await mkdir(generatedDir, { recursive: true });
   await mkdir(publicDir, { recursive: true });
 
+  const imageWordSources = await readDataImageExports(usedImageWords);
+
   await writeFile(
     path.join(generatedDir, "content-index.generated.ts"),
     `/* eslint-disable */\n// Generated by scripts/generate-content.mjs. Do not edit manually.\n\nexport type PageMeta = {\n  slug: string;\n  title: string;\n  description: string;\n  order: number;\n};\n\nexport type LanguageConfig = {\n  slug: string;\n  title: string;\n  nativeName: string;\n  description: string;\n  locale: string;\n  pages: readonly PageMeta[];\n};\n\nexport const languages = ${JSON.stringify(languages, null, 2)} as const satisfies readonly LanguageConfig[];\n\nexport function getLanguageConfig(language: string) {\n  return languages.find((item) => item.slug === language);\n}\n\nexport function getDocMeta(language: string, slug: string) {\n  return getLanguageConfig(language)?.pages.find((page) => page.slug === slug);\n}\n\nexport function getFirstDocPath() {\n  const language = languages[0];\n  const page = language?.pages[0];\n\n  if (!language || !page) {\n    return \"/\";\n  }\n\n  return \`/docs/\${language.slug}/\${page.slug}\`;\n}\n\nexport function getPreviousNext(language: string, slug: string) {\n  const pages = getLanguageConfig(language)?.pages ?? [];\n  const index = pages.findIndex((page) => page.slug === slug);\n\n  return {\n    previous: index > 0 ? pages[index - 1] : undefined,\n    next: index >= 0 && index < pages.length - 1 ? pages[index + 1] : undefined\n  };\n}\n`
@@ -241,16 +380,17 @@ async function build() {
   );
 
   await writeFile(
+    path.join(generatedDir, "image-word-sources.generated.ts"),
+    `/* eslint-disable */\n// Generated by scripts/generate-content.mjs. Do not edit manually.\n\nexport const imageWordSources = ${JSON.stringify(imageWordSources)} as const;\n`
+  );
+
+  await writeFile(
     path.join(publicDir, "search-index.json"),
-    `${JSON.stringify(
-      {
-        version: 1,
-        generator: "lexora",
-        documents: searchIndex
-      },
-      null,
-      2
-    )}\n`
+    JSON.stringify({
+      version: 1,
+      generator: "lexora",
+      documents: searchIndex
+    })
   );
 
   const basePath = normalizeBasePath(process.env.NEXT_PUBLIC_BASE_PATH);
@@ -262,14 +402,14 @@ async function build() {
     ...searchIndex.map((item) => item.path)
   ];
   const uniqueSitemapPaths = [...new Set(sitemapPaths)];
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${uniqueSitemapPaths
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${uniqueSitemapPaths
     .map((item) => {
       const normalizedPath = item === "/" ? "/" : `${item.replace(/\/+$/g, "")}/`;
       const url = `${siteUrl}${basePath}${normalizedPath}`.replace(/([^:]\/)\/+/g, "$1");
 
-      return `  <url>\n    <loc>${url}</loc>\n  </url>`;
+      return `<url><loc>${url}</loc></url>`;
     })
-    .join("\n")}\n</urlset>\n`;
+    .join("")}</urlset>`;
 
   await writeFile(path.join(publicDir, "sitemap.xml"), sitemap);
 }

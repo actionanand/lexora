@@ -1,7 +1,40 @@
 import { visit } from "unist-util-visit";
 import type { Node, Parent } from "unist";
 
-const CALLOUTS = new Set(["note", "tip", "warning", "info"]);
+const CALLOUTS = new Set(["note", "tip", "info", "caution", "warning", "danger"]);
+const CHARACTERS = new Set(["mentor", "learner", "guide", "owl", "unicorn", "duck", "boy", "girl"]);
+
+const EMOJI_NAMES: Record<string, string> = {
+  apple: "🍎",
+  book: "📘",
+  boy: "👦",
+  calendar: "📅",
+  city: "🏙️",
+  family: "👨‍👩‍👧‍👦",
+  flower: "🌸",
+  food: "🍚",
+  friend: "🤝",
+  girl: "👧",
+  hello: "🙏",
+  house: "🏠",
+  leaf: "🍃",
+  light: "💡",
+  listen: "👂",
+  moon: "🌙",
+  mountain: "⛰️",
+  pen: "✍️",
+  question: "❓",
+  read: "📖",
+  school: "🏫",
+  sound: "🔊",
+  speak: "🗣️",
+  star: "⭐",
+  sun: "☀️",
+  teacher: "🧑‍🏫",
+  tree: "🌳",
+  water: "💧",
+  word: "🔤"
+};
 
 type MdxNode = Node & {
   name?: string;
@@ -11,6 +44,7 @@ type MdxNode = Node & {
   data?: {
     hName?: string;
     hProperties?: Record<string, unknown>;
+    directiveLabel?: boolean;
   };
 };
 
@@ -22,6 +56,68 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
+function revealParts(value: string) {
+  const separatorIndex = value.indexOf("|");
+
+  if (separatorIndex === -1) {
+    return {
+      answer: value,
+      prefix: "",
+      suffix: ""
+    };
+  }
+
+  const answer = value.slice(0, separatorIndex).trim();
+  const template = value.slice(separatorIndex + 1);
+  const blankMatch = /_{3,}/.exec(template);
+
+  if (!blankMatch) {
+    return {
+      answer,
+      prefix: template.endsWith(" ") ? template : `${template} `,
+      suffix: ""
+    };
+  }
+
+  return {
+    answer,
+    prefix: template.slice(0, blankMatch.index),
+    suffix: template.slice(blankMatch.index + blankMatch[0].length)
+  };
+}
+
+function calloutTitle(type: string) {
+  switch (type) {
+    case "tip":
+      return "Tip";
+    case "info":
+      return "Info";
+    case "caution":
+    case "warning":
+      return "Caution";
+    case "danger":
+      return "Danger";
+    case "note":
+    default:
+      return "Note";
+  }
+}
+
+function readDirectiveLabel(node: MdxNode) {
+  const label = node.children?.find(
+    (child) =>
+      child.type === "paragraph" &&
+      (child.data?.directiveLabel === true || child.data?.hProperties?.directiveLabel === true)
+  );
+  const text = label?.children?.[0]?.value?.trim();
+
+  if (label) {
+    node.children = node.children?.filter((child) => child !== label);
+  }
+
+  return text || null;
+}
+
 export function remarkCallouts() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {
@@ -29,11 +125,120 @@ export function remarkCallouts() {
         return;
       }
 
+      const title = readDirectiveLabel(node) ?? calloutTitle(node.name);
+
       node.data = {
         hName: "aside",
         hProperties: {
           className: `callout callout-${node.name}`,
-          "data-callout": node.name
+          "data-callout": node.name,
+          "data-callout-title": title
+        }
+      };
+    });
+  };
+}
+
+export function remarkCharacterDialogues() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "containerDirective" || !node.name || !CHARACTERS.has(node.name)) {
+        return;
+      }
+
+      const align = node.attributes?.align;
+
+      node.data = {
+        hName: "aside",
+        hProperties: {
+          className: `character-dialogue${align === "right" ? " align-right" : align === "left" ? " align-left" : ""}`,
+          "data-character": node.name,
+          "data-align": align === "right" || align === "left" ? align : ""
+        }
+      };
+    });
+  };
+}
+
+export function remarkEmojiCards() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "emoji") {
+        return;
+      }
+
+      const rawValue = node.children?.[0]?.value?.trim() ?? node.attributes?.name ?? "";
+      const emoji = EMOJI_NAMES[rawValue.toLowerCase()] ?? rawValue;
+      const size = node.attributes?.size ?? "medium";
+      const label = node.attributes?.label ?? node.attributes?.text ?? rawValue;
+      const meaning = node.attributes?.meaning ?? "";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-emoji",
+        hProperties: {
+          emoji,
+          label,
+          meaning,
+          transliteration,
+          size
+        }
+      };
+    });
+  };
+}
+
+export function remarkImageWords() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || (node.name !== "imageWord" && node.name !== "svgWord")) {
+        return;
+      }
+
+      const image = node.children?.[0]?.value?.trim() ?? node.attributes?.name ?? "";
+      const size = node.attributes?.size ?? "huge";
+      const label = node.attributes?.label ?? node.attributes?.text ?? image;
+      const meaning = node.attributes?.meaning ?? "";
+      const transliteration = node.attributes?.transliteration ?? "";
+      const format = node.name === "svgWord" ? "svg" : "png";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-image-word",
+        hProperties: {
+          image,
+          format,
+          label,
+          meaning,
+          transliteration,
+          size
+        }
+      };
+    });
+  };
+}
+
+export function remarkTextWords() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "textWord") {
+        return;
+      }
+
+      const label = node.attributes?.label ?? node.attributes?.text ?? node.children?.[0]?.value?.trim() ?? "";
+      const meaning = node.attributes?.meaning ?? "";
+      const size = node.attributes?.size ?? "huge";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-text-word",
+        hProperties: {
+          label,
+          meaning,
+          transliteration,
+          size
         }
       };
     });
@@ -80,9 +285,11 @@ export function remarkRevealBlanks() {
           });
         }
 
+        const reveal = revealParts(match[1]);
+
         pieces.push({
           type: "html",
-          value: `<lexora-blank answer="${escapeHtml(match[1])}"></lexora-blank>`
+          value: `<lexora-blank answer="${escapeHtml(reveal.answer)}" prefix="${escapeHtml(reveal.prefix)}" suffix="${escapeHtml(reveal.suffix)}"></lexora-blank>`
         });
 
         cursor = match.index + match[0].length;
