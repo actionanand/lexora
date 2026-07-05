@@ -134,12 +134,14 @@ function EmojiCard({
   emoji,
   label,
   meaning,
+  meaningTamil,
   size,
   transliteration
 }: {
   emoji?: string;
   label?: string;
   meaning?: string;
+  meaningTamil?: string;
   size?: string;
   transliteration?: string;
 }) {
@@ -158,11 +160,19 @@ function EmojiCard({
         {emoji}
       </span>
       <span className={styles.emojiText}>
-        {label ? <span className={styles.emojiLabel}>{label}</span> : null}
-        {transliteration ? (
-          <span className={styles.emojiTransliteration}>({transliteration})</span>
-        ) : null}
-        {meaning ? <span className={styles.emojiMeaning}>{meaning}</span> : null}
+        <span className={styles.wordSource}>
+          {label ? <span className={styles.emojiLabel}>{label}</span> : null}
+          {transliteration ? (
+            <span className={styles.emojiTransliteration}>({transliteration})</span>
+          ) : null}
+        </span>
+        <span className={styles.wordDivider} aria-hidden>
+          -
+        </span>
+        <span className={styles.wordMeaningGroup}>
+          {meaning ? <span className={styles.emojiMeaning}>{meaning}</span> : null}
+          {meaningTamil ? <span className={styles.emojiTamilMeaning}>{meaningTamil}</span> : null}
+        </span>
       </span>
     </span>
   );
@@ -182,6 +192,7 @@ function ImageWordCard({
   image,
   label,
   meaning,
+  meaningTamil,
   size,
   transliteration
 }: {
@@ -189,6 +200,7 @@ function ImageWordCard({
   image?: string;
   label?: string;
   meaning?: string;
+  meaningTamil?: string;
   size?: string;
   transliteration?: string;
 }) {
@@ -206,7 +218,7 @@ function ImageWordCard({
         : size === "big"
         ? styles.imageWordBig
         : styles.imageWordHuge;
-  const readableLabel = [label, transliteration, meaning].filter(Boolean).join(" ");
+  const readableLabel = [label, transliteration, meaning, meaningTamil].filter(Boolean).join(" ");
 
   if (!src) {
     return null;
@@ -216,11 +228,19 @@ function ImageWordCard({
     <span className={`${styles.imageWord} ${sizeClass}`} role="group" aria-label={readableLabel}>
       <img className={styles.imageWordImage} src={src} alt="" loading="lazy" aria-hidden />
       <span className={styles.imageWordText}>
-        {label ? <span className={styles.imageWordLabel}>{label}</span> : null}
-        {transliteration ? (
-          <span className={styles.imageWordTransliteration}>({transliteration})</span>
-        ) : null}
-        {meaning ? <span className={styles.imageWordMeaning}>{meaning}</span> : null}
+        <span className={styles.wordSource}>
+          {label ? <span className={styles.imageWordLabel}>{label}</span> : null}
+          {transliteration ? (
+            <span className={styles.imageWordTransliteration}>({transliteration})</span>
+          ) : null}
+        </span>
+        <span className={styles.wordDivider} aria-hidden>
+          -
+        </span>
+        <span className={styles.wordMeaningGroup}>
+          {meaning ? <span className={styles.imageWordMeaning}>{meaning}</span> : null}
+          {meaningTamil ? <span className={styles.imageWordTamilMeaning}>{meaningTamil}</span> : null}
+        </span>
       </span>
     </span>
   );
@@ -229,11 +249,13 @@ function ImageWordCard({
 function TextWordCard({
   label,
   meaning,
+  meaningTamil,
   size,
   transliteration
 }: {
   label?: string;
   meaning?: string;
+  meaningTamil?: string;
   size?: string;
   transliteration?: string;
 }) {
@@ -245,15 +267,23 @@ function TextWordCard({
         : size === "big"
           ? styles.textWordBig
           : styles.textWordHuge;
-  const readableLabel = [label, transliteration, meaning].filter(Boolean).join(" ");
+  const readableLabel = [label, transliteration, meaning, meaningTamil].filter(Boolean).join(" ");
 
   return (
     <span className={`${styles.textWord} ${sizeClass}`} role="group" aria-label={readableLabel}>
-      {label ? <span className={styles.textWordLabel}>{label}</span> : null}
-      {transliteration ? (
-        <span className={styles.textWordTransliteration}>({transliteration})</span>
-      ) : null}
-      {meaning ? <span className={styles.textWordMeaning}>{meaning}</span> : null}
+      <span className={styles.wordSource}>
+        {label ? <span className={styles.textWordLabel}>{label}</span> : null}
+        {transliteration ? (
+          <span className={styles.textWordTransliteration}>({transliteration})</span>
+        ) : null}
+      </span>
+      <span className={styles.wordDivider} aria-hidden>
+        -
+      </span>
+      <span className={styles.wordMeaningGroup}>
+        {meaning ? <span className={styles.textWordMeaning}>{meaning}</span> : null}
+        {meaningTamil ? <span className={styles.textWordTamilMeaning}>{meaningTamil}</span> : null}
+      </span>
     </span>
   );
 }
@@ -352,6 +382,7 @@ const markdownComponents = {
         emoji={nodeProperty(node, "emoji")}
         label={nodeProperty(node, "label")}
         meaning={nodeProperty(node, "meaning")}
+        meaningTamil={nodeProperty(node, "meaningTamil")}
         size={nodeProperty(node, "size")}
         transliteration={nodeProperty(node, "transliteration")}
       />
@@ -364,6 +395,7 @@ const markdownComponents = {
         image={nodeProperty(node, "image")}
         label={nodeProperty(node, "label")}
         meaning={nodeProperty(node, "meaning")}
+        meaningTamil={nodeProperty(node, "meaningTamil")}
         size={nodeProperty(node, "size")}
         transliteration={nodeProperty(node, "transliteration")}
       />
@@ -374,6 +406,7 @@ const markdownComponents = {
       <TextWordCard
         label={nodeProperty(node, "label")}
         meaning={nodeProperty(node, "meaning")}
+        meaningTamil={nodeProperty(node, "meaningTamil")}
         size={nodeProperty(node, "size")}
         transliteration={nodeProperty(node, "transliteration")}
       />

@@ -60,29 +60,30 @@ export * from "./lotus";
 ```
 
 Use `imageWord` for PNG exports and `svgWord` for SVG exports. If you omit `size`, Lexora uses `huge`.
+Use `meaningTamil` only when you want to show an extra Tamil meaning.
 
 ```md
-:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy"}
+:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy" meaningTamil="சிறுவன்"}
 :imageWord[girl]{label="बालिका" transliteration="balika" meaning="girl" size="big"}
 :imageWord[old_woman]{label="वृद्धा" transliteration="Vṛddhā" meaning="old woman" size="huge"}
-:svgWord[peacock]{label="मयूरः" transliteration="mayurah" meaning="peacock"}
+:svgWord[peacock]{label="मयूरः" transliteration="mayurah" meaning="peacock" meaningTamil="மயில்"}
 ```
 
 Available sizes are `normal`, `medium`, `big`, and `huge`. The default is `huge`.
 
-:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy"}
+:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy" meaningTamil="சிறுவன்"}
 :imageWord[girl]{label="बालिका" transliteration="balika" meaning="girl" size="big"}
 :imageWord[old_woman]{label="वृद्धा" transliteration="Vṛddhā" meaning="old woman" size="huge"}
-:svgWord[peacock]{label="मयूरः" transliteration="mayurah" meaning="peacock"}
+:svgWord[peacock]{label="मयूरः" transliteration="mayurah" meaning="peacock" meaningTamil="மயில்"}
 
 Use `textWord` when you want the same label, transliteration, and meaning format without an image.
 
 ```md
-:textWord[गृहम्]{transliteration="grham" meaning="home"}
+:textWord[गृहम्]{transliteration="grham" meaning="home" meaningTamil="வீடு"}
 :textWord[जलम्]{transliteration="jalam" meaning="water" size="big"}
 ```
 
-:textWord[गृहम्]{transliteration="grham" meaning="home"}
+:textWord[गृहम्]{transliteration="grham" meaning="home" meaningTamil="வீடு"}
 :textWord[जलम्]{transliteration="jalam" meaning="water" size="big"}
 
 :::boy

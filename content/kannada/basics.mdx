@@ -161,18 +161,28 @@ Use reveal blanks for practice:
 [[ಮನೆ|The Kannada word ___ means house.]]
 ```
 
-Use emoji labels for image-assisted reading. You can use built-in names like `house`, `water`, and `book`, or paste any emoji directly inside the brackets. Sizes are `normal`, `medium`, `big`, and `huge`.
+Use emoji labels for image-assisted reading. You can use built-in names like `house`, `water`, and `book`, or paste any emoji directly inside the brackets. Sizes are `normal`, `medium`, `big`, and `huge`. Add `meaningTamil` only when an extra Tamil meaning is useful.
 
 ```md
-:emoji[house]{label="ಮನೆ" transliteration="mane" meaning="home" size="normal"}
+:emoji[house]{label="ಮನೆ" transliteration="mane" meaning="home" meaningTamil="வீடு" size="normal"}
 :emoji[water]{label="ನೀರು" transliteration="neeru" meaning="water" size="medium"}
 :emoji[book]{label="ಪುಸ್ತಕ" transliteration="pustaka" meaning="book" size="big"}
 :emoji[🌳]{label="ಮರ" transliteration="mara" meaning="tree" size="huge"}
 ```
 
-:emoji[house]{label="ಮನೆ" transliteration="mane" meaning="home" size="normal"} :emoji[water]{label="ನೀರು" transliteration="neeru" meaning="water" size="medium"} :emoji[book]{label="ಪುಸ್ತಕ" transliteration="pustaka" meaning="book" size="big"} :emoji[🌳]{label="ಮರ" transliteration="mara" meaning="tree" size="huge"}
+:emoji[house]{label="ಮನೆ" transliteration="mane" meaning="home" meaningTamil="வீடு" size="normal"} :emoji[water]{label="ನೀರು" transliteration="neeru" meaning="water" size="medium"} :emoji[book]{label="ಪುಸ್ತಕ" transliteration="pustaka" meaning="book" size="big"} :emoji[🌳]{label="ಮರ" transliteration="mara" meaning="tree" size="huge"}
 
 For more emoji, use your OS emoji picker or a Unicode emoji list such as [unicode.org/emoji/charts/full-emoji-list.html](https://unicode.org/emoji/charts/full-emoji-list.html), then paste the emoji directly into `:emoji[😀]{...}`.
+
+Use `textWord` when a word does not need an image. Add `meaningTamil` only when a rare extra Tamil meaning helps.
+
+```md
+:textWord[ಮನೆ]{transliteration="mane" meaning="home" meaningTamil="வீடு"}
+:textWord[ನೀರು]{transliteration="neeru" meaning="water"}
+```
+
+:textWord[ಮನೆ]{transliteration="mane" meaning="home" meaningTamil="வீடு"}
+:textWord[ನೀರು]{transliteration="neeru" meaning="water"}
 
 ## Character Conversations
 

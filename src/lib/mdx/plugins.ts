@@ -172,6 +172,7 @@ export function remarkEmojiCards() {
       const size = node.attributes?.size ?? "medium";
       const label = node.attributes?.label ?? node.attributes?.text ?? rawValue;
       const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
       const transliteration = node.attributes?.transliteration ?? "";
 
       node.children = [];
@@ -181,6 +182,7 @@ export function remarkEmojiCards() {
           emoji,
           label,
           meaning,
+          meaningTamil,
           transliteration,
           size
         }
@@ -200,6 +202,7 @@ export function remarkImageWords() {
       const size = node.attributes?.size ?? "huge";
       const label = node.attributes?.label ?? node.attributes?.text ?? image;
       const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
       const transliteration = node.attributes?.transliteration ?? "";
       const format = node.name === "svgWord" ? "svg" : "png";
 
@@ -211,6 +214,7 @@ export function remarkImageWords() {
           format,
           label,
           meaning,
+          meaningTamil,
           transliteration,
           size
         }
@@ -228,6 +232,7 @@ export function remarkTextWords() {
 
       const label = node.attributes?.label ?? node.attributes?.text ?? node.children?.[0]?.value?.trim() ?? "";
       const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
       const size = node.attributes?.size ?? "huge";
       const transliteration = node.attributes?.transliteration ?? "";
 
@@ -237,6 +242,7 @@ export function remarkTextWords() {
         hProperties: {
           label,
           meaning,
+          meaningTamil,
           transliteration,
           size
         }

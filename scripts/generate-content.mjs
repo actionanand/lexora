@@ -147,10 +147,11 @@ async function readDataImageExports(usedNames) {
 function directiveText(name, value, attributes = "") {
   const label = /label="([^"]+)"/.exec(attributes)?.[1];
   const meaning = /meaning="([^"]+)"/.exec(attributes)?.[1];
+  const meaningTamil = /meaningTamil="([^"]+)"/.exec(attributes)?.[1];
   const transliteration = /transliteration="([^"]+)"/.exec(attributes)?.[1];
 
   if (name === "emoji" || name === "imageWord" || name === "svgWord" || name === "textWord") {
-    return [value, label, transliteration, meaning].filter(Boolean).join(" ");
+    return [value, label, transliteration, meaning, meaningTamil].filter(Boolean).join(" ");
   }
 
   return value;

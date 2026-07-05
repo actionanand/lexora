@@ -310,9 +310,10 @@
 }
 
 .emojiText {
-  display: inline-grid;
-  gap: 1px;
-  line-height: 1.2;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.18;
 }
 
 .emojiTransliteration {
@@ -326,6 +327,12 @@
   color: var(--accent-strong);
   font-size: 0.82em;
   font-weight: 700;
+}
+
+.emojiTamilMeaning {
+  color: color-mix(in srgb, #c026d3 82%, var(--text));
+  font-size: 0.78em;
+  font-weight: 650;
 }
 
 .emojiNormal .emojiSymbol {
@@ -385,9 +392,23 @@
 }
 
 .imageWordText {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.18;
+}
+
+.wordSource,
+.wordMeaningGroup {
   display: inline-grid;
   gap: 2px;
-  line-height: 1.18;
+}
+
+.wordDivider {
+  color: var(--muted);
+  font-weight: 800;
+  line-height: 1.15;
+  padding-top: 0.08em;
 }
 
 .imageWordLabel {
@@ -406,6 +427,12 @@
   color: var(--accent-strong);
   font-size: 0.82em;
   font-weight: 700;
+}
+
+.imageWordTamilMeaning {
+  color: color-mix(in srgb, #c026d3 82%, var(--text));
+  font-size: 0.78em;
+  font-weight: 650;
 }
 
 .imageWordNormal .imageWordImage {
@@ -453,8 +480,9 @@
 }
 
 .textWord {
-  display: inline-grid;
-  gap: 2px;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
   margin: 0 14px 14px 0;
   line-height: 1.18;
   vertical-align: middle;
@@ -476,6 +504,12 @@
   color: var(--accent-strong);
   font-size: 0.82em;
   font-weight: 700;
+}
+
+.textWordTamilMeaning {
+  color: color-mix(in srgb, #c026d3 82%, var(--text));
+  font-size: 0.78em;
+  font-weight: 650;
 }
 
 .textWordNormal .textWordLabel {
