@@ -56,6 +56,51 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
+export function remarkHighlights() {
+  return (tree: MdxNode) => {
+    visit(tree, "text", (node: MdxNode, index: number | undefined, parent: Parent) => {
+      if (
+        typeof index !== "number" ||
+        !parent ||
+        !node.value?.includes("==") ||
+        parent.type === "textDirective"
+      ) {
+        return;
+      }
+
+      const pieces = [];
+      const pattern = /==(.+?)==/g;
+      let cursor = 0;
+      let match;
+
+      while ((match = pattern.exec(node.value)) !== null) {
+        if (match.index > cursor) {
+          pieces.push({
+            type: "text",
+            value: node.value.slice(cursor, match.index)
+          });
+        }
+
+        pieces.push({
+          type: "html",
+          value: `<lexora-highlight raw="${escapeHtml(match[1])}"></lexora-highlight>`
+        });
+
+        cursor = match.index + match[0].length;
+      }
+
+      if (cursor < node.value.length) {
+        pieces.push({
+          type: "text",
+          value: node.value.slice(cursor)
+        });
+      }
+
+      parent.children.splice(index, 1, ...pieces);
+    });
+  };
+}
+
 function revealParts(value: string) {
   const separatorIndex = value.indexOf("|");
 
@@ -118,6 +163,103 @@ function readDirectiveLabel(node: MdxNode) {
   return text || null;
 }
 
+function hasUsefulText(nodes: MdxNode[]) {
+  return nodes.some((node) => node.type !== "text" || Boolean(node.value?.trim()));
+}
+
+function trimTextEdges(nodes: MdxNode[]) {
+  const trimmed = [...nodes];
+  const first = trimmed[0];
+  const last = trimmed[trimmed.length - 1];
+
+  if (first?.type === "text" && first.value) {
+    first.value = first.value.replace(/^\s+/, "");
+  }
+
+  if (last?.type === "text" && last.value) {
+    last.value = last.value.replace(/\s+$/, "");
+  }
+
+  return trimmed.filter((node) => node.type !== "text" || Boolean(node.value));
+}
+
+function splitExploreParagraph(node: MdxNode) {
+  if (node.type !== "paragraph" || !node.children?.some((child) => child.type === "text" && child.value?.includes("[>]"))) {
+    return [node];
+  }
+
+  const paragraphs: MdxNode[] = [];
+  let current: MdxNode[] = [];
+
+  function finishCurrent() {
+    const children = trimTextEdges(current);
+
+    if (hasUsefulText(children)) {
+      paragraphs.push({
+        ...node,
+        children
+      });
+    }
+
+    current = [];
+  }
+
+  for (const child of node.children) {
+    if (child.type !== "text" || !child.value?.includes("[>]")) {
+      current.push(child);
+      continue;
+    }
+
+    const pattern = /(?:^|\r?\n)\s*\[>\]\s*/g;
+    let cursor = 0;
+    let match;
+
+    while ((match = pattern.exec(child.value)) !== null) {
+      const before = child.value.slice(cursor, match.index);
+
+      if (before) {
+        current.push({ ...child, value: before });
+      }
+
+      finishCurrent();
+      cursor = pattern.lastIndex;
+    }
+
+    const after = child.value.slice(cursor);
+
+    if (after) {
+      current.push({ ...child, value: after });
+    }
+  }
+
+  finishCurrent();
+  return paragraphs.length > 0 ? paragraphs : [node];
+}
+
+function normalizeExploreChildren(node: MdxNode) {
+  node.children = (node.children ?? []).flatMap((child) => splitExploreParagraph(child));
+}
+
+export function remarkExplore() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "containerDirective" || node.name !== "explore") {
+        return;
+      }
+
+      normalizeExploreChildren(node);
+
+      node.data = {
+        hName: "aside",
+        hProperties: {
+          className: "explore",
+          "data-explore": "true"
+        }
+      };
+    });
+  };
+}
+
 export function remarkCallouts() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {
@@ -172,6 +314,7 @@ export function remarkEmojiCards() {
       const size = node.attributes?.size ?? "medium";
       const label = node.attributes?.label ?? node.attributes?.text ?? rawValue;
       const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
       const transliteration = node.attributes?.transliteration ?? "";
 
       node.children = [];
@@ -181,6 +324,7 @@ export function remarkEmojiCards() {
           emoji,
           label,
           meaning,
+          meaningTamil,
           transliteration,
           size
         }
@@ -200,6 +344,7 @@ export function remarkImageWords() {
       const size = node.attributes?.size ?? "huge";
       const label = node.attributes?.label ?? node.attributes?.text ?? image;
       const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
       const transliteration = node.attributes?.transliteration ?? "";
       const format = node.name === "svgWord" ? "svg" : "png";
 
@@ -211,6 +356,7 @@ export function remarkImageWords() {
           format,
           label,
           meaning,
+          meaningTamil,
           transliteration,
           size
         }
@@ -228,6 +374,7 @@ export function remarkTextWords() {
 
       const label = node.attributes?.label ?? node.attributes?.text ?? node.children?.[0]?.value?.trim() ?? "";
       const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
       const size = node.attributes?.size ?? "huge";
       const transliteration = node.attributes?.transliteration ?? "";
 
@@ -237,8 +384,67 @@ export function remarkTextWords() {
         hProperties: {
           label,
           meaning,
+          meaningTamil,
           transliteration,
           size
+        }
+      };
+    });
+  };
+}
+
+export function remarkSentenceCards() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "sentence") {
+        return;
+      }
+
+      const sentence = node.children?.[0]?.value?.trim() ?? node.attributes?.text ?? "";
+      const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-sentence",
+        hProperties: {
+          sentence,
+          meaning,
+          meaningTamil,
+          transliteration
+        }
+      };
+    });
+  };
+}
+
+export function remarkArticleImages() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || (node.name !== "bigImage" && node.name !== "bigSvg")) {
+        return;
+      }
+
+      const image = node.children?.[0]?.value?.trim() ?? node.attributes?.name ?? "";
+      const format = node.name === "bigSvg" ? "svg" : "png";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-article-image",
+        hProperties: {
+          align: node.attributes?.align ?? "center",
+          alt: node.attributes?.alt ?? node.attributes?.caption ?? image,
+          bordered: node.attributes?.bordered ?? "false",
+          caption: node.attributes?.caption ?? "",
+          fit: node.attributes?.fit ?? "contain",
+          format,
+          height: node.attributes?.height ?? "",
+          image,
+          loading: node.attributes?.loading ?? "lazy",
+          rounded: node.attributes?.rounded ?? "false",
+          shadow: node.attributes?.shadow ?? "false",
+          width: node.attributes?.width ?? ""
         }
       };
     });

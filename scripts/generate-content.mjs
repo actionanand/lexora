@@ -9,8 +9,18 @@ const contentDir = path.join(rootDir, "content");
 const generatedDir = path.join(rootDir, "src", "generated");
 const publicDir = path.join(rootDir, "public");
 const dataImageDirs = {
-  png: path.join(rootDir, "src", "app", "dataImg", "png"),
-  svg: path.join(rootDir, "src", "app", "dataImg", "svg")
+  png: [{ dir: path.join(rootDir, "src", "app", "dataImg", "png"), importBase: "@/app/dataImg/png" }],
+  svg: [{ dir: path.join(rootDir, "src", "app", "dataImg", "svg"), importBase: "@/app/dataImg/svg" }]
+};
+const bigDataImageDirs = {
+  png: [
+    { dir: path.join(rootDir, "src", "app", "bigDataImg", "png"), importBase: "@/app/bigDataImg/png" },
+    { dir: path.join(rootDir, "src", "app", "dataImg", "png"), importBase: "@/app/dataImg/png" }
+  ],
+  svg: [
+    { dir: path.join(rootDir, "src", "app", "bigDataImg", "svg"), importBase: "@/app/bigDataImg/svg" },
+    { dir: path.join(rootDir, "src", "app", "dataImg", "svg"), importBase: "@/app/dataImg/svg" }
+  ]
 };
 
 function normalizeBasePath(value) {
@@ -48,6 +58,14 @@ function revealText(value) {
   return `${template} ${answer}`;
 }
 
+function highlightText(value) {
+  return value.split("|")[0].trim();
+}
+
+function stripHighlightSyntax(value) {
+  return value.replace(/==(.+?)==/g, (_, inner) => highlightText(inner));
+}
+
 function normalizeImageWordKey(value) {
   return value
     .trim()
@@ -73,30 +91,36 @@ function extractImageWordNames(markdown) {
   return names;
 }
 
+function extractArticleImageNames(markdown) {
+  const names = new Set();
+  const pattern = /:(bigImage|bigSvg)\[([^\]]+)\]/g;
+  let match;
+
+  while ((match = pattern.exec(markdown)) !== null) {
+    const [, directive, name] = match;
+    const format = directive === "bigSvg" ? "svg" : "png";
+    const imageName = normalizeImageWordKey(name);
+
+    names.add(`${format}:${imageName}`);
+  }
+
+  return names;
+}
+
 function modulePathFromExport(value) {
   return value.endsWith(".ts") ? value : `${value}.ts`;
 }
 
-function normalizeImageSource(value, format) {
-  const trimmed = value.trim();
-
-  if (trimmed.startsWith("data:")) {
-    return trimmed;
-  }
-
-  if (format === "svg" || trimmed.startsWith("<svg") || trimmed.startsWith("<?xml")) {
-    return `data:image/svg+xml;utf8,${encodeURIComponent(trimmed)}`;
-  }
-
-  return trimmed;
+function moduleImportFromExport(value) {
+  return value.replace(/^\.\//, "").replace(/\.ts$/, "");
 }
 
-async function readDataImageExportsFromDir(format, dataImageDir, usedNames) {
+async function readDataImageExportRefsFromDir(format, dataImageSource, usedNames) {
   const sources = {};
   let indexSource = "";
 
   try {
-    indexSource = await readFile(path.join(dataImageDir, "index.ts"), "utf8");
+    indexSource = await readFile(path.join(dataImageSource.dir, "index.ts"), "utf8");
   } catch {
     return sources;
   }
@@ -115,18 +139,20 @@ async function readDataImageExportsFromDir(format, dataImageDir, usedNames) {
   }
 
   for (const exportPath of exportPaths) {
-    const source = await readFile(path.join(dataImageDir, exportPath), "utf8");
-    const constPattern = /export\s+const\s+([A-Za-z0-9_]+)\s*=\s*`([^`]+)`/g;
+    const source = await readFile(path.join(dataImageSource.dir, exportPath), "utf8");
+    const constPattern = /export\s+const\s+([A-Za-z0-9_]+)\s*=/g;
     let constMatch;
 
     while ((constMatch = constPattern.exec(source)) !== null) {
-      const [, exportName, rawImageSource] = constMatch;
-      const imageSource = normalizeImageSource(rawImageSource, format);
+      const [, exportName] = constMatch;
       const normalized = normalizeImageWordKey(exportName);
       const formatted = `${format}:${normalized}`;
 
       if (usedNames.has(formatted)) {
-        sources[formatted] = imageSource;
+        sources[formatted] = {
+          exportName,
+          modulePath: `${dataImageSource.importBase}/${moduleImportFromExport(exportPath)}`
+        };
       }
     }
   }
@@ -134,23 +160,75 @@ async function readDataImageExportsFromDir(format, dataImageDir, usedNames) {
   return sources;
 }
 
-async function readDataImageExports(usedNames) {
-  const pngSources = await readDataImageExportsFromDir("png", dataImageDirs.png, usedNames);
-  const svgSources = await readDataImageExportsFromDir("svg", dataImageDirs.svg, usedNames);
+async function readDataImageExportRefs(usedNames) {
+  const sources = {};
 
-  return {
-    ...svgSources,
-    ...pngSources
-  };
+  for (const dataImageSource of dataImageDirs.png) {
+    for (const [key, value] of Object.entries(await readDataImageExportRefsFromDir("png", dataImageSource, usedNames))) {
+      sources[key] ??= value;
+    }
+  }
+
+  for (const dataImageSource of dataImageDirs.svg) {
+    for (const [key, value] of Object.entries(await readDataImageExportRefsFromDir("svg", dataImageSource, usedNames))) {
+      sources[key] ??= value;
+    }
+  }
+
+  return sources;
+}
+
+async function readArticleImageExportRefs(usedNames) {
+  const sources = {};
+
+  for (const dataImageSource of bigDataImageDirs.png) {
+    for (const [key, value] of Object.entries(await readDataImageExportRefsFromDir("png", dataImageSource, usedNames))) {
+      sources[key] ??= value;
+    }
+  }
+
+  for (const dataImageSource of bigDataImageDirs.svg) {
+    for (const [key, value] of Object.entries(await readDataImageExportRefsFromDir("svg", dataImageSource, usedNames))) {
+      sources[key] ??= value;
+    }
+  }
+
+  return sources;
+}
+
+function serializeImageSourceRegistry(exportName, sources) {
+  const entries = Object.entries(sources).sort(([left], [right]) => left.localeCompare(right));
+  const imports = entries.map(
+    ([, source], index) =>
+      `import { ${source.exportName} as ${exportName}_${index} } from "${source.modulePath}";`
+  );
+  const registry = entries.map(([key], index) => `  ${JSON.stringify(key)}: ${exportName}_${index}`);
+
+  return `/* eslint-disable */\n// Generated by scripts/generate-content.mjs. Do not edit manually.\n\n${imports.join("\n")}${imports.length ? "\n\n" : ""}export const ${exportName} = {\n${registry.join(",\n")}\n} as const;\n`;
 }
 
 function directiveText(name, value, attributes = "") {
+  const alt = /alt="([^"]+)"/.exec(attributes)?.[1];
+  const caption = /caption="([^"]+)"/.exec(attributes)?.[1];
   const label = /label="([^"]+)"/.exec(attributes)?.[1];
   const meaning = /meaning="([^"]+)"/.exec(attributes)?.[1];
+  const meaningTamil = /meaningTamil="([^"]+)"/.exec(attributes)?.[1];
   const transliteration = /transliteration="([^"]+)"/.exec(attributes)?.[1];
 
-  if (name === "emoji" || name === "imageWord" || name === "svgWord" || name === "textWord") {
-    return [value, label, transliteration, meaning].filter(Boolean).join(" ");
+  if (name === "bigImage" || name === "bigSvg") {
+    return [alt, caption].filter(Boolean).join(" ");
+  }
+
+  if (
+    name === "emoji" ||
+    name === "imageWord" ||
+    name === "svgWord" ||
+    name === "textWord" ||
+    name === "sentence"
+  ) {
+    return [stripHighlightSyntax(value), label, transliteration, meaning, meaningTamil]
+      .filter(Boolean)
+      .join(" ");
   }
 
   return value;
@@ -162,10 +240,12 @@ function stripMarkdown(markdown) {
     .replace(/`([^`]+)`/g, "$1")
     .replace(/:::\w+/g, " ")
     .replace(/:::/g, " ")
+    .replace(/\[>\]/g, " ")
     .replace(/:(\w+)\[([^\]]+)\](\{[^}]+\})?/g, (_, name, value, attributes = "") =>
       directiveText(name, value, attributes)
     )
     .replace(/\[\[([^\]]+)\]\]/g, (_, value) => revealText(value))
+    .replace(/==(.+?)==/g, (_, value) => highlightText(value))
     .replace(/\|/g, " ")
     .replace(/[#*_>~-]/g, " ")
     .replace(/\s+/g, " ")
@@ -191,7 +271,30 @@ function parseFrontmatter(source) {
 
   const data = {};
 
-  for (const line of match[1].split(/\r?\n/)) {
+  const lines = match[1].split(/\r?\n/);
+
+  function parseScalar(value) {
+    const trimmed = value.trim();
+    const quoted = trimmed.match(/^["'](.*)["']$/);
+    const numeric = Number(trimmed);
+
+    if (quoted) {
+      return quoted[1];
+    }
+
+    if (trimmed === "true") {
+      return true;
+    }
+
+    if (trimmed === "false") {
+      return false;
+    }
+
+    return Number.isFinite(numeric) && trimmed !== "" ? numeric : trimmed;
+  }
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
     const item = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
 
     if (!item) {
@@ -199,11 +302,44 @@ function parseFrontmatter(source) {
     }
 
     const [, key, rawValue] = item;
-    const trimmed = rawValue.trim();
-    const quoted = trimmed.match(/^["'](.*)["']$/);
-    const numeric = Number(trimmed);
 
-    data[key] = quoted ? quoted[1] : Number.isFinite(numeric) && trimmed !== "" ? numeric : trimmed;
+    if (rawValue.trim() === "") {
+      const values = [];
+
+      while (index + 1 < lines.length) {
+        const nextLine = lines[index + 1];
+        const listItem = nextLine.match(/^\s{2}-\s+([A-Za-z0-9_-]+):\s*(.*)$/);
+
+        if (!listItem) {
+          break;
+        }
+
+        const value = {};
+        const [, firstKey, firstValue] = listItem;
+        value[firstKey] = parseScalar(firstValue);
+        index += 1;
+
+        while (index + 1 < lines.length) {
+          const propertyLine = lines[index + 1];
+          const property = propertyLine.match(/^\s{4}([A-Za-z0-9_-]+):\s*(.*)$/);
+
+          if (!property) {
+            break;
+          }
+
+          const [, propertyKey, propertyValue] = property;
+          value[propertyKey] = parseScalar(propertyValue);
+          index += 1;
+        }
+
+        values.push(value);
+      }
+
+      data[key] = values;
+      continue;
+    }
+
+    data[key] = parseScalar(rawValue);
   }
 
   return { data, body: source.slice(match[0].length).trim() };
@@ -259,14 +395,14 @@ function extractToc(markdown) {
 }
 
 function pageOrder(config, slug, frontmatterOrder, index) {
+  if (typeof frontmatterOrder === "number") {
+    return frontmatterOrder;
+  }
+
   const explicitPage = config.pages?.find((page) => page.slug === slug);
 
   if (typeof explicitPage?.order === "number") {
     return explicitPage.order;
-  }
-
-  if (typeof frontmatterOrder === "number") {
-    return frontmatterOrder;
   }
 
   const orderedIndex = config.order?.indexOf(slug);
@@ -279,6 +415,7 @@ async function build() {
   const docsContent = {};
   const searchIndex = [];
   const usedImageWords = new Set();
+  const usedArticleImages = new Set();
   const languageDirs = await readdir(contentDir, { withFileTypes: true });
 
   for (const dirent of languageDirs.filter((item) => item.isDirectory())) {
@@ -303,6 +440,10 @@ async function build() {
         usedImageWords.add(imageWordName);
       }
 
+      for (const articleImageName of extractArticleImageNames(body)) {
+        usedArticleImages.add(articleImageName);
+      }
+
       pages.push({
         slug,
         title,
@@ -313,9 +454,17 @@ async function build() {
       docsContent[language][slug] = {
         title,
         description,
+        date: typeof data.date === "string" ? data.date : "",
         body,
-        toc: extractToc(body)
+        toc: extractToc(body),
+        mediaEmbeds: Array.isArray(data.mediaEmbeds) ? data.mediaEmbeds : []
       };
+
+      const mediaEmbedText = Array.isArray(data.mediaEmbeds)
+        ? data.mediaEmbeds
+            .map((item) => [item.title, item.type].filter(Boolean).join(" "))
+            .join(" ")
+        : "";
 
       searchIndex.push({
         id: `${language}/${slug}`,
@@ -339,7 +488,8 @@ async function build() {
             extractToc(body)
               .map((item) => item.text)
               .join(" "),
-            stripMarkdown(body)
+            stripMarkdown(body),
+            mediaEmbedText
           ].join(" ")
         )
       });
@@ -362,7 +512,8 @@ async function build() {
   await mkdir(generatedDir, { recursive: true });
   await mkdir(publicDir, { recursive: true });
 
-  const imageWordSources = await readDataImageExports(usedImageWords);
+  const imageWordSources = await readDataImageExportRefs(usedImageWords);
+  const articleImageSources = await readArticleImageExportRefs(usedArticleImages);
 
   await writeFile(
     path.join(generatedDir, "content-index.generated.ts"),
@@ -371,7 +522,7 @@ async function build() {
 
   await writeFile(
     path.join(generatedDir, "content.generated.ts"),
-    `/* eslint-disable */\n// Generated by scripts/generate-content.mjs. Do not edit manually.\n\nexport type TocItem = {\n  id: string;\n  text: string;\n  depth: number;\n};\n\nexport type DocContent = {\n  title: string;\n  description: string;\n  body: string;\n  toc: readonly TocItem[];\n};\n\nexport const docsContent = ${JSON.stringify(docsContent, null, 2)} as const;\n\nexport function getGeneratedDoc(language: string, slug: string): DocContent | undefined {\n  return (docsContent as unknown as Record<string, Record<string, DocContent>>)[language]?.[slug];\n}\n`
+    `/* eslint-disable */\n// Generated by scripts/generate-content.mjs. Do not edit manually.\n\nexport type TocItem = {\n  id: string;\n  text: string;\n  depth: number;\n};\n\nexport type MediaEmbed = {\n  type: string;\n  id?: string;\n  url?: string;\n  title?: string;\n  startTime?: number;\n};\n\nexport type DocContent = {\n  title: string;\n  description: string;\n  date?: string;\n  body: string;\n  toc: readonly TocItem[];\n  mediaEmbeds: readonly MediaEmbed[];\n};\n\nexport const docsContent = ${JSON.stringify(docsContent, null, 2)} as const;\n\nexport function getGeneratedDoc(language: string, slug: string): DocContent | undefined {\n  return (docsContent as unknown as Record<string, Record<string, DocContent>>)[language]?.[slug];\n}\n`
   );
 
   await writeFile(
@@ -381,7 +532,12 @@ async function build() {
 
   await writeFile(
     path.join(generatedDir, "image-word-sources.generated.ts"),
-    `/* eslint-disable */\n// Generated by scripts/generate-content.mjs. Do not edit manually.\n\nexport const imageWordSources = ${JSON.stringify(imageWordSources)} as const;\n`
+    serializeImageSourceRegistry("imageWordSources", imageWordSources)
+  );
+
+  await writeFile(
+    path.join(generatedDir, "article-image-sources.generated.ts"),
+    serializeImageSourceRegistry("articleImageSources", articleImageSources)
   );
 
   await writeFile(

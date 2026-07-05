@@ -81,6 +81,30 @@ export const languages = [
         "title": "Sentences",
         "description": "Practice simple Sanskrit sentences.",
         "order": 4
+      },
+      {
+        "slug": "media",
+        "title": "Media",
+        "description": "Use large exercise images, base64 illustrations, and SVG diagrams in lessons.",
+        "order": 5
+      },
+      {
+        "slug": "highlights",
+        "title": "Highlights",
+        "description": "Color and style important words in lessons.",
+        "order": 6
+      },
+      {
+        "slug": "video-embeds",
+        "title": "Video Embeds",
+        "description": "Embed lesson videos from YouTube, Shorts, Instagram, Facebook, and TikTok.",
+        "order": 7
+      },
+      {
+        "slug": "markdown-features",
+        "title": "Markdown Features",
+        "description": "Use built-in Markdown patterns to shape clear language-learning notes.",
+        "order": 8
       }
     ]
   }

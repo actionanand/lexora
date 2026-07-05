@@ -1,0 +1,117 @@
+---
+title: "Highlights"
+description: "Color and style important words in lessons."
+order: 6
+---
+
+# Highlights :icon[Highlighter]
+
+Use highlights when a learner should notice a sound, word ending, grammar marker, or translation clue.
+
+## Default Highlight
+
+The simplest form uses the theme's default highlight color.
+
+```md
+Read the ending carefully: ==-ति== often marks a simple verb form.
+```
+
+Read the ending carefully: ==-ति== often marks a simple verb form.
+
+This same default form also works inside sentence cards:
+
+```md
+:sentence[रामः ==पठति==]{transliteration="ramah pathati" meaning="Rama reads."}
+```
+
+:sentence[रामः ==पठति==]{transliteration="ramah pathati" meaning="Rama reads."}
+
+## Background Color
+
+Add a color after the text to use it as a background.
+
+```md
+The vowel is ==long|#0f766e== in this form.
+```
+
+The vowel is ==long|#0f766e== in this form.
+
+Use `bg` when you want the mode to be explicit:
+
+```md
+Remember the root: ==gam|#2563eb|bg|bold== means to go.
+```
+
+Remember the root: ==gam|#2563eb|bg|bold== means to go.
+
+## Foreground Color
+
+Use `fg` when only the text should change color.
+
+```md
+The subject is ==बालकः|#b91c1c|fg|bold==.
+```
+
+The subject is ==बालकः|#b91c1c|fg|bold==.
+
+Italic foreground text is useful for pronunciation notes:
+
+```md
+Say ==ā|#0369a1|fg||italic== longer than ==a==.
+```
+
+Say ==ā|#0369a1|fg||italic== longer than ==a==.
+
+## Dual Color
+
+Use dual mode when you need both text and background colors.
+
+```md
+The key verb is ==खादति|#ffffff|#15803d|dual|bold==.
+```
+
+The key verb is ==खादति|#ffffff|#15803d|dual|bold==.
+
+Dual colors also work inside sentence cards:
+
+```md
+:sentence[बालकः ==फलानि|#ffffff|#7c3aed|dual|bold== खादति]{transliteration="balakah phalani khadati" meaning="The boy eats fruits."}
+```
+
+:sentence[बालकः ==फलानि|#ffffff|#7c3aed|dual|bold== खादति]{transliteration="balakah phalani khadati" meaning="The boy eats fruits."}
+
+## Light Background
+
+Use `lightBg` for a soft marker that does not feel as strong as a full badge.
+
+```md
+Look for the case ending in ==रामेण|#d1ffbd|lightBg|bold==.
+```
+
+Look for the case ending in ==रामेण|#d1ffbd|lightBg|bold==.
+
+## Alignment
+
+Alignment turns the highlight into a block. This is useful for short reminders or translation checks.
+
+```md
+==Read the sentence aloud before revealing the answer.|#064e3b|#ccfbf1|dual|bold||center==
+```
+
+==Read the sentence aloud before revealing the answer.|#064e3b|#ccfbf1|dual|bold||center==
+
+## Syntax Reference
+
+| Use case | Syntax |
+| --- | --- |
+| Default theme highlight | `==text==` |
+| Background color | `==text\|#2563eb==` |
+| Explicit background | `==text\|#2563eb\|bg==` |
+| Foreground color | `==text\|#b91c1c\|fg==` |
+| Dual color | `==text\|#ffffff\|#15803d\|dual==` |
+| Bold or italic | `==text\|#2563eb\|bg\|bold\|italic==` |
+| Aligned block | `==text\|#064e3b\|#ccfbf1\|dual\|bold\|\|center==` |
+
+:::tip[Learning Use]
+Use one or two highlights per example. Too many colors make the sentence harder to scan.
+:::
