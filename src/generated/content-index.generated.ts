@@ -93,6 +93,12 @@ export const languages = [
         "title": "Highlights",
         "description": "Color and style important words in lessons.",
         "order": 6
+      },
+      {
+        "slug": "video-embeds",
+        "title": "Video Embeds",
+        "description": "Embed lesson videos from YouTube, Shorts, Instagram, Facebook, and TikTok.",
+        "order": 7
       }
     ]
   }

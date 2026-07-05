@@ -175,6 +175,24 @@ export const searchIndex = [
     "searchText": "sanskrit ससकतम sanskrit sentences sentences practice simple sanskrit sentences examples reveal practice sanskrit sentences messagesquaretext sentences become easier when you track the verb and then ask who or what is involved examples sanskrit meaning बलक पठत the boy reads सत लखत sita writes मतर आगचछत the friend comes reveal practice in बलक पठत the verb is पठत many beginner sentences place the subject first and verb last but sanskrit can move words around while keeping meaning through endings"
   },
   {
+    "id": "sanskrit/video-embeds",
+    "language": "sanskrit",
+    "languageTitle": "Sanskrit",
+    "languageNativeName": "संस्कृतम्",
+    "slug": "video-embeds",
+    "path": "/docs/sanskrit/video-embeds",
+    "title": "Video Embeds",
+    "description": "Embed lesson videos from YouTube, Shorts, Instagram, Facebook, and TikTok.",
+    "headings": [
+      "Supported Sources",
+      "Frontmatter Format",
+      "IDs And URLs",
+      "Optional Fields"
+    ],
+    "content": "Video Embeds PlayCircle Use video embeds when a lesson needs a short pronunciation clip, a script walkthrough, or a visual memory aid. Videos are added in frontmatter, not inside the lesson body. Lexora renders them together at the end of the article. Supported Sources Source Type Required value YouTube video youtube id YouTube Short youtube short id Instagram Reel instagram id Facebook Reel facebook id TikTok video tiktok url Frontmatter Format IDs And URLs For YouTube, use only the video id. In https://www.youtube.com/watch?v=K6o9JTcPgOA, the id is K6o9JTcPgOA. For YouTube Shorts, use the short id. In https://www.youtube.com/shorts/WcLbw92V4qk, the id is WcLbw92V4qk. For Instagram Reels, use only the reel id. DXHprmqgQQK becomes https://www.instagram.com/reel/DXHprmqgQQK/embed. For Facebook Reels, use only the reel id. 1423486709588631 becomes https://www.facebook.com/reel/1423486709588631. For TikTok, paste the full video URL. Lexora extracts the video id and renders the TikTok embed. Optional Fields title is optional, but it is recommended for accessibility and captions. startTime is only used for YouTube videos and YouTube Shorts. The value is in seconds, so startTime: 85 starts at 1 minute and 25 seconds. [Lesson Design] Keep embedded videos focused. A short clip after the written explanation works better than making the learner leave the article early.",
+    "searchText": "sanskrit ससकतम sanskrit video embeds video embeds embed lesson videos from youtube shorts instagram facebook and tiktok supported sources frontmatter format ids and urls optional fields video embeds playcircle use video embeds when a lesson needs a short pronunciation clip a script walkthrough or a visual memory aid videos are added in frontmatter not inside the lesson body lexora renders them together at the end of the article supported sources source type required value youtube video youtube id youtube short youtube short id instagram reel instagram id facebook reel facebook id tiktok video tiktok url frontmatter format ids and urls for youtube use only the video id in https www youtube com watch v k6o9jtcpgoa the id is k6o9jtcpgoa for youtube shorts use the short id in https www youtube com shorts wclbw92v4qk the id is wclbw92v4qk for instagram reels use only the reel id dxhprmqgqqk becomes https www instagram com reel dxhprmqgqqk embed for facebook reels use only the reel id 1423486709588631 becomes https www facebook com reel 1423486709588631 for tiktok paste the full video url lexora extracts the video id and renders the tiktok embed optional fields title is optional but it is recommended for accessibility and captions starttime is only used for youtube videos and youtube shorts the value is in seconds so starttime 85 starts at 1 minute and 25 seconds lesson design keep embedded videos focused a short clip after the written explanation works better than making the learner leave the article early tamil to malayalam letter patterns short youtube short malayalam script tutorial youtube malayalam script visual guide instagram learn days of the week in sanskrit facebook koko the kangaroo learns family words in english tiktok"
+  },
+  {
     "id": "sanskrit/words",
     "language": "sanskrit",
     "languageTitle": "Sanskrit",

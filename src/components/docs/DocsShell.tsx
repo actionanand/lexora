@@ -23,6 +23,7 @@ import {
   FileText,
   LogOut,
   Menu,
+  PlayCircle,
   Search,
   X
 } from "lucide-react";
@@ -373,6 +374,110 @@ function GoToTopButton() {
   );
 }
 
+type MediaEmbed = DocContent["mediaEmbeds"][number];
+
+function tiktokVideoId(url?: string) {
+  return url?.match(/\/video\/(\d+)/)?.[1] ?? "";
+}
+
+function embedSource(embed: MediaEmbed) {
+  const title = embed.title || "Embedded video";
+  const start = typeof embed.startTime === "number" ? Math.max(0, Math.floor(embed.startTime)) : 0;
+
+  switch (embed.type) {
+    case "youtube":
+    case "youtube-short":
+      if (!embed.id) {
+        return null;
+      }
+
+      return {
+        title,
+        url: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(embed.id)}?rel=0&modestbranding=1&playsinline=1&controls=1&mute=1${start ? `&start=${start}` : ""}`,
+        kind: embed.type === "youtube-short" ? "portrait" : "landscape"
+      };
+    case "instagram":
+      if (!embed.id) {
+        return null;
+      }
+
+      return {
+        title,
+        url: `https://www.instagram.com/reel/${encodeURIComponent(embed.id)}/embed`,
+        kind: "portrait"
+      };
+    case "facebook":
+      if (!embed.id) {
+        return null;
+      }
+
+      return {
+        title,
+        url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(`https://www.facebook.com/reel/${embed.id}`)}&show_text=false&width=420`,
+        kind: "portrait"
+      };
+    case "tiktok": {
+      const videoId = tiktokVideoId(embed.url);
+
+      if (!videoId) {
+        return null;
+      }
+
+      return {
+        title,
+        url: `https://www.tiktok.com/embed/v2/${encodeURIComponent(videoId)}`,
+        kind: "portrait"
+      };
+    }
+    default:
+      return null;
+  }
+}
+
+type ResolvedMediaEmbed = NonNullable<ReturnType<typeof embedSource>>;
+
+function isResolvedMediaEmbed(source: ReturnType<typeof embedSource>): source is ResolvedMediaEmbed {
+  return source !== null;
+}
+
+function MediaEmbeds({ embeds }: { embeds: readonly MediaEmbed[] }) {
+  const sources = embeds.map(embedSource).filter(isResolvedMediaEmbed);
+
+  if (sources.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className={styles.mediaEmbeds} aria-labelledby="media-embeds-title">
+      <div className={styles.mediaEmbedsHeader}>
+        <PlayCircle size={20} aria-hidden />
+        <h2 id="media-embeds-title">Videos</h2>
+      </div>
+      <div className={styles.mediaEmbedGrid}>
+        {sources.map((source) => (
+          <figure className={styles.mediaEmbedCard} key={`${source.url}-${source.title}`}>
+            <div
+              className={`${styles.mediaEmbedFrame} ${
+                source.kind === "portrait" ? styles.mediaEmbedPortrait : styles.mediaEmbedLandscape
+              }`}
+            >
+              <iframe
+                src={source.url}
+                title={source.title}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            </div>
+            {source.title ? <figcaption>{source.title}</figcaption> : null}
+          </figure>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function DocContentArea({ language, slug }: { language: string; slug: string }) {
   const [doc, setDoc] = useState<DocContent | null>(null);
   const [missing, setMissing] = useState(false);
@@ -412,6 +517,7 @@ function DocContentArea({ language, slug }: { language: string; slug: string }) 
     <div className={styles.contentGrid}>
       <article className={styles.article}>
         <MarkdownRenderer source={doc.body} />
+        <MediaEmbeds embeds={doc.mediaEmbeds} />
         <PreviousNext language={language} slug={slug} />
         <GoToTopButton />
       </article>

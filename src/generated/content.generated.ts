@@ -7,11 +7,20 @@ export type TocItem = {
   depth: number;
 };
 
+export type MediaEmbed = {
+  type: string;
+  id?: string;
+  url?: string;
+  title?: string;
+  startTime?: number;
+};
+
 export type DocContent = {
   title: string;
   description: string;
   body: string;
   toc: readonly TocItem[];
+  mediaEmbeds: readonly MediaEmbed[];
 };
 
 export const docsContent = {
@@ -51,7 +60,8 @@ export const docsContent = {
           "text": "Character Conversations",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     },
     "greetings": {
       "title": "Greetings",
@@ -68,7 +78,8 @@ export const docsContent = {
           "text": "Practice",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     },
     "sentences": {
       "title": "Sentences",
@@ -85,7 +96,8 @@ export const docsContent = {
           "text": "Reveal Practice",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     },
     "words": {
       "title": "Words",
@@ -97,7 +109,8 @@ export const docsContent = {
           "text": "Useful Words",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     }
   },
   "sanskrit": {
@@ -126,7 +139,8 @@ export const docsContent = {
           "text": "Learning Flow",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     },
     "grammar": {
       "title": "Grammar",
@@ -148,7 +162,8 @@ export const docsContent = {
           "text": "Agreement",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     },
     "highlights": {
       "title": "Highlights",
@@ -190,7 +205,8 @@ export const docsContent = {
           "text": "Syntax Reference",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     },
     "media": {
       "title": "Media",
@@ -222,7 +238,8 @@ export const docsContent = {
           "text": "Exercise Example",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     },
     "sentences": {
       "title": "Sentences",
@@ -238,6 +255,62 @@ export const docsContent = {
           "id": "reveal-practice",
           "text": "Reveal Practice",
           "depth": 2
+        }
+      ],
+      "mediaEmbeds": []
+    },
+    "video-embeds": {
+      "title": "Video Embeds",
+      "description": "Embed lesson videos from YouTube, Shorts, Instagram, Facebook, and TikTok.",
+      "body": "# Video Embeds :icon[PlayCircle]\n\nUse video embeds when a lesson needs a short pronunciation clip, a script walkthrough, or a visual memory aid.\n\nVideos are added in frontmatter, not inside the lesson body. Lexora renders them together at the end of the article.\n\n## Supported Sources\n\n| Source | Type | Required value |\n| --- | --- | --- |\n| YouTube video | `youtube` | `id` |\n| YouTube Short | `youtube-short` | `id` |\n| Instagram Reel | `instagram` | `id` |\n| Facebook Reel | `facebook` | `id` |\n| TikTok video | `tiktok` | `url` |\n\n## Frontmatter Format\n\n```md\n---\ntitle: \"Video Embeds\"\ndescription: \"Embed lesson videos from common social platforms.\"\norder: 7\nmediaEmbeds:\n  - type: youtube-short\n    id: \"WcLbw92V4qk\"\n    title: \"Tamil to Malayalam Letter Patterns (Short)\"\n  - type: youtube\n    id: \"K6o9JTcPgOA\"\n    title: \"Malayalam Script Tutorial\"\n    startTime: 85\n  - type: instagram\n    id: \"DXHprmqgQQK\"\n    title: \"Malayalam Script Visual Guide\"\n  - type: facebook\n    id: \"1423486709588631\"\n    title: \"Learn Days of the Week in Sanskrit\"\n  - type: tiktok\n    url: \"https://www.tiktok.com/@looplandia.kids/video/7567139089972006160\"\n    title: \"Koko the Kangaroo Learns Family Words in English\"\n---\n```\n\n## IDs And URLs\n\nFor YouTube, use only the video id. In `https://www.youtube.com/watch?v=K6o9JTcPgOA`, the id is `K6o9JTcPgOA`.\n\nFor YouTube Shorts, use the short id. In `https://www.youtube.com/shorts/WcLbw92V4qk`, the id is `WcLbw92V4qk`.\n\nFor Instagram Reels, use only the reel id. `DXHprmqgQQK` becomes `https://www.instagram.com/reel/DXHprmqgQQK/embed`.\n\nFor Facebook Reels, use only the reel id. `1423486709588631` becomes `https://www.facebook.com/reel/1423486709588631`.\n\nFor TikTok, paste the full video URL. Lexora extracts the video id and renders the TikTok embed.\n\n## Optional Fields\n\n`title` is optional, but it is recommended for accessibility and captions.\n\n`startTime` is only used for YouTube videos and YouTube Shorts. The value is in seconds, so `startTime: 85` starts at 1 minute and 25 seconds.\n\n:::tip[Lesson Design]\nKeep embedded videos focused. A short clip after the written explanation works better than making the learner leave the article early.\n:::",
+      "toc": [
+        {
+          "id": "supported-sources",
+          "text": "Supported Sources",
+          "depth": 2
+        },
+        {
+          "id": "frontmatter-format",
+          "text": "Frontmatter Format",
+          "depth": 2
+        },
+        {
+          "id": "ids-and-urls",
+          "text": "IDs And URLs",
+          "depth": 2
+        },
+        {
+          "id": "optional-fields",
+          "text": "Optional Fields",
+          "depth": 2
+        }
+      ],
+      "mediaEmbeds": [
+        {
+          "type": "youtube-short",
+          "id": "WcLbw92V4qk",
+          "title": "Tamil to Malayalam Letter Patterns (Short)"
+        },
+        {
+          "type": "youtube",
+          "id": "K6o9JTcPgOA",
+          "title": "Malayalam Script Tutorial",
+          "startTime": 85
+        },
+        {
+          "type": "instagram",
+          "id": "DXHprmqgQQK",
+          "title": "Malayalam Script Visual Guide"
+        },
+        {
+          "type": "facebook",
+          "id": "1423486709588631",
+          "title": "Learn Days of the Week in Sanskrit"
+        },
+        {
+          "type": "tiktok",
+          "url": "https://www.tiktok.com/@looplandia.kids/video/7567139089972006160",
+          "title": "Koko the Kangaroo Learns Family Words in English"
         }
       ]
     },
@@ -256,7 +329,8 @@ export const docsContent = {
           "text": "Practice",
           "depth": 2
         }
-      ]
+      ],
+      "mediaEmbeds": []
     }
   }
 } as const;
