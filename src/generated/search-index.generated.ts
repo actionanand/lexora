@@ -27,11 +27,11 @@ export const searchIndex = [
     "description": "Learn Kannada script basics and early reading patterns.",
     "headings": [
       "Script Shape",
-      "Reveal",
+      "Reveal Practice",
       "Learning Flow"
     ],
-    "content": "Kannada Basics BookOpen Kannada is written with a rounded script. Start by recognizing vowels, then combine consonants and vowel marks. Read slowly at first. Accuracy matters more than speed while the script is still new. Script Shape Letter Sound Example Hint ಅ a short vowel ಆ aa long vowel ಕ ka consonant with vowel ಕಿ ki consonant plus vowel mark Reveal The Kannada word ಕನ್ನಡ means Kannada. Learning Flow",
-    "searchText": "kannada ಕನನಡ kannada basics basics learn kannada script basics and early reading patterns script shape reveal learning flow kannada basics bookopen kannada is written with a rounded script start by recognizing vowels then combine consonants and vowel marks read slowly at first accuracy matters more than speed while the script is still new script shape letter sound example hint ಅ a short vowel ಆ aa long vowel ಕ ka consonant with vowel ಕ ki consonant plus vowel mark reveal the kannada word ಕನನಡ means kannada learning flow"
+    "content": "Kannada Basics BookOpen Kannada is written with a rounded script. Start by recognizing vowels, then combine consonants and vowel marks. Read slowly at first. Accuracy matters more than speed while the script is still new. Script Shape Letter Sound Example Hint ಅ a short vowel ಆ aa long vowel ಕ ka consonant with vowel ಕಿ ki consonant plus vowel mark Reveal Practice Use double brackets around the answer and a sentence template to make reveal practice. If the template does not include , Lexora places the blank at the end of the sentence. Write it like this: Blank at the end: The Kannada word ಕನ್ನಡ means Kannada Blank anywhere: The Kannada word ಕನ್ನಡ means Kannada. It appears like this: The Kannada word ಕನ್ನಡ means Kannada The Kannada word ಕನ್ನಡ means Kannada. Learning Flow",
+    "searchText": "kannada ಕನನಡ kannada basics basics learn kannada script basics and early reading patterns script shape reveal practice learning flow kannada basics bookopen kannada is written with a rounded script start by recognizing vowels then combine consonants and vowel marks read slowly at first accuracy matters more than speed while the script is still new script shape letter sound example hint ಅ a short vowel ಆ aa long vowel ಕ ka consonant with vowel ಕ ki consonant plus vowel mark reveal practice use double brackets around the answer and a sentence template to make reveal practice if the template does not include lexora places the blank at the end of the sentence write it like this blank at the end the kannada word ಕನನಡ means kannada blank anywhere the kannada word ಕನನಡ means kannada it appears like this the kannada word ಕನನಡ means kannada the kannada word ಕನನಡ means kannada learning flow"
   },
   {
     "id": "kannada/greetings",

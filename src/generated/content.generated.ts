@@ -19,7 +19,7 @@ export const docsContent = {
     "basics": {
       "title": "Basics",
       "description": "Learn Kannada script basics and early reading patterns.",
-      "body": "# Kannada Basics :icon[BookOpen]\n\nKannada is written with a rounded script. Start by recognizing vowels, then combine consonants and vowel marks.\n\n:::note\nRead slowly at first. Accuracy matters more than speed while the script is still new.\n:::\n\n## Script Shape\n\n| Letter | Sound | Example Hint |\n| --- | --- | --- |\n| ಅ | a | short vowel |\n| ಆ | aa | long vowel |\n| ಕ | ka | consonant with vowel |\n| ಕಿ | ki | consonant plus vowel mark |\n\n## Reveal\n\nThe Kannada word ಕನ್ನಡ means [[Kannada]].\n\n## Learning Flow\n\n```mermaid\nflowchart TD\n  vowels[Vowels] --> consonants[Consonants]\n  consonants --> marks[Vowel marks]\n  marks --> reading[Simple reading]\n```",
+      "body": "# Kannada Basics :icon[BookOpen]\n\nKannada is written with a rounded script. Start by recognizing vowels, then combine consonants and vowel marks.\n\n:::note\nRead slowly at first. Accuracy matters more than speed while the script is still new.\n:::\n\n## Script Shape\n\n| Letter | Sound | Example Hint |\n| --- | --- | --- |\n| ಅ | a | short vowel |\n| ಆ | aa | long vowel |\n| ಕ | ka | consonant with vowel |\n| ಕಿ | ki | consonant plus vowel mark |\n\n## Reveal Practice\n\nUse double brackets around the answer and a sentence template to make reveal practice. If the template does not include `___`, Lexora places the blank at the end of the sentence.\n\nWrite it like this:\n\n- Blank at the end: `[[Kannada|The Kannada word ಕನ್ನಡ means]]`\n- Blank anywhere: `[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]`\n\nIt appears like this:\n\n[[Kannada|The Kannada word ಕನ್ನಡ means]]\n\n[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]\n\n## Learning Flow\n\n```mermaid\nflowchart TD\n  vowels[Vowels] --> consonants[Consonants]\n  consonants --> marks[Vowel marks]\n  marks --> reading[Simple reading]\n```",
       "toc": [
         {
           "id": "script-shape",
@@ -27,8 +27,8 @@ export const docsContent = {
           "depth": 2
         },
         {
-          "id": "reveal",
-          "text": "Reveal",
+          "id": "reveal-practice",
+          "text": "Reveal Practice",
           "depth": 2
         },
         {

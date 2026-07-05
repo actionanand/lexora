@@ -26,6 +26,24 @@ function normalizeSiteUrl(value) {
   return trimmed.replace(/\/+$/g, "");
 }
 
+function revealText(value) {
+  const separatorIndex = value.indexOf("|");
+
+  if (separatorIndex === -1) {
+    return value;
+  }
+
+  const answer = value.slice(0, separatorIndex).trim();
+  const template = value.slice(separatorIndex + 1);
+  const blankPattern = /_{3,}/;
+
+  if (blankPattern.test(template)) {
+    return template.replace(blankPattern, answer);
+  }
+
+  return `${template} ${answer}`;
+}
+
 function stripMarkdown(markdown) {
   return markdown
     .replace(/```[\s\S]*?```/g, " ")
@@ -33,7 +51,7 @@ function stripMarkdown(markdown) {
     .replace(/:::\w+/g, " ")
     .replace(/:::/g, " ")
     .replace(/:\w+\[([^\]]+)\]/g, "$1")
-    .replace(/\[\[([^\]]+)\]\]/g, "$1")
+    .replace(/\[\[([^\]]+)\]\]/g, (_, value) => revealText(value))
     .replace(/\|/g, " ")
     .replace(/[#*_>~-]/g, " ")
     .replace(/\s+/g, " ")

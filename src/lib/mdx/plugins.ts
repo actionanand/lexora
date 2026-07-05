@@ -22,6 +22,36 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
+function revealParts(value: string) {
+  const separatorIndex = value.indexOf("|");
+
+  if (separatorIndex === -1) {
+    return {
+      answer: value,
+      prefix: "",
+      suffix: ""
+    };
+  }
+
+  const answer = value.slice(0, separatorIndex).trim();
+  const template = value.slice(separatorIndex + 1);
+  const blankMatch = /_{3,}/.exec(template);
+
+  if (!blankMatch) {
+    return {
+      answer,
+      prefix: template.endsWith(" ") ? template : `${template} `,
+      suffix: ""
+    };
+  }
+
+  return {
+    answer,
+    prefix: template.slice(0, blankMatch.index),
+    suffix: template.slice(blankMatch.index + blankMatch[0].length)
+  };
+}
+
 export function remarkCallouts() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {
@@ -80,9 +110,11 @@ export function remarkRevealBlanks() {
           });
         }
 
+        const reveal = revealParts(match[1]);
+
         pieces.push({
           type: "html",
-          value: `<lexora-blank answer="${escapeHtml(match[1])}"></lexora-blank>`
+          value: `<lexora-blank answer="${escapeHtml(reveal.answer)}" prefix="${escapeHtml(reveal.prefix)}" suffix="${escapeHtml(reveal.suffix)}"></lexora-blank>`
         });
 
         cursor = match.index + match[0].length;

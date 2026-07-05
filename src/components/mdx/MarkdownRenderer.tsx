@@ -15,17 +15,35 @@ import rehypeSlug from "rehype-slug";
 import remarkDirective from "remark-directive";
 import remarkGfm from "remark-gfm";
 
-function RevealBlank({ answer }: { answer?: string }) {
+function RevealBlank({
+  answer,
+  prefix,
+  suffix
+}: {
+  answer?: string;
+  prefix?: string;
+  suffix?: string;
+}) {
   const [revealed, setRevealed] = useState(false);
+  const label = revealed ? "Hide answer" : "Reveal answer";
 
   return (
-    <button
-      className={`${styles.blank} ${revealed ? styles.blankRevealed : ""}`}
-      type="button"
-      onClick={() => setRevealed(true)}
-    >
-      {revealed ? answer : "Reveal"}
-    </button>
+    <span className={styles.revealPractice}>
+      {prefix ? <span>{prefix}</span> : null}
+      <span className={`${styles.revealBlank} ${revealed ? styles.revealBlankOpen : ""}`}>
+        <span className={styles.blankText}>{revealed ? answer : null}</span>
+      </span>
+      {suffix ? <span>{suffix}</span> : null}
+      <button
+        className={styles.revealButton}
+        type="button"
+        onClick={() => setRevealed((current) => !current)}
+        aria-label={label}
+        title={label}
+      >
+        {revealed ? <Icons.EyeOff size={16} aria-hidden /> : <Icons.Eye size={16} aria-hidden />}
+      </button>
+    </span>
   );
 }
 
@@ -84,7 +102,13 @@ const markdownComponents = {
     );
   },
   "lexora-blank"({ node }: NodeProps) {
-    return <RevealBlank answer={nodeProperty(node, "answer")} />;
+    return (
+      <RevealBlank
+        answer={nodeProperty(node, "answer")}
+        prefix={nodeProperty(node, "prefix")}
+        suffix={nodeProperty(node, "suffix")}
+      />
+    );
   },
   "lexora-icon"({ node }: NodeProps) {
     return <InlineIcon name={nodeProperty(node, "name")} />;
