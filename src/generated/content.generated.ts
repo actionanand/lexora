@@ -150,6 +150,38 @@ export const docsContent = {
         }
       ]
     },
+    "media": {
+      "title": "Media",
+      "description": "Use large exercise images, base64 illustrations, and SVG diagrams in lessons.",
+      "body": "# Media :icon[Image]\n\nUse media directives when an article needs a large exercise image, diagram, poster, worksheet, or SVG illustration.\n\n## Folder Pattern\n\nPut large reusable assets in `src/app/bigDataImg`.\n\n```txt\nsrc/app/bigDataImg/\n  png/\n    worksheet.ts\n    index.ts\n  svg/\n    grammar-chart.ts\n    index.ts\n```\n\nPNG or base64 images:\n\n```ts\n// src/app/bigDataImg/png/worksheet.ts\nexport const WORKSHEET = `data:image/png;base64,...`;\n```\n\n```ts\n// src/app/bigDataImg/png/index.ts\nexport * from \"./worksheet\";\n```\n\nSVG images:\n\n```ts\n// src/app/bigDataImg/svg/grammar-chart.ts\nexport const GRAMMAR_CHART = `\n<svg viewBox=\"0 0 400 160\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"400\" height=\"160\" rx=\"16\" fill=\"#f8fafc\" />\n  <text x=\"200\" y=\"86\" text-anchor=\"middle\">Grammar chart</text>\n</svg>`;\n```\n\n```ts\n// src/app/bigDataImg/svg/index.ts\nexport * from \"./grammar-chart\";\n```\n\nNames are normalized like word images: `WORKSHEET` becomes `worksheet`, and `GRAMMAR_CHART` becomes `grammar-chart`.\n\n:::note\nLexora only includes large assets that are used by `bigImage` or `bigSvg` in articles. It checks `src/app/bigDataImg` first and falls back to `src/app/dataImg` if the same exported name is not present in the large-image folder.\n:::\n\n## Base64 Image\n\nUse `bigImage` for PNG/base64 article images.\n\n```md\n:bigImage[landscape]{alt=\"Landscape Image\" width=\"260\" height=\"150\" fit=\"cover\" caption=\"Landscape image with a fixed height\" shadow=\"true\" rounded=\"true\"}\n```\n\n:bigImage[landscape]{alt=\"Landscape Image\" fit=\"cover\" caption=\"Landscape image with a fixed height\" shadow=\"true\" rounded=\"true\"}\n\n## SVG Illustration\n\nUse `bigSvg` for SVG article illustrations.\n\n```md\n:bigSvg[house]{alt=\"House Image\" width=\"320\" height=\"190\" caption=\"House SVG with a fixed height\" shadow=\"true\"}\n```\n\n:bigSvg[house]{alt=\"House Image\" width=\"320\" height=\"190\" caption=\"House SVG with a fixed height\" shadow=\"true\"}\n\n## Options\n\n| Attribute | Example | Notes |\n| --- | --- | --- |\n| `alt` | `alt=\"Script worksheet\"` | Accessibility text. |\n| `caption` | `caption=\"Read the labels aloud.\"` | Optional caption below the image. |\n| `width` | `width=\"420\"` or `width=\"60%\"` | Numbers become pixels. |\n| `height` | `height=\"260\"` | Optional fixed height. |\n| `fit` | `fit=\"cover\"` | Default is `contain`. |\n| `align` | `align=\"left\"` | Use `left`, `center`, or `right`. |\n| `shadow` | `shadow=\"true\"` | Adds a soft drop shadow. |\n| `bordered` | `bordered=\"true\"` | Adds a subtle border. |\n| `rounded` | `rounded=\"true\"` | Adds rounded corners. |\n| `loading` | `loading=\"eager\"` | Default is `lazy`. |\n\n## Exercise Example\n\n```md\n:bigSvg[peacock]{alt=\"Find the highlighted parts\" width=\"360\" caption=\"Look at the image, then answer the sentence below.\" rounded=\"true\"}\n\n:sentence[चित्रे ==मयूरः== अस्ति]{transliteration=\"citre mayurah asti\" meaning=\"There is a peacock in the picture.\"}\n```\n\n:bigSvg[peacock]{alt=\"Find the highlighted parts\" width=\"360\" caption=\"Look at the image, then answer the sentence below.\" rounded=\"true\"}\n\n:sentence[चित्रे ==मयूरः== अस्ति]{transliteration=\"citre mayurah asti\" meaning=\"There is a peacock in the picture.\"}",
+      "toc": [
+        {
+          "id": "folder-pattern",
+          "text": "Folder Pattern",
+          "depth": 2
+        },
+        {
+          "id": "base64-image",
+          "text": "Base64 Image",
+          "depth": 2
+        },
+        {
+          "id": "svg-illustration",
+          "text": "SVG Illustration",
+          "depth": 2
+        },
+        {
+          "id": "options",
+          "text": "Options",
+          "depth": 2
+        },
+        {
+          "id": "exercise-example",
+          "text": "Exercise Example",
+          "depth": 2
+        }
+      ]
+    },
     "sentences": {
       "title": "Sentences",
       "description": "Practice simple Sanskrit sentences.",

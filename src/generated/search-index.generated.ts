@@ -119,6 +119,25 @@ export const searchIndex = [
     "searchText": "sanskrit ससकतम sanskrit grammar grammar a gentle introduction to agreement and sentence structure nouns verbs agreement sanskrit grammar layers sanskrit grammar is orderly instead of memorizing every form at once start by noticing what a word is doing in the sentence nouns nouns change form based on role number and gender the role of a noun is often visible in its ending so word order can be more flexible than in english verbs verbs carry information about person number tense and mood sanskrit meaning पठत he or she reads पठत two read पठनत they read agreement adjectives usually agree with the nouns they describe reveal the key idea adjectives follow the noun in gender number and case do not rush declension tables learn a few useful forms in real sentences first"
   },
   {
+    "id": "sanskrit/media",
+    "language": "sanskrit",
+    "languageTitle": "Sanskrit",
+    "languageNativeName": "संस्कृतम्",
+    "slug": "media",
+    "path": "/docs/sanskrit/media",
+    "title": "Media",
+    "description": "Use large exercise images, base64 illustrations, and SVG diagrams in lessons.",
+    "headings": [
+      "Folder Pattern",
+      "Base64 Image",
+      "SVG Illustration",
+      "Options",
+      "Exercise Example"
+    ],
+    "content": "Media Image Use media directives when an article needs a large exercise image, diagram, poster, worksheet, or SVG illustration. Folder Pattern Put large reusable assets in src/app/bigDataImg. PNG or base64 images: SVG images: Names are normalized like word images: WORKSHEET becomes worksheet, and GRAMMAR CHART becomes grammar chart. Lexora only includes large assets that are used by bigImage or bigSvg in articles. It checks src/app/bigDataImg first and falls back to src/app/dataImg if the same exported name is not present in the large image folder. Base64 Image Use bigImage for PNG/base64 article images. Landscape Image Landscape image with a fixed height SVG Illustration Use bigSvg for SVG article illustrations. House Image House SVG with a fixed height Options Attribute Example Notes alt alt=\"Script worksheet\" Accessibility text. caption caption=\"Read the labels aloud.\" Optional caption below the image. width width=\"420\" or width=\"60%\" Numbers become pixels. height height=\"260\" Optional fixed height. fit fit=\"cover\" Default is contain. align align=\"left\" Use left, center, or right. shadow shadow=\"true\" Adds a soft drop shadow. bordered bordered=\"true\" Adds a subtle border. rounded rounded=\"true\" Adds rounded corners. loading loading=\"eager\" Default is lazy. Exercise Example Find the highlighted parts Look at the image, then answer the sentence below. चित्रे मयूरः अस्ति citre mayurah asti There is a peacock in the picture.",
+    "searchText": "sanskrit ससकतम sanskrit media media use large exercise images base64 illustrations and svg diagrams in lessons folder pattern base64 image svg illustration options exercise example media image use media directives when an article needs a large exercise image diagram poster worksheet or svg illustration folder pattern put large reusable assets in src app bigdataimg png or base64 images svg images names are normalized like word images worksheet becomes worksheet and grammar chart becomes grammar chart lexora only includes large assets that are used by bigimage or bigsvg in articles it checks src app bigdataimg first and falls back to src app dataimg if the same exported name is not present in the large image folder base64 image use bigimage for png base64 article images landscape image landscape image with a fixed height svg illustration use bigsvg for svg article illustrations house image house svg with a fixed height options attribute example notes alt alt script worksheet accessibility text caption caption read the labels aloud optional caption below the image width width 420 or width 60 numbers become pixels height height 260 optional fixed height fit fit cover default is contain align align left use left center or right shadow shadow true adds a soft drop shadow bordered bordered true adds a subtle border rounded rounded true adds rounded corners loading loading eager default is lazy exercise example find the highlighted parts look at the image then answer the sentence below चतर मयर असत citre mayurah asti there is a peacock in the picture"
+  },
+  {
     "id": "sanskrit/sentences",
     "language": "sanskrit",
     "languageTitle": "Sanskrit",

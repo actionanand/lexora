@@ -27,6 +27,12 @@
       "title": "Sentences",
       "description": "Practice reading and forming complete sentences.",
       "order": 4
+    },
+    {
+      "slug": "media",
+      "title": "Media",
+      "description": "Use large exercise images, base64 illustrations, and SVG diagrams.",
+      "order": 5
     }
   ]
 }

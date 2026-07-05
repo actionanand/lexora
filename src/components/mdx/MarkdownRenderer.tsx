@@ -2,8 +2,10 @@
 
 import { MermaidBlock } from "@/components/mdx/MermaidBlock";
 import styles from "@/components/mdx/MarkdownRenderer.module.css";
+import { articleImageSources } from "@/generated/article-image-sources.generated";
 import { imageWordSources } from "@/generated/image-word-sources.generated";
 import {
+  remarkArticleImages,
   remarkCallouts,
   remarkCharacterDialogues,
   remarkEmojiCards,
@@ -17,7 +19,7 @@ import { withBasePath } from "@/lib/base-path";
 import * as Icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { isValidElement } from "react";
-import type { ReactElement, ReactNode } from "react";
+import type { CSSProperties, ReactElement, ReactNode } from "react";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import type { Components } from "react-markdown";
@@ -188,6 +190,24 @@ function normalizeImageWordKey(value: string) {
     .toLowerCase();
 }
 
+function renderableImageSource(value: string | undefined, format?: string) {
+  const source = value?.trim();
+
+  if (!source) {
+    return undefined;
+  }
+
+  if (source.startsWith("data:")) {
+    return source;
+  }
+
+  if (format === "svg" || source.startsWith("<svg") || source.startsWith("<?xml")) {
+    return `data:image/svg+xml;utf8,${encodeURIComponent(source)}`;
+  }
+
+  return source;
+}
+
 function ImageWordCard({
   format,
   image,
@@ -208,9 +228,10 @@ function ImageWordCard({
   const imageKey = normalizeImageWordKey(image ?? "");
   const imageFormat = normalizeImageWordKey(format ?? "");
   const sources = imageWordSources as Record<string, string>;
-  const src = imageFormat
+  const imageSource = imageFormat
     ? sources[`${imageFormat}:${imageKey}`]
     : sources[imageKey] ?? sources[`png:${imageKey}`] ?? sources[`svg:${imageKey}`];
+  const src = renderableImageSource(imageSource, imageFormat);
   const sizeClass =
     size === "normal"
       ? styles.imageWordNormal
@@ -367,6 +388,89 @@ function SentenceCard({
   );
 }
 
+function boolProp(value?: string) {
+  return value === "true";
+}
+
+function dimensionValue(value?: string) {
+  if (!value) {
+    return undefined;
+  }
+
+  return /^\d+$/.test(value) ? `${value}px` : value;
+}
+
+function ArticleImage({
+  align,
+  alt,
+  bordered,
+  caption,
+  fit,
+  format,
+  height,
+  image,
+  loading,
+  rounded,
+  shadow,
+  width
+}: {
+  align?: string;
+  alt?: string;
+  bordered?: string;
+  caption?: string;
+  fit?: string;
+  format?: string;
+  height?: string;
+  image?: string;
+  loading?: string;
+  rounded?: string;
+  shadow?: string;
+  width?: string;
+}) {
+  const imageKey = normalizeImageWordKey(image ?? "");
+  const imageFormat = normalizeImageWordKey(format ?? "");
+  const src = renderableImageSource(
+    (articleImageSources as Record<string, string>)[`${imageFormat}:${imageKey}`],
+    imageFormat
+  );
+  const alignClass =
+    align === "left" ? styles.articleImageLeft : align === "right" ? styles.articleImageRight : styles.articleImageCenter;
+  const className = [
+    styles.articleImageFigure,
+    alignClass,
+    boolProp(shadow) ? styles.articleImageShadow : "",
+    boolProp(bordered) ? styles.articleImageBordered : "",
+    boolProp(rounded) ? styles.articleImageRounded : ""
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const imageWidth = dimensionValue(width);
+  const imageHeight = dimensionValue(height);
+  const imageStyle: CSSProperties = {
+    width: imageWidth,
+    height: imageHeight,
+    maxHeight: imageHeight,
+    objectFit: fit === "cover" ? "cover" : "contain"
+  };
+
+  if (!src) {
+    return null;
+  }
+
+  return (
+    <span className={className} role="figure" aria-label={caption || alt || image}>
+      <img
+        className={styles.articleImage}
+        src={src}
+        alt={alt ?? ""}
+        loading={loading === "eager" ? "eager" : "lazy"}
+        style={imageStyle}
+      />
+      {caption ? <span className={styles.articleImageCaption}>{caption}</span> : null}
+    </span>
+  );
+}
+
 type MarkdownNode = {
   properties?: Record<string, unknown>;
 };
@@ -384,7 +488,7 @@ type NodeProps = {
 function nodeProperty(node: MarkdownNode | undefined, key: string) {
   const value = node?.properties?.[key];
 
-  return typeof value === "string" ? value : "";
+  return typeof value === "string" || typeof value === "number" ? String(value) : "";
 }
 
 const markdownComponents = {
@@ -500,6 +604,24 @@ const markdownComponents = {
         transliteration={nodeProperty(node, "transliteration")}
       />
     );
+  },
+  "lexora-article-image"({ node }: NodeProps) {
+    return (
+      <ArticleImage
+        align={nodeProperty(node, "align")}
+        alt={nodeProperty(node, "alt")}
+        bordered={nodeProperty(node, "bordered")}
+        caption={nodeProperty(node, "caption")}
+        fit={nodeProperty(node, "fit")}
+        format={nodeProperty(node, "format")}
+        height={nodeProperty(node, "height")}
+        image={nodeProperty(node, "image")}
+        loading={nodeProperty(node, "loading")}
+        rounded={nodeProperty(node, "rounded")}
+        shadow={nodeProperty(node, "shadow")}
+        width={nodeProperty(node, "width")}
+      />
+    );
   }
 } as unknown as Components;
 
@@ -510,6 +632,7 @@ export function MarkdownRenderer({ source }: { source: string }) {
         remarkPlugins={[
           remarkGfm,
           remarkDirective,
+          remarkArticleImages,
           remarkCallouts,
           remarkCharacterDialogues,
           remarkEmojiCards,

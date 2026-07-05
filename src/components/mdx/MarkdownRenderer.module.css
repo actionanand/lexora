@@ -39,6 +39,10 @@
   line-height: 1.28;
 }
 
+.markdown :global(p):has(.articleImageFigure) {
+  margin: 0;
+}
+
 .markdown :global(a) {
   color: var(--accent-strong);
   font-weight: 750;
@@ -587,6 +591,59 @@
   color: color-mix(in srgb, #c026d3 82%, var(--text));
   font-size: 0.86rem;
   font-weight: 680;
+}
+
+.articleImageFigure {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0 30px;
+}
+
+.articleImageCenter {
+  justify-items: center;
+}
+
+.articleImageLeft {
+  justify-items: start;
+}
+
+.articleImageRight {
+  justify-items: end;
+}
+
+.articleImage {
+  display: block;
+  max-width: 100%;
+}
+
+.articleImageShadow .articleImage {
+  filter: drop-shadow(0 18px 24px color-mix(in srgb, var(--heading) 16%, transparent));
+}
+
+.articleImageBordered .articleImage {
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+}
+
+.articleImageRounded .articleImage {
+  border-radius: 8px;
+}
+
+.articleImageCaption {
+  max-width: min(100%, 720px);
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-style: italic;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.articleImageLeft .articleImageCaption {
+  text-align: left;
+}
+
+.articleImageRight .articleImageCaption {
+  text-align: right;
 }
 
 .mermaid {

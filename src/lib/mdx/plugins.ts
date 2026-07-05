@@ -277,6 +277,38 @@ export function remarkSentenceCards() {
   };
 }
 
+export function remarkArticleImages() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || (node.name !== "bigImage" && node.name !== "bigSvg")) {
+        return;
+      }
+
+      const image = node.children?.[0]?.value?.trim() ?? node.attributes?.name ?? "";
+      const format = node.name === "bigSvg" ? "svg" : "png";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-article-image",
+        hProperties: {
+          align: node.attributes?.align ?? "center",
+          alt: node.attributes?.alt ?? node.attributes?.caption ?? image,
+          bordered: node.attributes?.bordered ?? "false",
+          caption: node.attributes?.caption ?? "",
+          fit: node.attributes?.fit ?? "contain",
+          format,
+          height: node.attributes?.height ?? "",
+          image,
+          loading: node.attributes?.loading ?? "lazy",
+          rounded: node.attributes?.rounded ?? "false",
+          shadow: node.attributes?.shadow ?? "false",
+          width: node.attributes?.width ?? ""
+        }
+      };
+    });
+  };
+}
+
 export function remarkIcons() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {

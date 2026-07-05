@@ -81,6 +81,12 @@ export const languages = [
         "title": "Sentences",
         "description": "Practice simple Sanskrit sentences.",
         "order": 4
+      },
+      {
+        "slug": "media",
+        "title": "Media",
+        "description": "Use large exercise images, base64 illustrations, and SVG diagrams in lessons.",
+        "order": 5
       }
     ]
   }

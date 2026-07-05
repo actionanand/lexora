@@ -1,0 +1,104 @@
+---
+title: "Media"
+description: "Use large exercise images, base64 illustrations, and SVG diagrams in lessons."
+order: 5
+---
+
+# Media :icon[Image]
+
+Use media directives when an article needs a large exercise image, diagram, poster, worksheet, or SVG illustration.
+
+## Folder Pattern
+
+Put large reusable assets in `src/app/bigDataImg`.
+
+```txt
+src/app/bigDataImg/
+  png/
+    worksheet.ts
+    index.ts
+  svg/
+    grammar-chart.ts
+    index.ts
+```
+
+PNG or base64 images:
+
+```ts
+// src/app/bigDataImg/png/worksheet.ts
+export const WORKSHEET = `data:image/png;base64,...`;
+```
+
+```ts
+// src/app/bigDataImg/png/index.ts
+export * from "./worksheet";
+```
+
+SVG images:
+
+```ts
+// src/app/bigDataImg/svg/grammar-chart.ts
+export const GRAMMAR_CHART = `
+<svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="160" rx="16" fill="#f8fafc" />
+  <text x="200" y="86" text-anchor="middle">Grammar chart</text>
+</svg>`;
+```
+
+```ts
+// src/app/bigDataImg/svg/index.ts
+export * from "./grammar-chart";
+```
+
+Names are normalized like word images: `WORKSHEET` becomes `worksheet`, and `GRAMMAR_CHART` becomes `grammar-chart`.
+
+:::note
+Lexora only includes large assets that are used by `bigImage` or `bigSvg` in articles. It checks `src/app/bigDataImg` first and falls back to `src/app/dataImg` if the same exported name is not present in the large-image folder.
+:::
+
+## Base64 Image
+
+Use `bigImage` for PNG/base64 article images.
+
+```md
+:bigImage[landscape]{alt="Landscape Image" width="260" height="150" fit="cover" caption="Landscape image with a fixed height" shadow="true" rounded="true"}
+```
+
+:bigImage[landscape]{alt="Landscape Image" width="260" height="150" fit="cover" caption="Landscape image with a fixed height" shadow="true" rounded="true"}
+
+## SVG Illustration
+
+Use `bigSvg` for SVG article illustrations.
+
+```md
+:bigSvg[house]{alt="House Image" width="320" height="190" caption="House SVG with a fixed height" shadow="true"}
+```
+
+:bigSvg[house]{alt="House Image" width="320" height="190" caption="House SVG with a fixed height" shadow="true"}
+
+## Options
+
+| Attribute | Example | Notes |
+| --- | --- | --- |
+| `alt` | `alt="Script worksheet"` | Accessibility text. |
+| `caption` | `caption="Read the labels aloud."` | Optional caption below the image. |
+| `width` | `width="420"` or `width="60%"` | Numbers become pixels. |
+| `height` | `height="260"` | Optional fixed height. |
+| `fit` | `fit="cover"` | Default is `contain`. |
+| `align` | `align="left"` | Use `left`, `center`, or `right`. |
+| `shadow` | `shadow="true"` | Adds a soft drop shadow. |
+| `bordered` | `bordered="true"` | Adds a subtle border. |
+| `rounded` | `rounded="true"` | Adds rounded corners. |
+| `loading` | `loading="eager"` | Default is `lazy`. |
+
+## Exercise Example
+
+```md
+:bigSvg[peacock]{alt="Find the highlighted parts" width="360" caption="Look at the image, then answer the sentence below." rounded="true"}
+
+:sentence[चित्रे ==मयूरः== अस्ति]{transliteration="citre mayurah asti" meaning="There is a peacock in the picture."}
+```
+
+:bigSvg[peacock]{alt="Find the highlighted parts" width="360" caption="Look at the image, then answer the sentence below." rounded="true"}
+
+:sentence[चित्रे ==मयूरः== अस्ति]{transliteration="citre mayurah asti" meaning="There is a peacock in the picture."}
