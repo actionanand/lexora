@@ -2,10 +2,12 @@
 
 import { MermaidBlock } from "@/components/mdx/MermaidBlock";
 import styles from "@/components/mdx/MarkdownRenderer.module.css";
+import { imageWordSources } from "@/generated/image-word-sources.generated";
 import {
   remarkCallouts,
   remarkCharacterDialogues,
   remarkEmojiCards,
+  remarkImageWords,
   remarkIcons,
   remarkRevealBlanks
 } from "@/lib/mdx/plugins";
@@ -87,7 +89,9 @@ const characterAvatars: Record<string, { label: string; image: string }> = {
   guide: { label: "Guide", image: "/admonitions/duck.webp" },
   owl: { label: "Owl", image: "/admonitions/owl.webp" },
   unicorn: { label: "Unicorn", image: "/admonitions/unicorn.webp" },
-  duck: { label: "Duck", image: "/admonitions/duck.webp" }
+  duck: { label: "Duck", image: "/admonitions/duck.webp" },
+  boy: { label: "Boy", image: "/admonitions/boy.png" },
+  girl: { label: "Girl", image: "/admonitions/girl.png" }
 };
 
 function CharacterDialogue({
@@ -158,6 +162,58 @@ function EmojiCard({
           <span className={styles.emojiTransliteration}>({transliteration})</span>
         ) : null}
         {meaning ? <span className={styles.emojiMeaning}>{meaning}</span> : null}
+      </span>
+    </span>
+  );
+}
+
+function normalizeImageWordKey(value: string) {
+  return value
+    .trim()
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, "-")
+    .replace(/[^A-Za-z0-9-]/g, "")
+    .toLowerCase();
+}
+
+function ImageWordCard({
+  image,
+  label,
+  meaning,
+  size,
+  transliteration
+}: {
+  image?: string;
+  label?: string;
+  meaning?: string;
+  size?: string;
+  transliteration?: string;
+}) {
+  const imageKey = normalizeImageWordKey(image ?? "");
+  const src = (imageWordSources as Record<string, string>)[imageKey];
+  const sizeClass =
+    size === "huge"
+      ? styles.imageWordHuge
+      : size === "big"
+        ? styles.imageWordBig
+        : size === "normal"
+          ? styles.imageWordNormal
+          : styles.imageWordMedium;
+  const readableLabel = [label, transliteration, meaning].filter(Boolean).join(" ");
+
+  if (!src) {
+    return null;
+  }
+
+  return (
+    <span className={`${styles.imageWord} ${sizeClass}`} role="group" aria-label={readableLabel}>
+      <img className={styles.imageWordImage} src={src} alt="" loading="lazy" aria-hidden />
+      <span className={styles.imageWordText}>
+        {label ? <span className={styles.imageWordLabel}>{label}</span> : null}
+        {transliteration ? (
+          <span className={styles.imageWordTransliteration}>({transliteration})</span>
+        ) : null}
+        {meaning ? <span className={styles.imageWordMeaning}>{meaning}</span> : null}
       </span>
     </span>
   );
@@ -261,6 +317,17 @@ const markdownComponents = {
         transliteration={nodeProperty(node, "transliteration")}
       />
     );
+  },
+  "lexora-image-word"({ node }: NodeProps) {
+    return (
+      <ImageWordCard
+        image={nodeProperty(node, "image")}
+        label={nodeProperty(node, "label")}
+        meaning={nodeProperty(node, "meaning")}
+        size={nodeProperty(node, "size")}
+        transliteration={nodeProperty(node, "transliteration")}
+      />
+    );
   }
 } as unknown as Components;
 
@@ -274,6 +341,7 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkCallouts,
           remarkCharacterDialogues,
           remarkEmojiCards,
+          remarkImageWords,
           remarkIcons,
           remarkRevealBlanks
         ]}

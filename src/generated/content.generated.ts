@@ -104,7 +104,7 @@ export const docsContent = {
     "basics": {
       "title": "Basics",
       "description": "Start with Sanskrit sounds, script, and first reading patterns.",
-      "body": "# Sanskrit Basics :icon[BookOpen]\n\nSanskrit is usually learned through sound first. Read slowly, keep the vowel length clear, and let each syllable land cleanly.\n\n:::note\nShort vowels and long vowels can change meaning. Treat `a` and `ā` as different sounds, not as decorative marks.\n:::\n\n## Sound And Script\n\nDevanagari is written from left to right. Many consonants carry an inherent `a` sound unless a vowel mark or virama changes it.\n\n| Pattern | Example | Hint |\n| --- | --- | --- |\n| अ | a | short open vowel |\n| आ | ā | long open vowel |\n| क | ka | consonant with inherent vowel |\n| की | kī | consonant with vowel mark |\n\n## First Reveal\n\nClick the blank to reveal the answer: नमस्ते means [[hello]].\n\n## Learning Flow\n\n```mermaid\nflowchart LR\n  sound[Listen] --> script[Read]\n  script --> word[Recognize words]\n  word --> sentence[Build sentences]\n```\n\n:::tip\nPractice five minutes of reading aloud before moving into grammar. The script becomes friendlier when your mouth knows the pattern.\n:::",
+      "body": "# Sanskrit Basics :icon[BookOpen]\n\nSanskrit is usually learned through sound first. Read slowly, keep the vowel length clear, and let each syllable land cleanly.\n\n:::note\nShort vowels and long vowels can change meaning. Treat `a` and `ā` as different sounds, not as decorative marks.\n:::\n\n## Sound And Script\n\nDevanagari is written from left to right. Many consonants carry an inherent `a` sound unless a vowel mark or virama changes it.\n\n| Pattern | Example | Hint |\n| --- | --- | --- |\n| अ | a | short open vowel |\n| आ | ā | long open vowel |\n| क | ka | consonant with inherent vowel |\n| की | kī | consonant with vowel mark |\n\n## First Reveal\n\nClick the blank to reveal the answer: नमस्ते means [[hello]].\n\n## Picture Word Practice\n\nUse `imageWord` when a learner should connect a word with a small visual, transliteration, and meaning. The image name comes from `src/app/dataImg/png/index.ts`, and the generator includes only the image names used in lessons.\n\nAdd a new base64 image like this:\n\n```ts\n// src/app/dataImg/png/house.ts\nexport const HOUSE = `data:image/png;base64,...`;\n```\n\nThen export it from the index:\n\n```ts\n// src/app/dataImg/png/index.ts\nexport * from \"./house\";\n```\n\nAfter that, use the export name in any lesson. You do not need to paste base64 into the article. `HOUSE` becomes `house`, and `BOY` becomes `boy`. Names with underscores can be written with dashes, so `SCHOOL_BAG` becomes `school-bag`.\n\n```md\n:imageWord[boy]{label=\"बालकः\" transliteration=\"balakah\" meaning=\"boy\" size=\"huge\"}\n:imageWord[girl]{label=\"बालिका\" transliteration=\"balika\" meaning=\"girl\" size=\"big\"}\n:imageWord[old_woman]{label=\"वृद्धा\" transliteration=\"Vṛddhā\" meaning=\"old woman\" size=\"huge\"}\n```\n\nAvailable sizes are `normal`, `medium`, `big`, and `huge`.\n\n:imageWord[boy]{label=\"बालकः\" transliteration=\"balakah\" meaning=\"boy\" size=\"huge\"}\n:imageWord[girl]{label=\"बालिका\" transliteration=\"balika\" meaning=\"girl\" size=\"big\"}\n:imageWord[old_woman]{label=\"वृद्धा\" transliteration=\"Vṛddhā\" meaning=\"old woman\" size=\"huge\"}\n\n:::boy\nSay `बालकः` slowly: `balakah`.\n:::\n\n:::girl{align=\"right\"}\nThen compare it with `बालिका`: `balika`.\n:::\n\n## Learning Flow\n\n```mermaid\nflowchart LR\n  sound[Listen] --> script[Read]\n  script --> word[Recognize words]\n  word --> sentence[Build sentences]\n```\n\n:::tip\nPractice five minutes of reading aloud before moving into grammar. The script becomes friendlier when your mouth knows the pattern.\n:::",
       "toc": [
         {
           "id": "sound-and-script",
@@ -114,6 +114,11 @@ export const docsContent = {
         {
           "id": "first-reveal",
           "text": "First Reveal",
+          "depth": 2
+        },
+        {
+          "id": "picture-word-practice",
+          "text": "Picture Word Practice",
           "depth": 2
         },
         {

@@ -368,6 +368,90 @@
   font-size: 1.18rem;
 }
 
+.imageWord {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 14px 14px 0;
+  vertical-align: middle;
+}
+
+.imageWordImage {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 12px color-mix(in srgb, var(--heading) 12%, transparent));
+}
+
+.imageWordText {
+  display: inline-grid;
+  gap: 2px;
+  line-height: 1.18;
+}
+
+.imageWordLabel {
+  color: var(--heading);
+  font-weight: 750;
+}
+
+.imageWordTransliteration {
+  color: var(--muted);
+  font-size: 0.82em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.imageWordMeaning {
+  color: var(--accent-strong);
+  font-size: 0.82em;
+  font-weight: 700;
+}
+
+.imageWordNormal .imageWordImage {
+  width: 42px;
+  height: 42px;
+}
+
+.imageWordNormal .imageWordLabel {
+  font-size: 0.88rem;
+}
+
+.imageWordMedium .imageWordImage {
+  width: 58px;
+  height: 58px;
+}
+
+.imageWordMedium .imageWordLabel {
+  font-size: 0.95rem;
+}
+
+.imageWordBig {
+  gap: 12px;
+}
+
+.imageWordBig .imageWordImage {
+  width: 76px;
+  height: 76px;
+}
+
+.imageWordBig .imageWordLabel {
+  font-size: 1.05rem;
+}
+
+.imageWordHuge {
+  gap: 14px;
+}
+
+.imageWordHuge .imageWordImage {
+  width: 104px;
+  height: 104px;
+}
+
+.imageWordHuge .imageWordLabel {
+  font-size: 1.18rem;
+}
+
 .mermaid {
   margin: 24px 0;
   padding: 18px;

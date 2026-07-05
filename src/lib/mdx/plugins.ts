@@ -2,7 +2,7 @@ import { visit } from "unist-util-visit";
 import type { Node, Parent } from "unist";
 
 const CALLOUTS = new Set(["note", "tip", "info", "caution", "warning", "danger"]);
-const CHARACTERS = new Set(["mentor", "learner", "guide", "owl", "unicorn", "duck"]);
+const CHARACTERS = new Set(["mentor", "learner", "guide", "owl", "unicorn", "duck", "boy", "girl"]);
 
 const EMOJI_NAMES: Record<string, string> = {
   apple: "🍎",
@@ -179,6 +179,34 @@ export function remarkEmojiCards() {
         hName: "lexora-emoji",
         hProperties: {
           emoji,
+          label,
+          meaning,
+          transliteration,
+          size
+        }
+      };
+    });
+  };
+}
+
+export function remarkImageWords() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "imageWord") {
+        return;
+      }
+
+      const image = node.children?.[0]?.value?.trim() ?? node.attributes?.name ?? "";
+      const size = node.attributes?.size ?? "medium";
+      const label = node.attributes?.label ?? node.attributes?.text ?? image;
+      const meaning = node.attributes?.meaning ?? "";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-image-word",
+        hProperties: {
+          image,
           label,
           meaning,
           transliteration,

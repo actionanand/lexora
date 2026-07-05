@@ -27,6 +27,46 @@ Devanagari is written from left to right. Many consonants carry an inherent `a` 
 
 Click the blank to reveal the answer: नमस्ते means [[hello]].
 
+## Picture Word Practice
+
+Use `imageWord` when a learner should connect a word with a small visual, transliteration, and meaning. The image name comes from `src/app/dataImg/png/index.ts`, and the generator includes only the image names used in lessons.
+
+Add a new base64 image like this:
+
+```ts
+// src/app/dataImg/png/house.ts
+export const HOUSE = `data:image/png;base64,...`;
+```
+
+Then export it from the index:
+
+```ts
+// src/app/dataImg/png/index.ts
+export * from "./house";
+```
+
+After that, use the export name in any lesson. You do not need to paste base64 into the article. `HOUSE` becomes `house`, and `BOY` becomes `boy`. Names with underscores can be written with dashes, so `SCHOOL_BAG` becomes `school-bag`.
+
+```md
+:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy" size="huge"}
+:imageWord[girl]{label="बालिका" transliteration="balika" meaning="girl" size="big"}
+:imageWord[old_woman]{label="वृद्धा" transliteration="Vṛddhā" meaning="old woman" size="huge"}
+```
+
+Available sizes are `normal`, `medium`, `big`, and `huge`.
+
+:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy" size="huge"}
+:imageWord[girl]{label="बालिका" transliteration="balika" meaning="girl" size="big"}
+:imageWord[old_woman]{label="वृद्धा" transliteration="Vṛddhā" meaning="old woman" size="huge"}
+
+:::boy
+Say `बालकः` slowly: `balakah`.
+:::
+
+:::girl{align="right"}
+Then compare it with `बालिका`: `balika`.
+:::
+
 ## Learning Flow
 
 ```mermaid
