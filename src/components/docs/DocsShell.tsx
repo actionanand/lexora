@@ -23,8 +23,12 @@ import {
   FileText,
   LogOut,
   Menu,
+  Copy,
+  PictureInPicture,
   PlayCircle,
   Search,
+  Volume2,
+  VolumeX,
   X
 } from "lucide-react";
 import Link from "next/link";
@@ -376,13 +380,99 @@ function GoToTopButton() {
 
 type MediaEmbed = DocContent["mediaEmbeds"][number];
 
+type YouTubePlayer = {
+  destroy: () => void;
+  getIframe: () => HTMLIFrameElement;
+  isMuted: () => boolean;
+  mute: () => void;
+  unMute: () => void;
+};
+
+type YouTubeApi = {
+  Player: new (
+    element: HTMLElement,
+    options: {
+      videoId: string;
+      width: string;
+      height: string;
+      playerVars: Record<string, string | number>;
+      events?: {
+        onReady?: (event: { target: YouTubePlayer }) => void;
+      };
+    }
+  ) => YouTubePlayer;
+};
+
+type YouTubeWindow = Window &
+  typeof globalThis & {
+    YT?: YouTubeApi;
+    onYouTubeIframeAPIReady?: () => void;
+    __lexoraYouTubeApiPromise?: Promise<YouTubeApi>;
+  };
+
+type BaseResolvedMediaEmbed = {
+  kind: "landscape" | "portrait";
+  muted: boolean;
+  supportsMuteToggle: boolean;
+  title: string;
+  url: string;
+  watchUrl: string;
+};
+
+type YouTubeResolvedMediaEmbed = BaseResolvedMediaEmbed & {
+  provider: "youtube";
+  id: string;
+  start: number;
+  supportsMuteToggle: true;
+};
+
+type ResolvedMediaEmbed =
+  | YouTubeResolvedMediaEmbed
+  | (BaseResolvedMediaEmbed & {
+      provider: "facebook";
+      supportsMuteToggle: true;
+    })
+  | (BaseResolvedMediaEmbed & {
+      provider: "instagram" | "tiktok";
+      supportsMuteToggle: false;
+    });
+
 function tiktokVideoId(url?: string) {
   return url?.match(/\/video\/(\d+)/)?.[1] ?? "";
 }
 
-function embedSource(embed: MediaEmbed) {
+function getYouTubeApi() {
+  const youtubeWindow = window as YouTubeWindow;
+
+  if (youtubeWindow.YT?.Player) {
+    return Promise.resolve(youtubeWindow.YT);
+  }
+
+  youtubeWindow.__lexoraYouTubeApiPromise ??= new Promise<YouTubeApi>((resolve) => {
+    const previousReady = youtubeWindow.onYouTubeIframeAPIReady;
+
+    youtubeWindow.onYouTubeIframeAPIReady = () => {
+      previousReady?.();
+
+      if (youtubeWindow.YT?.Player) {
+        resolve(youtubeWindow.YT);
+      }
+    };
+
+    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.append(tag);
+    }
+  });
+
+  return youtubeWindow.__lexoraYouTubeApiPromise;
+}
+
+function embedSource(embed: MediaEmbed, muted: boolean): ResolvedMediaEmbed | null {
   const title = embed.title || "Embedded video";
   const start = typeof embed.startTime === "number" ? Math.max(0, Math.floor(embed.startTime)) : 0;
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
 
   switch (embed.type) {
     case "youtube":
@@ -392,9 +482,18 @@ function embedSource(embed: MediaEmbed) {
       }
 
       return {
+        provider: "youtube",
         title,
-        url: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(embed.id)}?rel=0&modestbranding=1&playsinline=1&controls=1&mute=1${start ? `&start=${start}` : ""}`,
-        kind: embed.type === "youtube-short" ? "portrait" : "landscape"
+        id: embed.id,
+        start,
+        muted,
+        url: `https://www.youtube.com/embed/${encodeURIComponent(embed.id)}?rel=0&modestbranding=1&playsinline=1&controls=1&enablejsapi=1${origin ? `&origin=${encodeURIComponent(origin)}` : ""}&mute=${muted ? "1" : "0"}${start ? `&start=${start}` : ""}`,
+        watchUrl:
+          embed.type === "youtube-short"
+            ? `https://www.youtube.com/shorts/${embed.id}`
+            : `https://www.youtube.com/watch?v=${embed.id}${start ? `&t=${start}s` : ""}`,
+        kind: embed.type === "youtube-short" ? "portrait" : "landscape",
+        supportsMuteToggle: true
       };
     case "instagram":
       if (!embed.id) {
@@ -402,9 +501,13 @@ function embedSource(embed: MediaEmbed) {
       }
 
       return {
+        provider: "instagram",
         title,
+        muted,
         url: `https://www.instagram.com/reel/${encodeURIComponent(embed.id)}/embed`,
-        kind: "portrait"
+        watchUrl: `https://www.instagram.com/reel/${embed.id}/`,
+        kind: "portrait",
+        supportsMuteToggle: false
       };
     case "facebook":
       if (!embed.id) {
@@ -412,9 +515,13 @@ function embedSource(embed: MediaEmbed) {
       }
 
       return {
+        provider: "facebook",
         title,
-        url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(`https://www.facebook.com/reel/${embed.id}`)}&show_text=false&width=420`,
-        kind: "portrait"
+        muted,
+        url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(`https://www.facebook.com/reel/${embed.id}`)}&show_text=false&width=420&mute=${muted ? "1" : "0"}`,
+        watchUrl: `https://www.facebook.com/reel/${embed.id}`,
+        kind: "portrait",
+        supportsMuteToggle: true
       };
     case "tiktok": {
       const videoId = tiktokVideoId(embed.url);
@@ -424,9 +531,13 @@ function embedSource(embed: MediaEmbed) {
       }
 
       return {
+        provider: "tiktok",
         title,
+        muted,
         url: `https://www.tiktok.com/embed/v2/${encodeURIComponent(videoId)}`,
-        kind: "portrait"
+        watchUrl: embed.url ?? `https://www.tiktok.com/@/video/${videoId}`,
+        kind: "portrait",
+        supportsMuteToggle: false
       };
     }
     default:
@@ -434,14 +545,270 @@ function embedSource(embed: MediaEmbed) {
   }
 }
 
-type ResolvedMediaEmbed = NonNullable<ReturnType<typeof embedSource>>;
-
 function isResolvedMediaEmbed(source: ReturnType<typeof embedSource>): source is ResolvedMediaEmbed {
   return source !== null;
 }
 
+function YouTubeEmbedFrame({
+  muted,
+  source
+}: {
+  muted: boolean;
+  source: YouTubeResolvedMediaEmbed;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<YouTubePlayer | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    getYouTubeApi().then((api) => {
+      if (cancelled || !containerRef.current) {
+        return;
+      }
+
+      playerRef.current?.destroy();
+      playerRef.current = new api.Player(containerRef.current, {
+        videoId: source.id,
+        width: "100%",
+        height: "100%",
+        playerVars: {
+          rel: 0,
+          modestbranding: 1,
+          playsinline: 1,
+          controls: 1,
+          origin: window.location.origin,
+          enablejsapi: 1,
+          start: source.start
+        },
+        events: {
+          onReady(event) {
+            const iframe = event.target.getIframe();
+            iframe.style.cssText = "display:block;width:100%;height:100%;border:0;";
+
+            if (muted) {
+              event.target.mute();
+            } else {
+              event.target.unMute();
+            }
+          }
+        }
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      playerRef.current?.destroy();
+      playerRef.current = null;
+    };
+  }, [source.id, source.start]);
+
+  useEffect(() => {
+    const player = playerRef.current;
+
+    if (!player) {
+      return;
+    }
+
+    if (muted) {
+      player.mute();
+    } else {
+      player.unMute();
+    }
+  }, [muted]);
+
+  return <div className={styles.youtubePlayerSlot} ref={containerRef} />;
+}
+
+function FloatingMediaPlayer({
+  onClose,
+  source
+}: {
+  onClose: () => void;
+  source: ResolvedMediaEmbed;
+}) {
+  const panelRef = useRef<HTMLElement>(null);
+  const dragRef = useRef({ pointerId: 0, startX: 0, startY: 0, startLeft: 0, startTop: 0 });
+  const [position, setPosition] = useState(() => ({
+    x: typeof window === "undefined" ? 24 : Math.max(12, window.innerWidth - (source.kind === "portrait" ? 390 : 540)),
+    y: typeof window === "undefined" ? 24 : Math.max(12, window.innerHeight - (source.kind === "portrait" ? 620 : 360))
+  }));
+
+  useEffect(() => {
+    setPosition({
+      x: Math.max(12, window.innerWidth - (source.kind === "portrait" ? 390 : 540)),
+      y: Math.max(12, window.innerHeight - (source.kind === "portrait" ? 620 : 360))
+    });
+  }, [source]);
+
+  function clampPosition(nextX: number, nextY: number) {
+    const panel = panelRef.current;
+    const rect = panel?.getBoundingClientRect();
+    const width = rect?.width ?? 360;
+    const height = rect?.height ?? 320;
+
+    return {
+      x: Math.min(Math.max(12, nextX), Math.max(12, window.innerWidth - width - 12)),
+      y: Math.min(Math.max(12, nextY), Math.max(12, window.innerHeight - height - 12))
+    };
+  }
+
+  function startDrag(event: React.PointerEvent<HTMLElement>) {
+    const panel = panelRef.current;
+
+    if (!panel) {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startLeft: position.x,
+      startTop: position.y
+    };
+  }
+
+  function drag(event: React.PointerEvent<HTMLElement>) {
+    if (dragRef.current.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const deltaX = event.clientX - dragRef.current.startX;
+    const deltaY = event.clientY - dragRef.current.startY;
+    setPosition(clampPosition(dragRef.current.startLeft + deltaX, dragRef.current.startTop + deltaY));
+  }
+
+  function stopDrag(event: React.PointerEvent<HTMLElement>) {
+    if (dragRef.current.pointerId === event.pointerId) {
+      dragRef.current.pointerId = 0;
+    }
+  }
+
+  return (
+    <aside
+      className={`${styles.floatingMediaPlayer} ${
+        source.kind === "portrait" ? styles.floatingMediaPortrait : styles.floatingMediaLandscape
+      }`}
+      ref={panelRef}
+      style={{ left: position.x, top: position.y }}
+      aria-label={`${source.title} floating video player`}
+    >
+      <header
+        className={styles.floatingMediaHeader}
+        onPointerDown={startDrag}
+        onPointerMove={drag}
+        onPointerUp={stopDrag}
+        onPointerCancel={stopDrag}
+      >
+        <strong>{source.title}</strong>
+        <button
+          type="button"
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={onClose}
+          aria-label="Close floating player"
+          title="Close"
+        >
+          <X size={16} aria-hidden />
+        </button>
+      </header>
+      <div className={styles.floatingMediaFrame}>
+        {source.provider === "youtube" ? (
+          <YouTubeEmbedFrame muted={source.muted} source={source} />
+        ) : (
+          <iframe
+            src={source.url}
+            title={source.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        )}
+      </div>
+      <a href={source.watchUrl} target="_blank" rel="noreferrer noopener">
+        Open original
+      </a>
+    </aside>
+  );
+}
+
+function MediaEmbedCard({
+  embed,
+  onOpenFloating
+}: {
+  embed: MediaEmbed;
+  onOpenFloating: (source: ResolvedMediaEmbed) => void;
+}) {
+  const [muted, setMuted] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const source = embedSource(embed, muted);
+
+  if (!source) {
+    return null;
+  }
+
+  const resolvedSource = source;
+
+  async function copyLink() {
+    await navigator.clipboard?.writeText(resolvedSource.watchUrl);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1400);
+  }
+
+  return (
+    <figure className={styles.mediaEmbedCard}>
+      <div className={styles.mediaEmbedToolbar} aria-label={`${resolvedSource.title} video controls`}>
+        <button type="button" onClick={copyLink} title="Copy video link">
+          <Copy size={15} aria-hidden />
+          <span>{copied ? "Copied" : "Copy"}</span>
+        </button>
+        <button type="button" onClick={() => onOpenFloating(resolvedSource)} title="Open floating mini player">
+          <PictureInPicture size={15} aria-hidden />
+          <span>PiP</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMuted((current) => !current)}
+          disabled={!resolvedSource.supportsMuteToggle}
+          title={resolvedSource.supportsMuteToggle ? (muted ? "Unmute video" : "Mute video") : "Mute is controlled inside this player"}
+        >
+          {muted ? <VolumeX size={15} aria-hidden /> : <Volume2 size={15} aria-hidden />}
+          <span>{muted ? "Muted" : "Mute"}</span>
+        </button>
+      </div>
+      <div
+        className={`${styles.mediaEmbedFrame} ${
+          resolvedSource.kind === "portrait" ? styles.mediaEmbedPortrait : styles.mediaEmbedLandscape
+        }`}
+      >
+        {resolvedSource.provider === "youtube" ? (
+          <YouTubeEmbedFrame muted={muted} source={resolvedSource} />
+        ) : (
+          <iframe
+            src={resolvedSource.url}
+            title={resolvedSource.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        )}
+      </div>
+      {resolvedSource.title ? <figcaption>{resolvedSource.title}</figcaption> : null}
+    </figure>
+  );
+}
+
 function MediaEmbeds({ embeds }: { embeds: readonly MediaEmbed[] }) {
-  const sources = embeds.map(embedSource).filter(isResolvedMediaEmbed);
+  const [floatingSource, setFloatingSource] = useState<ResolvedMediaEmbed | null>(null);
+  const sources = embeds.map((embed) => embedSource(embed, true)).filter(isResolvedMediaEmbed);
 
   if (sources.length === 0) {
     return null;
@@ -454,26 +821,17 @@ function MediaEmbeds({ embeds }: { embeds: readonly MediaEmbed[] }) {
         <h2 id="media-embeds-title">Videos</h2>
       </div>
       <div className={styles.mediaEmbedGrid}>
-        {sources.map((source) => (
-          <figure className={styles.mediaEmbedCard} key={`${source.url}-${source.title}`}>
-            <div
-              className={`${styles.mediaEmbedFrame} ${
-                source.kind === "portrait" ? styles.mediaEmbedPortrait : styles.mediaEmbedLandscape
-              }`}
-            >
-              <iframe
-                src={source.url}
-                title={source.title}
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
-            </div>
-            {source.title ? <figcaption>{source.title}</figcaption> : null}
-          </figure>
+        {embeds.map((embed, index) => (
+          <MediaEmbedCard
+            embed={embed}
+            key={`${embed.type}-${embed.id ?? embed.url ?? index}`}
+            onOpenFloating={setFloatingSource}
+          />
         ))}
       </div>
+      {floatingSource ? (
+        <FloatingMediaPlayer source={floatingSource} onClose={() => setFloatingSource(null)} />
+      ) : null}
     </section>
   );
 }
