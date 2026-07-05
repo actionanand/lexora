@@ -150,8 +150,10 @@ function directiveText(name, value, attributes = "") {
   const meaningTamil = /meaningTamil="([^"]+)"/.exec(attributes)?.[1];
   const transliteration = /transliteration="([^"]+)"/.exec(attributes)?.[1];
 
-  if (name === "emoji" || name === "imageWord" || name === "svgWord" || name === "textWord") {
-    return [value, label, transliteration, meaning, meaningTamil].filter(Boolean).join(" ");
+  if (name === "emoji" || name === "imageWord" || name === "svgWord" || name === "textWord" || name === "sentence") {
+    return [value.replace(/==(.+?)==/g, "$1"), label, transliteration, meaning, meaningTamil]
+      .filter(Boolean)
+      .join(" ");
   }
 
   return value;

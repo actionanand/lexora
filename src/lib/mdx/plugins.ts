@@ -251,6 +251,32 @@ export function remarkTextWords() {
   };
 }
 
+export function remarkSentenceCards() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "sentence") {
+        return;
+      }
+
+      const sentence = node.children?.[0]?.value?.trim() ?? node.attributes?.text ?? "";
+      const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-sentence",
+        hProperties: {
+          sentence,
+          meaning,
+          meaningTamil,
+          transliteration
+        }
+      };
+    });
+  };
+}
+
 export function remarkIcons() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {

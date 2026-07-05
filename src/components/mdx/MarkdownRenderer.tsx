@@ -10,6 +10,7 @@ import {
   remarkImageWords,
   remarkIcons,
   remarkRevealBlanks,
+  remarkSentenceCards,
   remarkTextWords
 } from "@/lib/mdx/plugins";
 import { withBasePath } from "@/lib/base-path";
@@ -288,6 +289,84 @@ function TextWordCard({
   );
 }
 
+function highlightedParts(value: string) {
+  const parts: ReactNode[] = [];
+  const pattern = /==(.+?)==/g;
+  let cursor = 0;
+  let match;
+
+  while ((match = pattern.exec(value)) !== null) {
+    if (match.index > cursor) {
+      parts.push(value.slice(cursor, match.index));
+    }
+
+    parts.push(
+      <span className={styles.sentenceHighlight} key={`${match.index}-${match[1]}`}>
+        {match[1]}
+      </span>
+    );
+    cursor = match.index + match[0].length;
+  }
+
+  if (cursor < value.length) {
+    parts.push(value.slice(cursor));
+  }
+
+  return parts.length > 0 ? parts : value;
+}
+
+function SentenceCard({
+  meaning,
+  meaningTamil,
+  sentence,
+  transliteration
+}: {
+  meaning?: string;
+  meaningTamil?: string;
+  sentence?: string;
+  transliteration?: string;
+}) {
+  const splitLayout = Boolean(transliteration && meaning && meaningTamil);
+  const readableLabel = [sentence?.replace(/==(.+?)==/g, "$1"), transliteration, meaning, meaningTamil]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span
+      className={`${styles.sentenceCard} ${splitLayout ? styles.sentenceSplit : styles.sentenceStack}`}
+      role="group"
+      aria-label={readableLabel}
+    >
+      {splitLayout ? (
+        <>
+          <span className={styles.sentenceSource}>
+            {sentence ? <span className={styles.sentenceText}>{highlightedParts(sentence)}</span> : null}
+            {transliteration ? (
+              <span className={styles.sentenceTransliteration}>({transliteration})</span>
+            ) : null}
+          </span>
+          <span className={styles.wordDivider} aria-hidden>
+            -
+          </span>
+          <span className={styles.wordMeaningGroup}>
+            {meaning ? <span className={styles.sentenceMeaning}>{meaning}</span> : null}
+            {meaningTamil ? <span className={styles.sentenceTamilMeaning}>{meaningTamil}</span> : null}
+          </span>
+        </>
+      ) : (
+        <>
+          {sentence ? <span className={styles.sentenceText}>{highlightedParts(sentence)}</span> : null}
+          {transliteration ? (
+            <span className={styles.sentenceTransliteration}>({transliteration})</span>
+          ) : null}
+          {meaning ? <span className={styles.sentenceMeaning}>{meaning}</span> : null}
+          {meaningTamil ? <span className={styles.sentenceTamilMeaning}>{meaningTamil}</span> : null}
+        </>
+      )}
+    </span>
+  );
+}
+
 type MarkdownNode = {
   properties?: Record<string, unknown>;
 };
@@ -411,6 +490,16 @@ const markdownComponents = {
         transliteration={nodeProperty(node, "transliteration")}
       />
     );
+  },
+  "lexora-sentence"({ node }: NodeProps) {
+    return (
+      <SentenceCard
+        meaning={nodeProperty(node, "meaning")}
+        meaningTamil={nodeProperty(node, "meaningTamil")}
+        sentence={nodeProperty(node, "sentence")}
+        transliteration={nodeProperty(node, "transliteration")}
+      />
+    );
   }
 } as unknown as Components;
 
@@ -427,6 +516,7 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkImageWords,
           remarkIcons,
           remarkRevealBlanks,
+          remarkSentenceCards,
           remarkTextWords
         ]}
         rehypePlugins={[rehypeRaw, rehypeSlug]}
