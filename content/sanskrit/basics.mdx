@@ -31,7 +31,7 @@ Click the blank to reveal the answer: नमस्ते means [[hello]].
 
 Use `imageWord` when a learner should connect a word with a small visual, transliteration, and meaning. The image name comes from `src/app/dataImg/png/index.ts`, and the generator includes only the image names used in lessons.
 
-Add a new base64 image like this:
+Add a new PNG base64 image like this:
 
 ```ts
 // src/app/dataImg/png/house.ts
@@ -45,19 +45,45 @@ Then export it from the index:
 export * from "./house";
 ```
 
-After that, use the export name in any lesson. You do not need to paste base64 into the article. `HOUSE` becomes `house`, and `BOY` becomes `boy`. Names with underscores can be written with dashes, so `SCHOOL_BAG` becomes `school-bag`.
+After that, use the export name in any lesson. You do not need to paste base64 into the article, and you do not need to edit the renderer. Only names exported from the folder `index.ts` are available. `HOUSE` becomes `house`, and `BOY` becomes `boy`. Names with underscores can be written with dashes, so `SCHOOL_BAG` becomes `school-bag`.
 
-```md
-:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy" size="huge"}
-:imageWord[girl]{label="बालिका" transliteration="balika" meaning="girl" size="big"}
-:imageWord[old_woman]{label="वृद्धा" transliteration="Vṛddhā" meaning="old woman" size="huge"}
+SVG works the same way from `src/app/dataImg/svg/index.ts`:
+
+```ts
+// src/app/dataImg/svg/lotus.ts
+export const LOTUS = `data:image/svg+xml;base64,...`;
 ```
 
-Available sizes are `normal`, `medium`, `big`, and `huge`.
+```ts
+// src/app/dataImg/svg/index.ts
+export * from "./lotus";
+```
 
-:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy" size="huge"}
+Use `imageWord` for PNG exports and `svgWord` for SVG exports. If you omit `size`, Lexora uses `huge`.
+
+```md
+:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy"}
 :imageWord[girl]{label="बालिका" transliteration="balika" meaning="girl" size="big"}
 :imageWord[old_woman]{label="वृद्धा" transliteration="Vṛddhā" meaning="old woman" size="huge"}
+:svgWord[peacock]{label="मयूरः" transliteration="mayurah" meaning="peacock"}
+```
+
+Available sizes are `normal`, `medium`, `big`, and `huge`. The default is `huge`.
+
+:imageWord[boy]{label="बालकः" transliteration="balakah" meaning="boy"}
+:imageWord[girl]{label="बालिका" transliteration="balika" meaning="girl" size="big"}
+:imageWord[old_woman]{label="वृद्धा" transliteration="Vṛddhā" meaning="old woman" size="huge"}
+:svgWord[peacock]{label="मयूरः" transliteration="mayurah" meaning="peacock"}
+
+Use `textWord` when you want the same label, transliteration, and meaning format without an image.
+
+```md
+:textWord[गृहम्]{transliteration="grham" meaning="home"}
+:textWord[जलम्]{transliteration="jalam" meaning="water" size="big"}
+```
+
+:textWord[गृहम्]{transliteration="grham" meaning="home"}
+:textWord[जलम्]{transliteration="jalam" meaning="water" size="big"}
 
 :::boy
 Say `बालकः` slowly: `balakah`.

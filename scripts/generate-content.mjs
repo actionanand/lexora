@@ -8,7 +8,10 @@ const rootDir = path.resolve(__dirname, "..");
 const contentDir = path.join(rootDir, "content");
 const generatedDir = path.join(rootDir, "src", "generated");
 const publicDir = path.join(rootDir, "public");
-const dataPngDir = path.join(rootDir, "src", "app", "dataImg", "png");
+const dataImageDirs = {
+  png: path.join(rootDir, "src", "app", "dataImg", "png"),
+  svg: path.join(rootDir, "src", "app", "dataImg", "svg")
+};
 
 function normalizeBasePath(value) {
   const trimmed = value?.trim();
@@ -56,11 +59,15 @@ function normalizeImageWordKey(value) {
 
 function extractImageWordNames(markdown) {
   const names = new Set();
-  const pattern = /:imageWord\[([^\]]+)\]/g;
+  const pattern = /:(imageWord|svgWord)\[([^\]]+)\]/g;
   let match;
 
   while ((match = pattern.exec(markdown)) !== null) {
-    names.add(normalizeImageWordKey(match[1]));
+    const [, directive, name] = match;
+    const format = directive === "svgWord" ? "svg" : "png";
+    const imageName = normalizeImageWordKey(name);
+
+    names.add(`${format}:${imageName}`);
   }
 
   return names;
@@ -70,12 +77,26 @@ function modulePathFromExport(value) {
   return value.endsWith(".ts") ? value : `${value}.ts`;
 }
 
-async function readDataImageExports(usedNames) {
+function normalizeImageSource(value, format) {
+  const trimmed = value.trim();
+
+  if (trimmed.startsWith("data:")) {
+    return trimmed;
+  }
+
+  if (format === "svg" || trimmed.startsWith("<svg") || trimmed.startsWith("<?xml")) {
+    return `data:image/svg+xml;utf8,${encodeURIComponent(trimmed)}`;
+  }
+
+  return trimmed;
+}
+
+async function readDataImageExportsFromDir(format, dataImageDir, usedNames) {
   const sources = {};
   let indexSource = "";
 
   try {
-    indexSource = await readFile(path.join(dataPngDir, "index.ts"), "utf8");
+    indexSource = await readFile(path.join(dataImageDir, "index.ts"), "utf8");
   } catch {
     return sources;
   }
@@ -94,16 +115,18 @@ async function readDataImageExports(usedNames) {
   }
 
   for (const exportPath of exportPaths) {
-    const source = await readFile(path.join(dataPngDir, exportPath), "utf8");
+    const source = await readFile(path.join(dataImageDir, exportPath), "utf8");
     const constPattern = /export\s+const\s+([A-Za-z0-9_]+)\s*=\s*`([^`]+)`/g;
     let constMatch;
 
     while ((constMatch = constPattern.exec(source)) !== null) {
-      const [, exportName, imageSource] = constMatch;
+      const [, exportName, rawImageSource] = constMatch;
+      const imageSource = normalizeImageSource(rawImageSource, format);
       const normalized = normalizeImageWordKey(exportName);
+      const formatted = `${format}:${normalized}`;
 
-      if (usedNames.has(normalized)) {
-        sources[normalized] = imageSource;
+      if (usedNames.has(formatted)) {
+        sources[formatted] = imageSource;
       }
     }
   }
@@ -111,12 +134,22 @@ async function readDataImageExports(usedNames) {
   return sources;
 }
 
+async function readDataImageExports(usedNames) {
+  const pngSources = await readDataImageExportsFromDir("png", dataImageDirs.png, usedNames);
+  const svgSources = await readDataImageExportsFromDir("svg", dataImageDirs.svg, usedNames);
+
+  return {
+    ...svgSources,
+    ...pngSources
+  };
+}
+
 function directiveText(name, value, attributes = "") {
   const label = /label="([^"]+)"/.exec(attributes)?.[1];
   const meaning = /meaning="([^"]+)"/.exec(attributes)?.[1];
   const transliteration = /transliteration="([^"]+)"/.exec(attributes)?.[1];
 
-  if (name === "emoji" || name === "imageWord") {
+  if (name === "emoji" || name === "imageWord" || name === "svgWord" || name === "textWord") {
     return [value, label, transliteration, meaning].filter(Boolean).join(" ");
   }
 

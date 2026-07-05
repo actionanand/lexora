@@ -192,21 +192,49 @@ export function remarkEmojiCards() {
 export function remarkImageWords() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {
-      if (node.type !== "textDirective" || node.name !== "imageWord") {
+      if (node.type !== "textDirective" || (node.name !== "imageWord" && node.name !== "svgWord")) {
         return;
       }
 
       const image = node.children?.[0]?.value?.trim() ?? node.attributes?.name ?? "";
-      const size = node.attributes?.size ?? "medium";
+      const size = node.attributes?.size ?? "huge";
       const label = node.attributes?.label ?? node.attributes?.text ?? image;
       const meaning = node.attributes?.meaning ?? "";
       const transliteration = node.attributes?.transliteration ?? "";
+      const format = node.name === "svgWord" ? "svg" : "png";
 
       node.children = [];
       node.data = {
         hName: "lexora-image-word",
         hProperties: {
           image,
+          format,
+          label,
+          meaning,
+          transliteration,
+          size
+        }
+      };
+    });
+  };
+}
+
+export function remarkTextWords() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "textWord") {
+        return;
+      }
+
+      const label = node.attributes?.label ?? node.attributes?.text ?? node.children?.[0]?.value?.trim() ?? "";
+      const meaning = node.attributes?.meaning ?? "";
+      const size = node.attributes?.size ?? "huge";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-text-word",
+        hProperties: {
           label,
           meaning,
           transliteration,

@@ -452,6 +452,48 @@
   font-size: 1.18rem;
 }
 
+.textWord {
+  display: inline-grid;
+  gap: 2px;
+  margin: 0 14px 14px 0;
+  line-height: 1.18;
+  vertical-align: middle;
+}
+
+.textWordLabel {
+  color: var(--heading);
+  font-weight: 750;
+}
+
+.textWordTransliteration {
+  color: var(--muted);
+  font-size: 0.82em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.textWordMeaning {
+  color: var(--accent-strong);
+  font-size: 0.82em;
+  font-weight: 700;
+}
+
+.textWordNormal .textWordLabel {
+  font-size: 0.88rem;
+}
+
+.textWordMedium .textWordLabel {
+  font-size: 0.95rem;
+}
+
+.textWordBig .textWordLabel {
+  font-size: 1.05rem;
+}
+
+.textWordHuge .textWordLabel {
+  font-size: 1.18rem;
+}
+
 .mermaid {
   margin: 24px 0;
   padding: 18px;

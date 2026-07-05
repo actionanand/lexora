@@ -9,7 +9,8 @@ import {
   remarkEmojiCards,
   remarkImageWords,
   remarkIcons,
-  remarkRevealBlanks
+  remarkRevealBlanks,
+  remarkTextWords
 } from "@/lib/mdx/plugins";
 import { withBasePath } from "@/lib/base-path";
 import * as Icons from "lucide-react";
@@ -177,12 +178,14 @@ function normalizeImageWordKey(value: string) {
 }
 
 function ImageWordCard({
+  format,
   image,
   label,
   meaning,
   size,
   transliteration
 }: {
+  format?: string;
   image?: string;
   label?: string;
   meaning?: string;
@@ -190,15 +193,19 @@ function ImageWordCard({
   transliteration?: string;
 }) {
   const imageKey = normalizeImageWordKey(image ?? "");
-  const src = (imageWordSources as Record<string, string>)[imageKey];
+  const imageFormat = normalizeImageWordKey(format ?? "");
+  const sources = imageWordSources as Record<string, string>;
+  const src = imageFormat
+    ? sources[`${imageFormat}:${imageKey}`]
+    : sources[imageKey] ?? sources[`png:${imageKey}`] ?? sources[`svg:${imageKey}`];
   const sizeClass =
-    size === "huge"
-      ? styles.imageWordHuge
-      : size === "big"
+    size === "normal"
+      ? styles.imageWordNormal
+      : size === "medium"
+        ? styles.imageWordMedium
+        : size === "big"
         ? styles.imageWordBig
-        : size === "normal"
-          ? styles.imageWordNormal
-          : styles.imageWordMedium;
+        : styles.imageWordHuge;
   const readableLabel = [label, transliteration, meaning].filter(Boolean).join(" ");
 
   if (!src) {
@@ -215,6 +222,38 @@ function ImageWordCard({
         ) : null}
         {meaning ? <span className={styles.imageWordMeaning}>{meaning}</span> : null}
       </span>
+    </span>
+  );
+}
+
+function TextWordCard({
+  label,
+  meaning,
+  size,
+  transliteration
+}: {
+  label?: string;
+  meaning?: string;
+  size?: string;
+  transliteration?: string;
+}) {
+  const sizeClass =
+    size === "normal"
+      ? styles.textWordNormal
+      : size === "medium"
+        ? styles.textWordMedium
+        : size === "big"
+          ? styles.textWordBig
+          : styles.textWordHuge;
+  const readableLabel = [label, transliteration, meaning].filter(Boolean).join(" ");
+
+  return (
+    <span className={`${styles.textWord} ${sizeClass}`} role="group" aria-label={readableLabel}>
+      {label ? <span className={styles.textWordLabel}>{label}</span> : null}
+      {transliteration ? (
+        <span className={styles.textWordTransliteration}>({transliteration})</span>
+      ) : null}
+      {meaning ? <span className={styles.textWordMeaning}>{meaning}</span> : null}
     </span>
   );
 }
@@ -321,7 +360,18 @@ const markdownComponents = {
   "lexora-image-word"({ node }: NodeProps) {
     return (
       <ImageWordCard
+        format={nodeProperty(node, "format")}
         image={nodeProperty(node, "image")}
+        label={nodeProperty(node, "label")}
+        meaning={nodeProperty(node, "meaning")}
+        size={nodeProperty(node, "size")}
+        transliteration={nodeProperty(node, "transliteration")}
+      />
+    );
+  },
+  "lexora-text-word"({ node }: NodeProps) {
+    return (
+      <TextWordCard
         label={nodeProperty(node, "label")}
         meaning={nodeProperty(node, "meaning")}
         size={nodeProperty(node, "size")}
@@ -343,7 +393,8 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkEmojiCards,
           remarkImageWords,
           remarkIcons,
-          remarkRevealBlanks
+          remarkRevealBlanks,
+          remarkTextWords
         ]}
         rehypePlugins={[rehypeRaw, rehypeSlug]}
         components={markdownComponents}
