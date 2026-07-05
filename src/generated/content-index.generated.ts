@@ -99,6 +99,12 @@ export const languages = [
         "title": "Video Embeds",
         "description": "Embed lesson videos from YouTube, Shorts, Instagram, Facebook, and TikTok.",
         "order": 7
+      },
+      {
+        "slug": "markdown-features",
+        "title": "Markdown Features",
+        "description": "Use built-in Markdown patterns to shape clear language-learning notes.",
+        "order": 8
       }
     ]
   }

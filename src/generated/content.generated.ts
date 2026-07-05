@@ -18,6 +18,7 @@ export type MediaEmbed = {
 export type DocContent = {
   title: string;
   description: string;
+  date?: string;
   body: string;
   toc: readonly TocItem[];
   mediaEmbeds: readonly MediaEmbed[];
@@ -28,6 +29,7 @@ export const docsContent = {
     "basics": {
       "title": "Basics",
       "description": "Learn Kannada script basics and early reading patterns.",
+      "date": "",
       "body": "# Kannada Basics :icon[BookOpen]\n\nKannada is written with a rounded script. Start by recognizing vowels, then combine consonants and vowel marks.\n\n:::note\nRead slowly at first. Accuracy matters more than speed while the script is still new.\n:::\n\n## Script Shape\n\n| Letter | Sound | Example Hint |\n| --- | --- | --- |\n| ಅ | a | short vowel |\n| ಆ | aa | long vowel |\n| ಕ | ka | consonant with vowel |\n| ಕಿ | ki | consonant plus vowel mark |\n\n## Reveal Practice\n\nUse double brackets around the answer and a sentence template to make reveal practice. If the template does not include `___`, Lexora places the blank at the end of the sentence.\n\nWrite it like this:\n\n- Blank at the end: `[[Kannada|The Kannada word ಕನ್ನಡ means]]`\n- Blank anywhere: `[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]`\n\nIt appears like this:\n\n[[Kannada|The Kannada word ಕನ್ನಡ means]]\n\n[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]\n\n## Callout Examples\n\nUse callouts to mark learning hints, pronunciation reminders, and practice warnings.\n\nWrite a simple note like this:\n\n```md\n:::note\nRead each new word aloud before writing it.\n:::\n```\n\n:::note\nRead each new word aloud before writing it.\n:::\n\nAdd a custom title when the callout needs a clearer label:\n\n```md\n:::tip[Pronunciation Tip]\nSay the vowel slowly, then attach it to the consonant.\n:::\n```\n\n:::tip[Pronunciation Tip]\nSay the vowel slowly, then attach it to the consonant.\n:::\n\nUse caution for mistakes learners should notice early:\n\n```md\n:::caution[Common Mix-up]\nDo not treat long and short vowel sounds as the same sound.\n:::\n```\n\n:::caution[Common Mix-up]\nDo not treat long and short vowel sounds as the same sound.\n:::\n\nUse info for helpful context:\n\n```md\n:::info[Study Habit]\nA small daily reading habit is better than one long weekly session.\n:::\n```\n\n:::info[Study Habit]\nA small daily reading habit is better than one long weekly session.\n:::\n\nUse danger sparingly for a serious warning:\n\n```md\n:::danger[Avoid This]\nDo not memorize random word lists without reading them in sentences.\n:::\n```\n\n:::danger[Avoid This]\nDo not memorize random word lists without reading them in sentences.\n:::\n\n## Learning Flow\n\n```mermaid\nflowchart TD\n  vowels[Vowels] --> consonants[Consonants]\n  consonants --> marks[Vowel marks]\n  marks --> reading[Simple reading]\n```\n\nHere is a richer Mermaid example for planning a study loop:\n\n```mermaid\nflowchart LR\n  start([Choose a sound]) --> listen[Listen carefully]\n  listen --> speak{Can you say it clearly?}\n  speak -- Not yet --> repeat[Repeat slowly]\n  repeat --> listen\n  speak -- Yes --> write[Write the letter]\n  write --> read[Read it inside a word]\n  read --> check{Did meaning stay clear?}\n  check -- Review --> listen\n  check -- Clear --> next([Move to the next pattern])\n```\n\n## Markdown Features\n\nLexora articles support familiar markdown plus a few learning-focused helpers.\n\nUse Lucide icons inline with `:icon[IconName]`.\n\n```md\nGreat for practice :icon[Sparkles] and review :icon[BookOpen].\n```\n\nGreat for practice :icon[Sparkles] and review :icon[BookOpen].\n\nFind more icon names at [lucide.dev/icons](https://lucide.dev/icons). Use the PascalCase name shown by Lucide, such as `BookOpen`, `Languages`, `Brain`, `Volume2`, or `House`.\n\nUse tables for compact vocabulary:\n\n| Kannada | Transliteration | Meaning |\n| --- | --- | --- |\n| ನೀರು | neeru | water |\n| ಮನೆ | mane | house |\n\nUse code fences for examples, including Mermaid diagrams:\n\n````md\n```mermaid\nflowchart LR\n  word[Word] --> meaning[Meaning]\n```\n````\n\nUse reveal blanks for practice:\n\n```md\n[[water|The Kannada word ನೀರು means]]\n[[ಮನೆ|The Kannada word ___ means house.]]\n```\n\nUse emoji labels for image-assisted reading. You can use built-in names like `house`, `water`, and `book`, or paste any emoji directly inside the brackets. Sizes are `normal`, `medium`, `big`, and `huge`. Add `meaningTamil` only when an extra Tamil meaning is useful.\n\n```md\n:emoji[house]{label=\"ಮನೆ\" transliteration=\"mane\" meaning=\"home\" meaningTamil=\"வீடு\" size=\"normal\"}\n:emoji[water]{label=\"ನೀರು\" transliteration=\"neeru\" meaning=\"water\" size=\"medium\"}\n:emoji[book]{label=\"ಪುಸ್ತಕ\" transliteration=\"pustaka\" meaning=\"book\" size=\"big\"}\n:emoji[🌳]{label=\"ಮರ\" transliteration=\"mara\" meaning=\"tree\" size=\"huge\"}\n```\n\n:emoji[house]{label=\"ಮನೆ\" transliteration=\"mane\" meaning=\"home\" meaningTamil=\"வீடு\" size=\"normal\"} :emoji[water]{label=\"ನೀರು\" transliteration=\"neeru\" meaning=\"water\" size=\"medium\"} :emoji[book]{label=\"ಪುಸ್ತಕ\" transliteration=\"pustaka\" meaning=\"book\" size=\"big\"} :emoji[🌳]{label=\"ಮರ\" transliteration=\"mara\" meaning=\"tree\" size=\"huge\"}\n\nFor more emoji, use your OS emoji picker or a Unicode emoji list such as [unicode.org/emoji/charts/full-emoji-list.html](https://unicode.org/emoji/charts/full-emoji-list.html), then paste the emoji directly into `:emoji[😀]{...}`.\n\nUse `textWord` when a word does not need an image. Add `meaningTamil` only when a rare extra Tamil meaning helps.\n\n```md\n:textWord[ಮನೆ]{transliteration=\"mane\" meaning=\"home\" meaningTamil=\"வீடு\"}\n:textWord[ನೀರು]{transliteration=\"neeru\" meaning=\"water\"}\n```\n\n:textWord[ಮನೆ]{transliteration=\"mane\" meaning=\"home\" meaningTamil=\"வீடு\"}\n:textWord[ನೀರು]{transliteration=\"neeru\" meaning=\"water\"}\n\nUse `sentence` when a full sentence needs transliteration, meaning, or a rare Tamil meaning. Mark important words with `==highlight==`.\n\n```md\n:sentence[ಅವಳು ==ಮನೆಗೆ== ಹೋಗುತ್ತಾಳೆ]{transliteration=\"avalu manege hoguttale\" meaning=\"She goes home.\" meaningTamil=\"அவள் வீட்டிற்கு செல்கிறாள்.\"}\n:sentence[ಮಕ್ಕಳು ಶಾಲೆಯಲ್ಲಿ ==ಪುಸ್ತಕಗಳನ್ನು== ಓದುತ್ತಾರೆ]{transliteration=\"makkalu shaleyalli pustakagalannu oduttare\" meaning=\"The children read books at school.\"}\n```\n\n:sentence[ಅವಳು ==ಮನೆಗೆ== ಹೋಗುತ್ತಾಳೆ]{transliteration=\"avalu manege hoguttale\" meaning=\"She goes home.\" meaningTamil=\"அவள் வீட்டிற்கு செல்கிறாள்.\"}\n\n:sentence[ಮಕ್ಕಳು ಶಾಲೆಯಲ್ಲಿ ==ಪುಸ್ತಕಗಳನ್ನು== ಓದುತ್ತಾರೆ]{transliteration=\"makkalu shaleyalli pustakagalannu oduttare\" meaning=\"The children read books at school.\"}\n\n## Character Conversations\n\nCharacter conversations are useful for short teaching moments. Consecutive messages alternate sides automatically.\n\nWrite it like this:\n\n```md\n:::owl\nTry reading the word slowly before guessing the meaning.\n:::\n\n:::unicorn\nSo I should notice the sound first, then the word?\n:::\n```\n\n:::owl\nTry reading the word slowly before guessing the meaning.\n:::\n\n:::unicorn\nSo I should notice the sound first, then the word?\n:::\n\nYou can force a side with `align=\"right\"` or `align=\"left\"`.\n\n```md\n:::duck{align=\"right\"}\nKeep this reminder near the practice question.\n:::\n```\n\n:::duck{align=\"right\"}\nKeep this reminder near the practice question.\n:::",
       "toc": [
         {
@@ -66,6 +68,7 @@ export const docsContent = {
     "greetings": {
       "title": "Greetings",
       "description": "Common Kannada greetings and polite expressions.",
+      "date": "",
       "body": "# Kannada Greetings :icon[Hand]\n\nGreetings are a practical way to start speaking early.\n\n## Common Phrases\n\n| Kannada | Transliteration | Meaning |\n| --- | --- | --- |\n| ನಮಸ್ಕಾರ | namaskara | hello |\n| ಹೇಗಿದ್ದೀರಾ? | hegiddira? | how are you? |\n| ಧನ್ಯವಾದಗಳು | dhanyavadagalu | thank you |\n\n:::tip\nUse `ನಮಸ್ಕಾರ` for a respectful greeting in many everyday situations.\n:::\n\n## Practice\n\nReveal the meaning: ಧನ್ಯವಾದಗಳು means [[thank you]].",
       "toc": [
         {
@@ -84,6 +87,7 @@ export const docsContent = {
     "sentences": {
       "title": "Sentences",
       "description": "Practice short Kannada sentences.",
+      "date": "",
       "body": "# Kannada Sentences :icon[MessageSquareText]\n\nKannada often places the verb at the end of the sentence.\n\n## Examples\n\n| Kannada | Meaning |\n| --- | --- |\n| ನಾನು ಓದುತ್ತೇನೆ. | I read. |\n| ಅವಳು ಬರೆಯುತ್ತಾಳೆ. | She writes. |\n| ಅವರು ಬರುತ್ತಾರೆ. | They come. |\n\n## Reveal Practice\n\nIn `ನಾನು ಓದುತ್ತೇನೆ`, the subject is [[ನಾನು]].\n\n:::warning\nSpoken Kannada can differ by region. Keep listening to real usage as you learn written forms.\n:::",
       "toc": [
         {
@@ -102,6 +106,7 @@ export const docsContent = {
     "words": {
       "title": "Words",
       "description": "Everyday Kannada words for first practice.",
+      "date": "",
       "body": "# Kannada Words :icon[Sparkles]\n\nGroup new words by daily use. That makes recall much easier.\n\n## Useful Words\n\n| Kannada | Transliteration | Meaning |\n| --- | --- | --- |\n| ನೀರು | neeru | water |\n| ಮನೆ | mane | house |\n| ಪುಸ್ತಕ | pustaka | book |\n| ಸ್ನೇಹಿತ | snehita | friend |\n\n:::info\nKannada has formal and informal choices in conversation. Learn a phrase with its social context when possible.\n:::\n\nThe word for house is [[ಮನೆ]].",
       "toc": [
         {
@@ -117,6 +122,7 @@ export const docsContent = {
     "basics": {
       "title": "Basics",
       "description": "Start with Sanskrit sounds, script, and first reading patterns.",
+      "date": "",
       "body": "# Sanskrit Basics :icon[BookOpen]\n\nSanskrit is usually learned through sound first. Read slowly, keep the vowel length clear, and let each syllable land cleanly.\n\n:::note\nShort vowels and long vowels can change meaning. Treat `a` and `ā` as different sounds, not as decorative marks.\n:::\n\n## Sound And Script\n\nDevanagari is written from left to right. Many consonants carry an inherent `a` sound unless a vowel mark or virama changes it.\n\n| Pattern | Example | Hint |\n| --- | --- | --- |\n| अ | a | short open vowel |\n| आ | ā | long open vowel |\n| क | ka | consonant with inherent vowel |\n| की | kī | consonant with vowel mark |\n\n## First Reveal\n\nClick the blank to reveal the answer: नमस्ते means [[hello]].\n\n## Picture Word Practice\n\nUse `imageWord` when a learner should connect a word with a small visual, transliteration, and meaning. The image name comes from `src/app/dataImg/png/index.ts`, and the generator includes only the image names used in lessons.\n\nAdd a new PNG base64 image like this:\n\n```ts\n// src/app/dataImg/png/house.ts\nexport const HOUSE = `data:image/png;base64,...`;\n```\n\nThen export it from the index:\n\n```ts\n// src/app/dataImg/png/index.ts\nexport * from \"./house\";\n```\n\nAfter that, use the export name in any lesson. You do not need to paste base64 into the article, and you do not need to edit the renderer. Only names exported from the folder `index.ts` are available. `HOUSE` becomes `house`, and `BOY` becomes `boy`. Names with underscores can be written with dashes, so `SCHOOL_BAG` becomes `school-bag`.\n\nSVG works the same way from `src/app/dataImg/svg/index.ts`:\n\n```ts\n// src/app/dataImg/svg/lotus.ts\nexport const LOTUS = `data:image/svg+xml;base64,...`;\n```\n\n```ts\n// src/app/dataImg/svg/index.ts\nexport * from \"./lotus\";\n```\n\nUse `imageWord` for PNG exports and `svgWord` for SVG exports. If you omit `size`, Lexora uses `huge`.\nUse `meaningTamil` only when you want to show an extra Tamil meaning.\n\n```md\n:imageWord[boy]{label=\"बालकः\" transliteration=\"balakah\" meaning=\"boy\" meaningTamil=\"சிறுவன்\"}\n:imageWord[girl]{label=\"बालिका\" transliteration=\"balika\" meaning=\"girl\" size=\"big\"}\n:imageWord[old_woman]{label=\"वृद्धा\" transliteration=\"Vṛddhā\" meaning=\"old woman\" size=\"huge\"}\n:svgWord[peacock]{label=\"मयूरः\" transliteration=\"mayurah\" meaning=\"peacock\" meaningTamil=\"மயில்\"}\n```\n\nAvailable sizes are `normal`, `medium`, `big`, and `huge`. The default is `huge`.\n\n:imageWord[boy]{label=\"बालकः\" transliteration=\"balakah\" meaning=\"boy\" meaningTamil=\"சிறுவன்\"}\n:imageWord[girl]{label=\"बालिका\" transliteration=\"balika\" meaning=\"girl\" size=\"big\"}\n:imageWord[old_woman]{label=\"वृद्धा\" transliteration=\"Vṛddhā\" meaning=\"old woman\" size=\"huge\"}\n:svgWord[peacock]{label=\"मयूरः\" transliteration=\"mayurah\" meaning=\"peacock\" meaningTamil=\"மயில்\"}\n\nUse `textWord` when you want the same label, transliteration, and meaning format without an image.\n\n```md\n:textWord[गृहम्]{transliteration=\"grham\" meaning=\"home\" meaningTamil=\"வீடு\"}\n:textWord[जलम्]{transliteration=\"jalam\" meaning=\"water\" size=\"big\"}\n```\n\n:textWord[गृहम्]{transliteration=\"grham\" meaning=\"home\" meaningTamil=\"வீடு\"}\n:textWord[जलम्]{transliteration=\"jalam\" meaning=\"water\" size=\"big\"}\n\nUse `sentence` for sentence practice. Mark one or two important words with `==highlight==`.\n\n```md\n:sentence[किं ==कुर्वन्ति==]{transliteration=\"kim kurvanti\" meaning=\"What are they doing?\" meaningTamil=\"அவர்கள் என்ன செய்கிறார்கள்?\"}\n:sentence[बालकः उद्याने ==फलानि== ==खादति==]{transliteration=\"balakah udyane phalani khadati\" meaning=\"The boy eats fruits in the garden.\" meaningTamil=\"சிறுவன் தோட்டத்தில் பழங்களை சாப்பிடுகிறான்.\"}\n:sentence[सीता पठति]{meaning=\"Sita reads.\"}\n```\n\n:sentence[किं ==कुर्वन्ति==]{transliteration=\"kim kurvanti\" meaning=\"What are they doing?\" meaningTamil=\"அவர்கள் என்ன செய்கிறார்கள்?\"}\n\n:sentence[बालकः उद्याने ==फलानि== ==खादति==]{transliteration=\"balakah udyane phalani khadati\" meaning=\"The boy eats fruits in the garden.\" meaningTamil=\"சிறுவன் தோட்டத்தில் பழங்களை சாப்பிடுகிறான்.\"}\n\n:sentence[सीता पठति]{meaning=\"Sita reads.\"}\n\n:::boy\nSay `बालकः` slowly: `balakah`.\n:::\n\n:::girl{align=\"right\"}\nThen compare it with `बालिका`: `balika`.\n:::\n\n## Learning Flow\n\n```mermaid\nflowchart LR\n  sound[Listen] --> script[Read]\n  script --> word[Recognize words]\n  word --> sentence[Build sentences]\n```\n\n:::tip\nPractice five minutes of reading aloud before moving into grammar. The script becomes friendlier when your mouth knows the pattern.\n:::",
       "toc": [
         {
@@ -145,6 +151,7 @@ export const docsContent = {
     "grammar": {
       "title": "Grammar",
       "description": "A gentle introduction to agreement and sentence structure.",
+      "date": "",
       "body": "# Sanskrit Grammar :icon[Layers]\n\nSanskrit grammar is orderly. Instead of memorizing every form at once, start by noticing what a word is doing in the sentence.\n\n## Nouns\n\nNouns change form based on role, number, and gender.\n\n:::info\nThe role of a noun is often visible in its ending, so word order can be more flexible than in English.\n:::\n\n## Verbs\n\nVerbs carry information about person, number, tense, and mood.\n\n| Sanskrit | Meaning |\n| --- | --- |\n| पठति | he or she reads |\n| पठतः | two read |\n| पठन्ति | they read |\n\n## Agreement\n\nAdjectives usually agree with the nouns they describe. Reveal the key idea: adjectives follow the noun in [[gender, number, and case]].\n\n:::warning\nDo not rush declension tables. Learn a few useful forms in real sentences first.\n:::",
       "toc": [
         {
@@ -168,6 +175,7 @@ export const docsContent = {
     "highlights": {
       "title": "Highlights",
       "description": "Color and style important words in lessons.",
+      "date": "",
       "body": "# Highlights :icon[Highlighter]\n\nUse highlights when a learner should notice a sound, word ending, grammar marker, or translation clue.\n\n## Default Highlight\n\nThe simplest form uses the theme's default highlight color.\n\n```md\nRead the ending carefully: ==-ति== often marks a simple verb form.\n```\n\nRead the ending carefully: ==-ति== often marks a simple verb form.\n\nThis same default form also works inside sentence cards:\n\n```md\n:sentence[रामः ==पठति==]{transliteration=\"ramah pathati\" meaning=\"Rama reads.\"}\n```\n\n:sentence[रामः ==पठति==]{transliteration=\"ramah pathati\" meaning=\"Rama reads.\"}\n\n## Background Color\n\nAdd a color after the text to use it as a background.\n\n```md\nThe vowel is ==long|#0f766e== in this form.\n```\n\nThe vowel is ==long|#0f766e== in this form.\n\nUse `bg` when you want the mode to be explicit:\n\n```md\nRemember the root: ==gam|#2563eb|bg|bold== means to go.\n```\n\nRemember the root: ==gam|#2563eb|bg|bold== means to go.\n\n## Foreground Color\n\nUse `fg` when only the text should change color.\n\n```md\nThe subject is ==बालकः|#b91c1c|fg|bold==.\n```\n\nThe subject is ==बालकः|#b91c1c|fg|bold==.\n\nItalic foreground text is useful for pronunciation notes:\n\n```md\nSay ==ā|#0369a1|fg||italic== longer than ==a==.\n```\n\nSay ==ā|#0369a1|fg||italic== longer than ==a==.\n\n## Dual Color\n\nUse dual mode when you need both text and background colors.\n\n```md\nThe key verb is ==खादति|#ffffff|#15803d|dual|bold==.\n```\n\nThe key verb is ==खादति|#ffffff|#15803d|dual|bold==.\n\nDual colors also work inside sentence cards:\n\n```md\n:sentence[बालकः ==फलानि|#ffffff|#7c3aed|dual|bold== खादति]{transliteration=\"balakah phalani khadati\" meaning=\"The boy eats fruits.\"}\n```\n\n:sentence[बालकः ==फलानि|#ffffff|#7c3aed|dual|bold== खादति]{transliteration=\"balakah phalani khadati\" meaning=\"The boy eats fruits.\"}\n\n## Light Background\n\nUse `lightBg` for a soft marker that does not feel as strong as a full badge.\n\n```md\nLook for the case ending in ==रामेण|#d1ffbd|lightBg|bold==.\n```\n\nLook for the case ending in ==रामेण|#d1ffbd|lightBg|bold==.\n\n## Alignment\n\nAlignment turns the highlight into a block. This is useful for short reminders or translation checks.\n\n```md\n==Read the sentence aloud before revealing the answer.|#064e3b|#ccfbf1|dual|bold||center==\n```\n\n==Read the sentence aloud before revealing the answer.|#064e3b|#ccfbf1|dual|bold||center==\n\n## Syntax Reference\n\n| Use case | Syntax |\n| --- | --- |\n| Default theme highlight | `==text==` |\n| Background color | `==text\\|#2563eb==` |\n| Explicit background | `==text\\|#2563eb\\|bg==` |\n| Foreground color | `==text\\|#b91c1c\\|fg==` |\n| Dual color | `==text\\|#ffffff\\|#15803d\\|dual==` |\n| Bold or italic | `==text\\|#2563eb\\|bg\\|bold\\|italic==` |\n| Aligned block | `==text\\|#064e3b\\|#ccfbf1\\|dual\\|bold\\|\\|center==` |\n\n:::tip[Learning Use]\nUse one or two highlights per example. Too many colors make the sentence harder to scan.\n:::",
       "toc": [
         {
@@ -208,9 +216,64 @@ export const docsContent = {
       ],
       "mediaEmbeds": []
     },
+    "markdown-features": {
+      "title": "Markdown Features",
+      "description": "Use built-in Markdown patterns to shape clear language-learning notes.",
+      "date": "06-07-2026",
+      "body": "# Markdown Features\n\nMarkdown gives each lesson a simple writing rhythm: plain text first, structure only where it helps. Use these built-in patterns for examples, notes, grammar tables, reading practice, and reference links.\n\n## Headings\n\nUse headings to break a long lesson into scan-friendly steps.\n\n```md\n## Sound Practice\n### Short Vowels\n```\n\n## Paragraphs And Emphasis\n\nWrite normal paragraphs for explanation. Use **bold** for important words and *italic* for pronunciation hints.\n\n```md\nThe word **नमस्ते** is often read as *namaste*.\n```\n\nThe word **नमस्ते** is often read as *namaste*.\n\n## Lists\n\nUse unordered lists for quick groups.\n\n- Listen once.\n- Repeat slowly.\n- Write the word from memory.\n\nUse numbered lists when order matters.\n\n1. Read the word.\n2. Cover the answer.\n3. Say it aloud.\n\n## Blockquotes\n\nUse `>` for a quoted rule, a reminder, or a sentence worth keeping visible.\n\n```md\n> A short vowel and a long vowel can change the meaning.\n```\n\n> A short vowel and a long vowel can change the meaning.\n\n## Tables\n\nTables are useful for vocabulary, scripts, meanings, and short grammar contrasts.\n\n```md\n| Sanskrit | Transliteration | Meaning |\n| --- | --- | --- |\n| फलम् | ==phalam== | fruit |\n| जलम् | jalam | water |\n```\n\n| Sanskrit | Transliteration | Meaning |\n| --- | --- | --- |\n| फलम् | ==phalam== | fruit |\n| जलम् | jalam | water |\n\n## Code And Inline Text\n\nUse inline code for syntax examples like `[[answer]]`, `:BookOpen:`, or `:::note`.\n\nFor longer examples, use fenced code blocks:\n\n```md\n:::tip[Practice Pattern]\nRead the sentence once, then reveal the missing word.\n:::\n```\n\n## Links\n\nUse regular Markdown links for references. External links open in a new tab.\n\n```md\n[Lucide icons](https://lucide.dev/icons)\n```\n\n[Lucide icons](https://lucide.dev/icons)\n\n## Horizontal Rules\n\nUse `---` to create a visual pause between practice sections.\n\n---\n\n## Explore Blocks\n\nUse `:::explore` when an article needs a small list of external references at the end.\n\n```md\n:::explore\n[>] [Markdown Guide](https://www.markdownguide.org/basic-syntax/)  - Basic Syntax\n[>] [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)\n[>] [CommonMark Help](https://commonmark.org/help/)\n:::\n```\n\n:::explore\n[>] [Markdown Guide](https://www.markdownguide.org/basic-syntax/)  - Basic Syntax\n[>] [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)\n[>] [CommonMark Help](https://commonmark.org/help/)\n:::",
+      "toc": [
+        {
+          "id": "headings",
+          "text": "Headings",
+          "depth": 2
+        },
+        {
+          "id": "paragraphs-and-emphasis",
+          "text": "Paragraphs And Emphasis",
+          "depth": 2
+        },
+        {
+          "id": "lists",
+          "text": "Lists",
+          "depth": 2
+        },
+        {
+          "id": "blockquotes",
+          "text": "Blockquotes",
+          "depth": 2
+        },
+        {
+          "id": "tables",
+          "text": "Tables",
+          "depth": 2
+        },
+        {
+          "id": "code-and-inline-text",
+          "text": "Code And Inline Text",
+          "depth": 2
+        },
+        {
+          "id": "links",
+          "text": "Links",
+          "depth": 2
+        },
+        {
+          "id": "horizontal-rules",
+          "text": "Horizontal Rules",
+          "depth": 2
+        },
+        {
+          "id": "explore-blocks",
+          "text": "Explore Blocks",
+          "depth": 2
+        }
+      ],
+      "mediaEmbeds": []
+    },
     "media": {
       "title": "Media",
       "description": "Use large exercise images, base64 illustrations, and SVG diagrams in lessons.",
+      "date": "",
       "body": "# Media :icon[Image]\n\nUse media directives when an article needs a large exercise image, diagram, poster, worksheet, or SVG illustration.\n\n## Folder Pattern\n\nPut large reusable assets in `src/app/bigDataImg`.\n\n```txt\nsrc/app/bigDataImg/\n  png/\n    worksheet.ts\n    index.ts\n  svg/\n    grammar-chart.ts\n    index.ts\n```\n\nPNG or base64 images:\n\n```ts\n// src/app/bigDataImg/png/worksheet.ts\nexport const WORKSHEET = `data:image/png;base64,...`;\n```\n\n```ts\n// src/app/bigDataImg/png/index.ts\nexport * from \"./worksheet\";\n```\n\nSVG images:\n\n```ts\n// src/app/bigDataImg/svg/grammar-chart.ts\nexport const GRAMMAR_CHART = `\n<svg viewBox=\"0 0 400 160\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"400\" height=\"160\" rx=\"16\" fill=\"#f8fafc\" />\n  <text x=\"200\" y=\"86\" text-anchor=\"middle\">Grammar chart</text>\n</svg>`;\n```\n\n```ts\n// src/app/bigDataImg/svg/index.ts\nexport * from \"./grammar-chart\";\n```\n\nNames are normalized like word images: `WORKSHEET` becomes `worksheet`, and `GRAMMAR_CHART` becomes `grammar-chart`.\n\n:::note\nLexora only includes large assets that are used by `bigImage` or `bigSvg` in articles. It checks `src/app/bigDataImg` first and falls back to `src/app/dataImg` if the same exported name is not present in the large-image folder.\n:::\n\n## Base64 Image\n\nUse `bigImage` for PNG/base64 article images.\n\n```md\n:bigImage[landscape]{alt=\"Landscape Image\" width=\"260\" height=\"150\" fit=\"cover\" caption=\"Landscape image with a fixed height\" shadow=\"true\" rounded=\"true\"}\n```\n\n:bigImage[landscape]{alt=\"Landscape Image\" width=\"260\" height=\"150\" fit=\"cover\" caption=\"Landscape image with a fixed height\" shadow=\"true\" rounded=\"true\"}\n\n## SVG Illustration\n\nUse `bigSvg` for SVG article illustrations.\n\n```md\n:bigSvg[house]{alt=\"House Image\" width=\"320\" height=\"190\" caption=\"House SVG with a fixed height\" shadow=\"true\"}\n```\n\n:bigSvg[house]{alt=\"House Image\" width=\"320\" height=\"190\" caption=\"House SVG with a fixed height\" shadow=\"true\"}\n\n## Options\n\n| Attribute | Example | Notes |\n| --- | --- | --- |\n| `alt` | `alt=\"Script worksheet\"` | Accessibility text. |\n| `caption` | `caption=\"Read the labels aloud.\"` | Optional caption below the image. |\n| `width` | `width=\"420\"` or `width=\"60%\"` | Numbers become pixels. |\n| `height` | `height=\"260\"` | Optional fixed height. |\n| `fit` | `fit=\"cover\"` | Default is `contain`. |\n| `align` | `align=\"left\"` | Use `left`, `center`, or `right`. |\n| `shadow` | `shadow=\"true\"` | Adds a soft drop shadow. |\n| `bordered` | `bordered=\"true\"` | Adds a subtle border. |\n| `rounded` | `rounded=\"true\"` | Adds rounded corners. |\n| `loading` | `loading=\"eager\"` | Default is `lazy`. |\n\n## Exercise Example\n\n```md\n:bigSvg[peacock]{alt=\"Find the highlighted parts\" width=\"360\" caption=\"Look at the image, then answer the sentence below.\" rounded=\"true\"}\n\n:sentence[चित्रे ==मयूरः== अस्ति]{transliteration=\"citre mayurah asti\" meaning=\"There is a peacock in the picture.\"}\n```\n\n:bigSvg[peacock]{alt=\"Find the highlighted parts\" width=\"360\" caption=\"Look at the image, then answer the sentence below.\" rounded=\"true\"}\n\n:sentence[चित्रे ==मयूरः== अस्ति]{transliteration=\"citre mayurah asti\" meaning=\"There is a peacock in the picture.\"}",
       "toc": [
         {
@@ -244,6 +307,7 @@ export const docsContent = {
     "sentences": {
       "title": "Sentences",
       "description": "Practice simple Sanskrit sentences.",
+      "date": "",
       "body": "# Sanskrit Sentences :icon[MessageSquareText]\n\nSentences become easier when you track the verb and then ask who or what is involved.\n\n## Examples\n\n| Sanskrit | Meaning |\n| --- | --- |\n| बालकः पठति। | The boy reads. |\n| सीता लिखति। | Sita writes. |\n| मित्रं आगच्छति। | The friend comes. |\n\n## Reveal Practice\n\nIn `बालकः पठति`, the verb is [[पठति]].\n\n:::note\nMany beginner sentences place the subject first and verb last, but Sanskrit can move words around while keeping meaning through endings.\n:::",
       "toc": [
         {
@@ -262,6 +326,7 @@ export const docsContent = {
     "video-embeds": {
       "title": "Video Embeds",
       "description": "Embed lesson videos from YouTube, Shorts, Instagram, Facebook, and TikTok.",
+      "date": "",
       "body": "# Video Embeds :icon[PlayCircle]\n\nUse video embeds when a lesson needs a short pronunciation clip, a script walkthrough, or a visual memory aid.\n\nVideos are added in frontmatter, not inside the lesson body. Lexora renders them together at the end of the article.\n\n## Supported Sources\n\n| Source | Type | Required value |\n| --- | --- | --- |\n| YouTube video | `youtube` | `id` |\n| YouTube Short | `youtube-short` | `id` |\n| Instagram Reel | `instagram` | `id` |\n| Facebook Reel | `facebook` | `id` |\n| TikTok video | `tiktok` | `url` |\n\n## Frontmatter Format\n\n```md\n---\ntitle: \"Video Embeds\"\ndescription: \"Embed lesson videos from common social platforms.\"\norder: 7\nmediaEmbeds:\n  - type: youtube-short\n    id: \"WcLbw92V4qk\"\n    title: \"Tamil to Malayalam Letter Patterns (Short)\"\n  - type: youtube\n    id: \"K6o9JTcPgOA\"\n    title: \"Malayalam Script Tutorial\"\n    startTime: 85\n  - type: instagram\n    id: \"DXHprmqgQQK\"\n    title: \"Malayalam Script Visual Guide\"\n  - type: facebook\n    id: \"1423486709588631\"\n    title: \"Learn Days of the Week in Sanskrit\"\n  - type: tiktok\n    url: \"https://www.tiktok.com/@looplandia.kids/video/7567139089972006160\"\n    title: \"Koko the Kangaroo Learns Family Words in English\"\n---\n```\n\n## IDs And URLs\n\nFor YouTube, use only the video id. In `https://www.youtube.com/watch?v=K6o9JTcPgOA`, the id is `K6o9JTcPgOA`.\n\nFor YouTube Shorts, use the short id. In `https://www.youtube.com/shorts/WcLbw92V4qk`, the id is `WcLbw92V4qk`.\n\nFor Instagram Reels, use only the reel id. `DXHprmqgQQK` becomes `https://www.instagram.com/reel/DXHprmqgQQK/embed`.\n\nFor Facebook Reels, use only the reel id. `1423486709588631` becomes `https://www.facebook.com/reel/1423486709588631`.\n\nFor TikTok, paste the full video URL. Lexora extracts the video id and renders the TikTok embed.\n\n## Optional Fields\n\n`title` is optional, but it is recommended for accessibility and captions.\n\n`startTime` is only used for YouTube videos and YouTube Shorts. The value is in seconds, so `startTime: 85` starts at 1 minute and 25 seconds.\n\n:::tip[Lesson Design]\nKeep embedded videos focused. A short clip after the written explanation works better than making the learner leave the article early.\n:::",
       "toc": [
         {
@@ -317,6 +382,7 @@ export const docsContent = {
     "words": {
       "title": "Words",
       "description": "Useful Sanskrit words for first practice.",
+      "date": "",
       "body": "# Sanskrit Words :icon[Sparkles]\n\nBuild vocabulary in small clusters. A cluster helps each word carry context.\n\n## Everyday Words\n\n| Word | Transliteration | Meaning |\n| --- | --- | --- |\n| जलम् | jalam | water |\n| पुस्तकम् | pustakam | book |\n| गुरु | guru | teacher |\n| मित्रम् | mitram | friend |\n\n## Practice\n\nThe word for water is [[जलम्]].\n\n:::tip\nWrite each word once, say it twice, and use it in one sentence.\n:::",
       "toc": [
         {

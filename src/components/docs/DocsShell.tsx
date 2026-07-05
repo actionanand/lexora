@@ -19,6 +19,7 @@ import {
   ArrowLeft,
   ArrowUp,
   BookOpen,
+  Calendar,
   ChevronRight,
   FileText,
   LogOut,
@@ -34,6 +35,34 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+
+const DATE_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function formatDocDate(value?: string) {
+  const date = value?.trim();
+
+  if (!date) {
+    return "";
+  }
+
+  const dayFirst = date.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+  const yearFirst = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const match = dayFirst ?? yearFirst;
+
+  if (!match) {
+    return date;
+  }
+
+  const day = dayFirst ? match[1] : match[3];
+  const month = Number(match[2]);
+  const year = dayFirst ? match[3] : match[1];
+
+  if (!Number.isInteger(month) || month < 1 || month > 12) {
+    return date;
+  }
+
+  return `${DATE_MONTHS[month - 1]}-${day}-${year}`;
+}
 
 function LanguageSelect({ language }: { language: string }) {
   const router = useRouter();
@@ -874,6 +903,12 @@ function DocContentArea({ language, slug }: { language: string; slug: string }) 
   return (
     <div className={styles.contentGrid}>
       <article className={styles.article}>
+        {doc.date ? (
+          <div className={styles.publishedDate}>
+            <Calendar size={15} aria-hidden />
+            <span>Published {formatDocDate(doc.date)}</span>
+          </div>
+        ) : null}
         <MarkdownRenderer source={doc.body} />
         <MediaEmbeds embeds={doc.mediaEmbeds} />
         <PreviousNext language={language} slug={slug} />

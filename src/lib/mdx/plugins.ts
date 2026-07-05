@@ -163,6 +163,103 @@ function readDirectiveLabel(node: MdxNode) {
   return text || null;
 }
 
+function hasUsefulText(nodes: MdxNode[]) {
+  return nodes.some((node) => node.type !== "text" || Boolean(node.value?.trim()));
+}
+
+function trimTextEdges(nodes: MdxNode[]) {
+  const trimmed = [...nodes];
+  const first = trimmed[0];
+  const last = trimmed[trimmed.length - 1];
+
+  if (first?.type === "text" && first.value) {
+    first.value = first.value.replace(/^\s+/, "");
+  }
+
+  if (last?.type === "text" && last.value) {
+    last.value = last.value.replace(/\s+$/, "");
+  }
+
+  return trimmed.filter((node) => node.type !== "text" || Boolean(node.value));
+}
+
+function splitExploreParagraph(node: MdxNode) {
+  if (node.type !== "paragraph" || !node.children?.some((child) => child.type === "text" && child.value?.includes("[>]"))) {
+    return [node];
+  }
+
+  const paragraphs: MdxNode[] = [];
+  let current: MdxNode[] = [];
+
+  function finishCurrent() {
+    const children = trimTextEdges(current);
+
+    if (hasUsefulText(children)) {
+      paragraphs.push({
+        ...node,
+        children
+      });
+    }
+
+    current = [];
+  }
+
+  for (const child of node.children) {
+    if (child.type !== "text" || !child.value?.includes("[>]")) {
+      current.push(child);
+      continue;
+    }
+
+    const pattern = /(?:^|\r?\n)\s*\[>\]\s*/g;
+    let cursor = 0;
+    let match;
+
+    while ((match = pattern.exec(child.value)) !== null) {
+      const before = child.value.slice(cursor, match.index);
+
+      if (before) {
+        current.push({ ...child, value: before });
+      }
+
+      finishCurrent();
+      cursor = pattern.lastIndex;
+    }
+
+    const after = child.value.slice(cursor);
+
+    if (after) {
+      current.push({ ...child, value: after });
+    }
+  }
+
+  finishCurrent();
+  return paragraphs.length > 0 ? paragraphs : [node];
+}
+
+function normalizeExploreChildren(node: MdxNode) {
+  node.children = (node.children ?? []).flatMap((child) => splitExploreParagraph(child));
+}
+
+export function remarkExplore() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "containerDirective" || node.name !== "explore") {
+        return;
+      }
+
+      normalizeExploreChildren(node);
+
+      node.data = {
+        hName: "aside",
+        hProperties: {
+          className: "explore",
+          "data-explore": "true"
+        }
+      };
+    });
+  };
+}
+
 export function remarkCallouts() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {

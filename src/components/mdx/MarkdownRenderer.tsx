@@ -9,6 +9,7 @@ import {
   remarkCallouts,
   remarkCharacterDialogues,
   remarkEmojiCards,
+  remarkExplore,
   remarkHighlights,
   remarkImageWords,
   remarkIcons,
@@ -693,6 +694,20 @@ const markdownComponents = {
       );
     }
 
+    const isExplore = nodeProperty(node, "dataExplore");
+
+    if (isExplore) {
+      return (
+        <aside className={styles.explore}>
+          <div className={styles.exploreTitle}>
+            <Icons.Compass size={20} aria-hidden />
+            <strong>Explore Further</strong>
+          </div>
+          <div className={styles.exploreLinks}>{children}</div>
+        </aside>
+      );
+    }
+
     const calloutType = nodeProperty(node, "dataCallout") || "note";
     const calloutTitle = nodeProperty(node, "dataCalloutTitle") || calloutType;
 
@@ -795,6 +810,7 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkGfm,
           remarkDirective,
           remarkArticleImages,
+          remarkExplore,
           remarkCallouts,
           remarkCharacterDialogues,
           remarkEmojiCards,

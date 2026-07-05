@@ -140,6 +140,29 @@ export const searchIndex = [
     "searchText": "sanskrit ससकतम sanskrit highlights highlights color and style important words in lessons default highlight background color foreground color dual color light background alignment syntax reference highlights highlighter use highlights when a learner should notice a sound word ending grammar marker or translation clue default highlight the simplest form uses the theme s default highlight color read the ending carefully त often marks a simple verb form this same default form also works inside sentence cards रम पठत ramah pathati rama reads background color add a color after the text to use it as a background the vowel is long in this form use bg when you want the mode to be explicit remember the root gam means to go foreground color use fg when only the text should change color the subject is बलक italic foreground text is useful for pronunciation notes say a longer than a dual color use dual mode when you need both text and background colors the key verb is खदत dual colors also work inside sentence cards बलक फलन खदत balakah phalani khadati the boy eats fruits light background use lightbg for a soft marker that does not feel as strong as a full badge look for the case ending in रमण alignment alignment turns the highlight into a block this is useful for short reminders or translation checks read the sentence aloud before revealing the answer syntax reference use case syntax default theme highlight text background color text explicit background text foreground color text dual color text bold or italic text aligned block text learning use use one or two highlights per example too many colors make the sentence harder to scan"
   },
   {
+    "id": "sanskrit/markdown-features",
+    "language": "sanskrit",
+    "languageTitle": "Sanskrit",
+    "languageNativeName": "संस्कृतम्",
+    "slug": "markdown-features",
+    "path": "/docs/sanskrit/markdown-features",
+    "title": "Markdown Features",
+    "description": "Use built-in Markdown patterns to shape clear language-learning notes.",
+    "headings": [
+      "Headings",
+      "Paragraphs And Emphasis",
+      "Lists",
+      "Blockquotes",
+      "Tables",
+      "Code And Inline Text",
+      "Links",
+      "Horizontal Rules",
+      "Explore Blocks"
+    ],
+    "content": "Markdown Features Markdown gives each lesson a simple writing rhythm: plain text first, structure only where it helps. Use these built in patterns for examples, notes, grammar tables, reading practice, and reference links. Headings Use headings to break a long lesson into scan friendly steps. Paragraphs And Emphasis Write normal paragraphs for explanation. Use bold for important words and italic for pronunciation hints. The word नमस्ते is often read as namaste . Lists Use unordered lists for quick groups. Listen once. Repeat slowly. Write the word from memory. Use numbered lists when order matters. 1. Read the word. 2. Cover the answer. 3. Say it aloud. Blockquotes Use for a quoted rule, a reminder, or a sentence worth keeping visible. A short vowel and a long vowel can change the meaning. Tables Tables are useful for vocabulary, scripts, meanings, and short grammar contrasts. Sanskrit Transliteration Meaning फलम् phalam fruit जलम् jalam water Code And Inline Text Use inline code for syntax examples like answer, :BookOpen:, or . For longer examples, use fenced code blocks: Links Use regular Markdown links for references. External links open in a new tab. [Lucide icons](https://lucide.dev/icons) Horizontal Rules Use to create a visual pause between practice sections. Explore Blocks Use when an article needs a small list of external references at the end. [Markdown Guide](https://www.markdownguide.org/basic syntax/) Basic Syntax [GitHub Flavored Markdown Spec](https://github.github.com/gfm/) [CommonMark Help](https://commonmark.org/help/)",
+    "searchText": "sanskrit ससकतम sanskrit markdown features markdown features use built in markdown patterns to shape clear language learning notes headings paragraphs and emphasis lists blockquotes tables code and inline text links horizontal rules explore blocks markdown features markdown gives each lesson a simple writing rhythm plain text first structure only where it helps use these built in patterns for examples notes grammar tables reading practice and reference links headings use headings to break a long lesson into scan friendly steps paragraphs and emphasis write normal paragraphs for explanation use bold for important words and italic for pronunciation hints the word नमसत is often read as namaste lists use unordered lists for quick groups listen once repeat slowly write the word from memory use numbered lists when order matters 1 read the word 2 cover the answer 3 say it aloud blockquotes use for a quoted rule a reminder or a sentence worth keeping visible a short vowel and a long vowel can change the meaning tables tables are useful for vocabulary scripts meanings and short grammar contrasts sanskrit transliteration meaning फलम phalam fruit जलम jalam water code and inline text use inline code for syntax examples like answer bookopen or for longer examples use fenced code blocks links use regular markdown links for references external links open in a new tab lucide icons https lucide dev icons horizontal rules use to create a visual pause between practice sections explore blocks use when an article needs a small list of external references at the end markdown guide https www markdownguide org basic syntax basic syntax github flavored markdown spec https github github com gfm commonmark help https commonmark org help"
+  },
+  {
     "id": "sanskrit/media",
     "language": "sanskrit",
     "languageTitle": "Sanskrit",
