@@ -2,10 +2,10 @@
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import styles from "@/components/auth/AuthGate.module.css";
-import { Eye, EyeOff, KeyRound, LockKeyhole, UserRound } from "lucide-react";
+import { Eye, EyeOff, KeyRound, LockKeyhole, UserRound, X } from "lucide-react";
 import { FormEvent, useState } from "react";
 
-export function LoginModal() {
+export function LoginModal({ onClose }: { onClose?: () => void }) {
   const { config, login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -52,6 +52,11 @@ export function LoginModal() {
 
   return (
     <form className={`${styles.card} ${shake ? styles.shake : ""}`} onSubmit={onSubmit}>
+      {onClose && (
+        <button type="button" className={styles.closeButton} onClick={onClose} aria-label="Close">
+          <X size={18} aria-hidden />
+        </button>
+      )}
       <div className={styles.badge}>
         <LockKeyhole size={18} aria-hidden />
         Protected docs

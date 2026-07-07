@@ -61,6 +61,30 @@
   color: var(--accent-strong);
 }
 
+.heroCta {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.heroCta:hover {
+  background: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
 .hero {
   min-height: calc(100vh - 72px);
   display: grid;
