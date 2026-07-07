@@ -1,0 +1,147 @@
+---
+title: "Letter Directives"
+description: "How to use :letter and :letterGrid to display script cards and full alphabet charts in any lesson."
+order: 1
+date: 07-07-2026
+---
+
+# Letter Directives :icon[BookOpen]
+
+Two inline directives handle letter display in Lexora: `:letter` for a single styled card, and `:letterGrid` for a full script chart. Both render on blue boards that match the reference screenshots.
+
+---
+
+## `:letter` — Single Letter Card
+
+Place one letter inside a styled card. The glyph goes between square brackets; all options go in curly braces.
+
+```md
+:letter[अ]{transliteration="a" meaning="as in 'about'" size="big" highlight="true"}
+```
+
+### Card Options
+
+| Parameter | Required | Values | Default |
+| `transliteration` | no | IAST string | — |
+| `meaning` | no | any hint text | — |
+| `size` | no | `small` `normal` `big` | `normal` |
+| `highlight` | no | `true` \| `false` | `false` |
+
+### Size Examples
+
+:letter[अ]{transliteration="a" meaning="short open vowel" size="small"}
+:letter[आ]{transliteration="ā" meaning="long open vowel" size="normal"}
+:letter[इ]{transliteration="i" meaning="as in 'sit'" size="big"}
+
+### Highlight
+
+Passing `highlight="true"` adds an accent-colour background. Use it to call out the most important letter on the page.
+
+:letter[अ]{transliteration="a" meaning="as in 'about'" size="big" highlight="true"}
+:letter[आ]{transliteration="ā" meaning="as in 'father'" size="big"}
+
+### With Tamil or Meaning Hints
+
+The `meaning` attribute accepts any short text, including a Tamil pronunciation hint:
+
+:letter[ऋ]{transliteration="ṛ" meaning="like ரி in ரிஷி — syllabic r" size="big"}
+:letter[ळ]{transliteration="ḷa" meaning="like ள in குளம் (pond)" size="big"}
+:letter[ऴ]{transliteration="ẓa" meaning="like ழ in பழம் (fruit)" size="big"}
+
+### Using `:letter` Inside a Table
+
+Cards work inside Markdown tables because they are inline elements:
+
+| Short | Long | Difference |
+| --- | --- | --- |
+| :letter[अ]{transliteration="a"} | :letter[आ]{transliteration="ā"} | hold the sound longer |
+| :letter[इ]{transliteration="i"} | :letter[ई]{transliteration="ī"} | hold the sound longer |
+
+---
+
+## `:letterGrid` — Script Chart Board
+
+Renders a full grid of letters inside a blue board. The title appears top-right; letters flow through the grid in the order you write them.
+
+```md
+:letterGrid[Vowels]{rows="4" items="अ=a, आ=ā, इ=i, ई=ī"}
+```
+
+### Grid Options
+
+| Parameter | Required | Values | Default |
+| `items` | yes | comma-separated `glyph=translit` pairs | — |
+| `rows` | no | number | `4` |
+| `cols` | no | number | — |
+| `layout` | no | `inline` `stack` | `inline` |
+| `variant` | no | `board` `plain` | `board` |
+
+### Items Format
+
+Every item is a `glyph=transliteration` pair. Separate pairs with commas. Prefix any item with `*` to highlight its glyph in **yellow**:
+
+```
+*ङ=ṅ
+```
+
+Items with no `=` part are shown with only the glyph and no transliteration.
+
+---
+
+## Layout Modes
+
+### Column-major: `rows="N"` (default)
+
+Items fill **top-to-bottom**, then wrap to the next column. Best for vowel charts. The vowel board on the Vowels lesson uses `rows="4"`:
+
+:letterGrid[Vowels]{rows="4" items="अ=a, आ=ā, इ=i, ई=ī, उ=u, ऊ=ū, ऋ=ṛ, ॠ=ṝ, ऌ=ḷ, ॡ=ḹ, ए=e, ऐ=ai, ओ=o, औ=au, अं=aṃ, अः=aḥ"}
+
+### Row-major: `cols="N"`
+
+Items fill **left-to-right**, then wrap to the next row. Best for consonant grids. Setting `cols="5"` keeps five letters per row:
+
+:letterGrid[Consonants]{cols="5" items="क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ, च=c, छ=ch, ज=j, झ=jh, *ञ=ñ"}
+
+---
+
+## Stack Layout: `layout="stack"`
+
+In `stack` mode the glyph appears **above** its transliteration instead of beside it. This matches the consonant-chart style from the reference images. Combine with `cols` for a row-major stacked board:
+
+:letterGrid[Consonants]{cols="5" layout="stack" items="क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ, च=c, छ=ch, ज=j, झ=jh, *ञ=ñ, ट=ṭ, ठ=ṭh, ड=ḍ, ढ=ḍh, *ण=ṇ, त=t, थ=th, द=d, ध=dh, *न=n, प=p, फ=ph, ब=b, भ=bh, *म=m"}
+
+Compare default `layout="inline"` with the same data:
+
+:letterGrid[Consonants]{cols="5" layout="inline" items="क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ"}
+
+---
+
+## Highlight with `*`
+
+Prefix any item with `*` to render its glyph in **yellow** on a board, or in the accent colour on a plain board. The consonant chart uses this to mark the nasal at the end of each group:
+
+:letterGrid[Nasals highlighted]{cols="5" layout="stack" items="क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ"}
+
+Without `*`:
+
+:letterGrid[No highlight]{cols="5" layout="stack" items="क=k, ख=kh, ग=g, घ=gh, ङ=ṅ"}
+
+---
+
+## Plain Variant: `variant="plain"`
+
+Use `variant="plain"` to remove the blue background and render on the page surface instead. Useful for inline reference tables or light-theme sections:
+
+:letterGrid[Plain board]{cols="5" layout="stack" variant="plain" items="क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ, च=c, छ=ch, ज=j, झ=jh, *ञ=ñ"}
+
+---
+
+## Tips
+
+:::tip
+- Use `:letter` inside paragraphs or table cells when you need an **inline** card.
+- Use `:letterGrid` when you want a **standalone** reference board.
+- `cols` + `layout="stack"` → consonant chart style (stacked, row-major).
+- `rows` + default `layout="inline"` → vowel chart style (side-by-side, column-major).
+- `*` on any item highlights that letter in yellow — traditional use is the nasal at the end of each consonant group.
+:::

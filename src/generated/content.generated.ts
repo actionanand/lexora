@@ -148,6 +148,45 @@ export const docsContent = {
       ],
       "mediaEmbeds": []
     },
+    "consonants": {
+      "title": "Consonants",
+      "description": "Lesson 2 - Learn the Sanskrit consonants (vyañjana): the 25 categorized stops, the uncategorized semivowels and sibilants, and special letters.",
+      "date": "07-07-2026",
+      "body": "# Lesson 2: Sanskrit Consonants :icon[BookOpen]\n\nAfter the vowels come the consonants — called **व्यञ्जन** (*vyañjana*). Unlike vowels, every consonant carries an inherent **अ** (*a*) sound unless a vowel mark or a **halant** removes it. Sanskrit organises its consonants by *where in the mouth* they are produced, which makes them surprisingly easy to memorise.\n\n:::tip{title=\"How to use this lesson\"}\nRead each row left to right. Notice how the sounds move from the back of the throat (velar) to the lips (labial). The last letter in every categorized row is the **nasal** of that group — shown in yellow because it behaves differently.\n:::\n\n## Categorized Consonants (स्पर्श)\n\nThese 25 consonants are the **stops** (*sparśa*). They form a neat **5 × 5** grid: five groups (*varga*), each with five letters. The fifth letter in each row is the **nasal** (*anunāsika*) of that group.\n\n:letterGrid[Consonants]{cols=\"5\" layout=\"stack\" items=\"क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ, च=c, छ=ch, ज=j, झ=jh, *ञ=ñ, ट=ṭ, ठ=ṭh, ड=ḍ, ढ=ḍh, *ण=ṇ, त=t, थ=th, द=d, ध=dh, *न=n, प=p, फ=ph, ब=b, भ=bh, *म=m\"}\n\nEach row has a name based on its place of articulation:\n\n| Group (वर्ग) | Place | Letters |\n| --- | --- | --- |\n| **कण्ठ्य** (*kaṇṭhya*) | Velar / throat | क ख ग घ ङ |\n| **तालव्य** (*tālavya*) | Palatal | च छ ज झ ञ |\n| **मूर्धन्य** (*mūrdhanya*) | Retroflex | ट ठ ड ढ ण |\n| **दन्त्य** (*dantya*) | Dental | त थ द ध न |\n| **ओष्ठ्य** (*oṣṭhya*) | Labial / lips | प फ ब भ म |\n\n:::note\nWithin each row the pattern is always the same: **unvoiced → unvoiced aspirated → voiced → voiced aspirated → nasal**. Learn this rhythm once and it repeats for all five groups.\n:::\n\n## Uncategorized Consonants (अन्तःस्थ and ऊष्म)\n\nThe remaining consonants do not fit the 5 × 5 grid. They split into two small families — the **semivowels** (*antaḥstha*) and the **sibilants** (*ūṣma*).\n\n:letterGrid[Consonants]{cols=\"4\" layout=\"stack\" items=\"य=y, र=r, ल=l, व=v, श=ś, ष=ṣ, स=s, ह=h\"}\n\n- **Semivowels — अन्तःस्थ** (*antaḥstha*): :letter[य]{transliteration=\"ya\" size=\"small\"} :letter[र]{transliteration=\"ra\" size=\"small\"} :letter[ल]{transliteration=\"la\" size=\"small\"} :letter[व]{transliteration=\"va\" size=\"small\"}\n- **Sibilants & aspirate — ऊष्म** (*ūṣma*): :letter[श]{transliteration=\"śa\" size=\"small\"} :letter[ष]{transliteration=\"ṣa\" size=\"small\"} :letter[स]{transliteration=\"sa\" size=\"small\"} :letter[ह]{transliteration=\"ha\" size=\"small\"}\n\n## Pure Consonants And The Halant\n\nA consonant on its own always includes the inherent **अ** (*a*) sound: **क** is read *ka*, not *k*.\n\nTo write a **pure consonant** (with no vowel), a slanting stroke called the **halant** (**हलन्त्**, *halant* — also *virāma*, **विराम**) is added below it.\n\n:::info{title=\"Slanting stroke = halant\"}\nA consonant **without** the slanting stroke is mixed with the vowel *a* → **क** = *ka*.\nA consonant **with** the slanting stroke is pure → **क्** = *k*.\n:::\n\n## Special Consonants\n\nTwo rare retroflex consonants survive in Vedic texts and related languages:\n\n:letter[ळ]{transliteration=\"ḷa\" meaning=\"like ள in குளம் (pond)\" size=\"big\"}\n:letter[ऴ]{transliteration=\"ẓa\" meaning=\"like ழ in பழம் (fruit)\" size=\"big\"}\n\n- **ळ** (*ḷa*) — a retroflex lateral. Pronounced like **ள** in **குளம்** (*kuḷam*, pond). Found in Vedic recitation and still used in Marathi. Classical Sanskrit usually replaces it with **ल** (*la*).\n- **ऴ** (*ẓa*) — an ancient retroflex. Pronounced like **ழ** in **பழம்** (*paẓam*, fruit). Appears only in the oldest Vedic texts and is no longer used in standard Sanskrit.\n\n## Quick Check\n\nReveal the answers only after you try.\n\n- The nasal of the **कण्ठ्य** (velar) group is [[ङ|_____ (ṅ)]].\n- The slanting stroke that removes the inherent *a* is called the [[हलन्त् (halant)]].\n- A consonant with no vowel mark is read with an inherent [[अ (a)]] sound.\n\n## Learning Flow\n\n```mermaid\nflowchart LR\n  velar[Velar क-वर्ग] --> palatal[Palatal च-वर्ग]\n  palatal --> retroflex[Retroflex ट-वर्ग]\n  retroflex --> dental[Dental त-वर्ग]\n  dental --> labial[Labial प-वर्ग]\n  labial --> extra[Semivowels & Sibilants]\n```\n\n:::tip{title=\"Next lesson\"}\nWith vowels and consonants in place, you are ready to combine them into **syllables** using vowel marks (*mātrā*, **मात्रा**).\n:::",
+      "toc": [
+        {
+          "id": "categorized-consonants-सपरश",
+          "text": "Categorized Consonants (स्पर्श)",
+          "depth": 2
+        },
+        {
+          "id": "uncategorized-consonants-अनतसथ-and-ऊषम",
+          "text": "Uncategorized Consonants (अन्तःस्थ and ऊष्म)",
+          "depth": 2
+        },
+        {
+          "id": "pure-consonants-and-the-halant",
+          "text": "Pure Consonants And The Halant",
+          "depth": 2
+        },
+        {
+          "id": "special-consonants",
+          "text": "Special Consonants",
+          "depth": 2
+        },
+        {
+          "id": "quick-check",
+          "text": "Quick Check",
+          "depth": 2
+        },
+        {
+          "id": "learning-flow",
+          "text": "Learning Flow",
+          "depth": 2
+        }
+      ],
+      "mediaEmbeds": []
+    },
     "grammar": {
       "title": "Grammar",
       "description": "A gentle introduction to agreement and sentence structure.",
@@ -379,6 +418,55 @@ export const docsContent = {
         }
       ]
     },
+    "vowels": {
+      "title": "Vowels",
+      "description": "Lesson 1 - Learn the Sanskrit vowels (svara) in Devanagari with IAST transliteration.",
+      "date": "07-07-2026",
+      "body": "# Lesson 1: Sanskrit Vowels :icon[BookOpen]\n\nSanskrit begins with sound. Before words and sentences, learn the vowels — called **स्वर** (*svara*). Every syllable in the language rests on one of these sounds, so this is the perfect first step.\n\n:::tip{title=\"How to use this lesson\"}\nRead each vowel aloud. Say the short sound, then its long partner right after it. Keeping the length clear is the single most important habit in Sanskrit pronunciation.\n:::\n\n## The Vowel Chart (स्वर)\n\nRead the chart **column by column**, top to bottom, then move to the next column. This is the traditional order in which Sanskrit vowels are learned.\n\n:letterGrid[Vowels]{rows=\"4\" items=\"अ=a, आ=ā, इ=i, ई=ī, उ=u, ऊ=ū, ऋ=ṛ, ॠ=ṝ, ऌ=ḷ, ॡ=ḹ, ए=e, ऐ=ai, ओ=o, औ=au, अं=aṃ, अः=aḥ\"}\n\n:::note\nThe last two, **अं** (*aṃ*) and **अः** (*aḥ*), are the **अनुस्वार** (*anusvāra*) and **विसर्ग** (*visarga*). They are not pure vowels, but they always follow a vowel, so they are taught together with this group.\n:::\n\n## Short And Long Pairs\n\nMost vowels come in a **short** (**ह्रस्व**, *hrasva*) and **long** (**दीर्घ**, *dīrgha*) pair. The long vowel is held about twice as long as the short one.\n\n| Short | Long | Difference |\n| --- | --- | --- |\n| :letter[अ]{transliteration=\"a\"} | :letter[आ]{transliteration=\"ā\"} | hold the sound longer |\n| :letter[इ]{transliteration=\"i\"} | :letter[ई]{transliteration=\"ī\"} | hold the sound longer |\n| :letter[उ]{transliteration=\"u\"} | :letter[ऊ]{transliteration=\"ū\"} | hold the sound longer |\n| :letter[ऋ]{transliteration=\"ṛ\"} | :letter[ॠ]{transliteration=\"ṝ\"} | hold the sound longer |\n| :letter[ऌ]{transliteration=\"ḷ\"} | :letter[ॡ]{transliteration=\"ḹ\"} | hold the sound longer |\n\n:::caution\n`a` and `ā` are **different sounds**, not the same letter with decoration. Swapping them can change the meaning of a word.\n:::\n\n## Meet The First Four\n\nStart by mastering just these four. Say each one three times before moving on.\n\n:letter[अ]{transliteration=\"a\" meaning=\"as in 'about'\" size=\"big\" highlight=\"true\"}\n:letter[आ]{transliteration=\"ā\" meaning=\"as in 'father'\" size=\"big\"}\n:letter[इ]{transliteration=\"i\" meaning=\"as in 'sit'\" size=\"big\"}\n:letter[ई]{transliteration=\"ī\" meaning=\"as in 'machine'\" size=\"big\"}\n\n## The Special Vowels\n\nSanskrit has **vocalic consonants** (ṛ, ṝ, ḷ, ḹ) — sounds that treat a consonant as a vowel — and **compound vowels** (ए, ऐ, ओ, औ) that glide between two sounds.\n\n### Vocalic Consonants\n\n:letter[ऋ]{transliteration=\"ṛ\" meaning=\"like ரி in ரிஷி — syllabic r\" size=\"big\"}\n:letter[ॠ]{transliteration=\"ṝ\" meaning=\"like ரீ in ரீங்காரம் — long syllabic r\" size=\"big\"}\n:letter[ऌ]{transliteration=\"ḷ\" meaning=\"like ல் in கல் — syllabic l, Vedic\" size=\"big\"}\n:letter[ॡ]{transliteration=\"ḹ\" meaning=\"long ḷ — purely theoretical\" size=\"big\"}\n\n| Vowel | IAST | Tamil hint | Note |\n| --- | --- | --- | --- |\n| ऋ | ṛ | **ரி** in **ரிஷி** (*ṛṣi*, sage) | Short syllabic r |\n| ॠ | ṝ | **ரீ** in **ரீங்காரம்** (*rīṅkāram*, humming) | Long syllabic r |\n| ऌ | ḷ | **ல்** in **கல்** (*kal*, stone) — sustain the l | Vedic only |\n| ॡ | ḹ | — | Purely theoretical in classical grammar |\n\n### Compound Vowels\n\n:letter[ए]{transliteration=\"e\" meaning=\"as in 'they'\" size=\"big\"}\n:letter[ऐ]{transliteration=\"ai\" meaning=\"as in 'aisle'\" size=\"big\"}\n:letter[ओ]{transliteration=\"o\" meaning=\"as in 'go'\" size=\"big\"}\n:letter[औ]{transliteration=\"au\" meaning=\"as in 'cow'\" size=\"big\"}\n\n:::girl\nPractising `ऐ` and `औ`? Glide smoothly from one sound into the next: `a` → `i` gives `ai`, and `a` → `u` gives `au`.\n:::\n\n## Quick Check\n\nReveal the answers only after you try.\n\n- The long partner of **अ** (`a`) is [[आ|_____ (ā)]].\n- The vowel that sounds like *machine* is [[ई|_____ (ī)]].\n- **अः** is called the [[विसर्ग (visarga)]].\n\n## Learning Flow\n\n```mermaid\nflowchart LR\n  hear[Hear the vowel] --> say[Say it aloud]\n  say --> read[Read the Devanagari]\n  read --> write[Write from memory]\n```\n\n:::tip{title=\"Next lesson\"}\nOnce these vowels feel natural, you are ready for the **consonants** (**व्यञ्जन**, *vyañjana*), where each consonant carries an inherent `a` sound.\n:::",
+      "toc": [
+        {
+          "id": "the-vowel-chart-सवर",
+          "text": "The Vowel Chart (स्वर)",
+          "depth": 2
+        },
+        {
+          "id": "short-and-long-pairs",
+          "text": "Short And Long Pairs",
+          "depth": 2
+        },
+        {
+          "id": "meet-the-first-four",
+          "text": "Meet The First Four",
+          "depth": 2
+        },
+        {
+          "id": "the-special-vowels",
+          "text": "The Special Vowels",
+          "depth": 2
+        },
+        {
+          "id": "vocalic-consonants",
+          "text": "Vocalic Consonants",
+          "depth": 3
+        },
+        {
+          "id": "compound-vowels",
+          "text": "Compound Vowels",
+          "depth": 3
+        },
+        {
+          "id": "quick-check",
+          "text": "Quick Check",
+          "depth": 2
+        },
+        {
+          "id": "learning-flow",
+          "text": "Learning Flow",
+          "depth": 2
+        }
+      ],
+      "mediaEmbeds": []
+    },
     "words": {
       "title": "Words",
       "description": "Useful Sanskrit words for first practice.",
@@ -393,6 +481,97 @@ export const docsContent = {
         {
           "id": "practice",
           "text": "Practice",
+          "depth": 2
+        }
+      ],
+      "mediaEmbeds": []
+    }
+  },
+  "studio": {
+    "letter-directives": {
+      "title": "Letter Directives",
+      "description": "How to use :letter and :letterGrid to display script cards and full alphabet charts in any lesson.",
+      "date": "07-07-2026",
+      "body": "# Letter Directives :icon[BookOpen]\n\nTwo inline directives handle letter display in Lexora: `:letter` for a single styled card, and `:letterGrid` for a full script chart. Both render on blue boards that match the reference screenshots.\n\n---\n\n## `:letter` — Single Letter Card\n\nPlace one letter inside a styled card. The glyph goes between square brackets; all options go in curly braces.\n\n```md\n:letter[अ]{transliteration=\"a\" meaning=\"as in 'about'\" size=\"big\" highlight=\"true\"}\n```\n\n### Card Options\n\n| Parameter | Required | Values | Default |\n| `transliteration` | no | IAST string | — |\n| `meaning` | no | any hint text | — |\n| `size` | no | `small` `normal` `big` | `normal` |\n| `highlight` | no | `true` \\| `false` | `false` |\n\n### Size Examples\n\n:letter[अ]{transliteration=\"a\" meaning=\"short open vowel\" size=\"small\"}\n:letter[आ]{transliteration=\"ā\" meaning=\"long open vowel\" size=\"normal\"}\n:letter[इ]{transliteration=\"i\" meaning=\"as in 'sit'\" size=\"big\"}\n\n### Highlight\n\nPassing `highlight=\"true\"` adds an accent-colour background. Use it to call out the most important letter on the page.\n\n:letter[अ]{transliteration=\"a\" meaning=\"as in 'about'\" size=\"big\" highlight=\"true\"}\n:letter[आ]{transliteration=\"ā\" meaning=\"as in 'father'\" size=\"big\"}\n\n### With Tamil or Meaning Hints\n\nThe `meaning` attribute accepts any short text, including a Tamil pronunciation hint:\n\n:letter[ऋ]{transliteration=\"ṛ\" meaning=\"like ரி in ரிஷி — syllabic r\" size=\"big\"}\n:letter[ळ]{transliteration=\"ḷa\" meaning=\"like ள in குளம் (pond)\" size=\"big\"}\n:letter[ऴ]{transliteration=\"ẓa\" meaning=\"like ழ in பழம் (fruit)\" size=\"big\"}\n\n### Using `:letter` Inside a Table\n\nCards work inside Markdown tables because they are inline elements:\n\n| Short | Long | Difference |\n| --- | --- | --- |\n| :letter[अ]{transliteration=\"a\"} | :letter[आ]{transliteration=\"ā\"} | hold the sound longer |\n| :letter[इ]{transliteration=\"i\"} | :letter[ई]{transliteration=\"ī\"} | hold the sound longer |\n\n---\n\n## `:letterGrid` — Script Chart Board\n\nRenders a full grid of letters inside a blue board. The title appears top-right; letters flow through the grid in the order you write them.\n\n```md\n:letterGrid[Vowels]{rows=\"4\" items=\"अ=a, आ=ā, इ=i, ई=ī\"}\n```\n\n### Grid Options\n\n| Parameter | Required | Values | Default |\n| `items` | yes | comma-separated `glyph=translit` pairs | — |\n| `rows` | no | number | `4` |\n| `cols` | no | number | — |\n| `layout` | no | `inline` `stack` | `inline` |\n| `variant` | no | `board` `plain` | `board` |\n\n### Items Format\n\nEvery item is a `glyph=transliteration` pair. Separate pairs with commas. Prefix any item with `*` to highlight its glyph in **yellow**:\n\n```\n*ङ=ṅ\n```\n\nItems with no `=` part are shown with only the glyph and no transliteration.\n\n---\n\n## Layout Modes\n\n### Column-major: `rows=\"N\"` (default)\n\nItems fill **top-to-bottom**, then wrap to the next column. Best for vowel charts. The vowel board on the Vowels lesson uses `rows=\"4\"`:\n\n:letterGrid[Vowels]{rows=\"4\" items=\"अ=a, आ=ā, इ=i, ई=ī, उ=u, ऊ=ū, ऋ=ṛ, ॠ=ṝ, ऌ=ḷ, ॡ=ḹ, ए=e, ऐ=ai, ओ=o, औ=au, अं=aṃ, अः=aḥ\"}\n\n### Row-major: `cols=\"N\"`\n\nItems fill **left-to-right**, then wrap to the next row. Best for consonant grids. Setting `cols=\"5\"` keeps five letters per row:\n\n:letterGrid[Consonants]{cols=\"5\" items=\"क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ, च=c, छ=ch, ज=j, झ=jh, *ञ=ñ\"}\n\n---\n\n## Stack Layout: `layout=\"stack\"`\n\nIn `stack` mode the glyph appears **above** its transliteration instead of beside it. This matches the consonant-chart style from the reference images. Combine with `cols` for a row-major stacked board:\n\n:letterGrid[Consonants]{cols=\"5\" layout=\"stack\" items=\"क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ, च=c, छ=ch, ज=j, झ=jh, *ञ=ñ, ट=ṭ, ठ=ṭh, ड=ḍ, ढ=ḍh, *ण=ṇ, त=t, थ=th, द=d, ध=dh, *न=n, प=p, फ=ph, ब=b, भ=bh, *म=m\"}\n\nCompare default `layout=\"inline\"` with the same data:\n\n:letterGrid[Consonants]{cols=\"5\" layout=\"inline\" items=\"क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ\"}\n\n---\n\n## Highlight with `*`\n\nPrefix any item with `*` to render its glyph in **yellow** on a board, or in the accent colour on a plain board. The consonant chart uses this to mark the nasal at the end of each group:\n\n:letterGrid[Nasals highlighted]{cols=\"5\" layout=\"stack\" items=\"क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ\"}\n\nWithout `*`:\n\n:letterGrid[No highlight]{cols=\"5\" layout=\"stack\" items=\"क=k, ख=kh, ग=g, घ=gh, ङ=ṅ\"}\n\n---\n\n## Plain Variant: `variant=\"plain\"`\n\nUse `variant=\"plain\"` to remove the blue background and render on the page surface instead. Useful for inline reference tables or light-theme sections:\n\n:letterGrid[Plain board]{cols=\"5\" layout=\"stack\" variant=\"plain\" items=\"क=k, ख=kh, ग=g, घ=gh, *ङ=ṅ, च=c, छ=ch, ज=j, झ=jh, *ञ=ñ\"}\n\n---\n\n## Tips\n\n:::tip\n- Use `:letter` inside paragraphs or table cells when you need an **inline** card.\n- Use `:letterGrid` when you want a **standalone** reference board.\n- `cols` + `layout=\"stack\"` → consonant chart style (stacked, row-major).\n- `rows` + default `layout=\"inline\"` → vowel chart style (side-by-side, column-major).\n- `*` on any item highlights that letter in yellow — traditional use is the nasal at the end of each consonant group.\n:::",
+      "toc": [
+        {
+          "id": "letter-single-letter-card",
+          "text": "letter — Single Letter Card",
+          "depth": 2
+        },
+        {
+          "id": "card-options",
+          "text": "Card Options",
+          "depth": 3
+        },
+        {
+          "id": "size-examples",
+          "text": "Size Examples",
+          "depth": 3
+        },
+        {
+          "id": "highlight",
+          "text": "Highlight",
+          "depth": 3
+        },
+        {
+          "id": "with-tamil-or-meaning-hints",
+          "text": "With Tamil or Meaning Hints",
+          "depth": 3
+        },
+        {
+          "id": "using-letter-inside-a-table",
+          "text": "Using letter Inside a Table",
+          "depth": 3
+        },
+        {
+          "id": "lettergrid-script-chart-board",
+          "text": "letterGrid — Script Chart Board",
+          "depth": 2
+        },
+        {
+          "id": "grid-options",
+          "text": "Grid Options",
+          "depth": 3
+        },
+        {
+          "id": "items-format",
+          "text": "Items Format",
+          "depth": 3
+        },
+        {
+          "id": "layout-modes",
+          "text": "Layout Modes",
+          "depth": 2
+        },
+        {
+          "id": "column-major-rowsn-default",
+          "text": "Column-major rows=\"N\" (default)",
+          "depth": 3
+        },
+        {
+          "id": "row-major-colsn",
+          "text": "Row-major cols=\"N\"",
+          "depth": 3
+        },
+        {
+          "id": "stack-layout-layoutstack",
+          "text": "Stack Layout layout=\"stack\"",
+          "depth": 2
+        },
+        {
+          "id": "highlight-with",
+          "text": "Highlight with",
+          "depth": 2
+        },
+        {
+          "id": "plain-variant-variantplain",
+          "text": "Plain Variant variant=\"plain\"",
+          "depth": 2
+        },
+        {
+          "id": "tips",
+          "text": "Tips",
           "depth": 2
         }
       ],

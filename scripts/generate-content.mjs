@@ -231,6 +231,17 @@ function directiveText(name, value, attributes = "") {
       .join(" ");
   }
 
+  if (name === "letter") {
+    return [value, transliteration, meaning].filter(Boolean).join(" ");
+  }
+
+  if (name === "letterGrid") {
+    const title = /title="([^"]+)"/.exec(attributes)?.[1];
+    const items = /items="([^"]+)"/.exec(attributes)?.[1] ?? "";
+
+    return [value, title, items.replace(/[=*,]/g, " ")].filter(Boolean).join(" ");
+  }
+
   return value;
 }
 
@@ -363,6 +374,7 @@ function titleFromSlug(slug) {
 
 function extractToc(markdown) {
   const toc = [];
+  const seenSlugs = new Map();
   let inFence = false;
 
   for (const line of markdown.split(/\r?\n/)) {
@@ -383,9 +395,13 @@ function extractToc(markdown) {
 
     const depth = heading[1].length;
     const text = heading[2].replace(/[#*_`:[\]]/g, "").trim();
+    const baseSlug = slugify(text);
+    const count = seenSlugs.get(baseSlug) ?? 0;
+    seenSlugs.set(baseSlug, count + 1);
+    const id = count === 0 ? baseSlug : `${baseSlug}-${count}`;
 
     toc.push({
-      id: slugify(text),
+      id,
       text,
       depth
     });

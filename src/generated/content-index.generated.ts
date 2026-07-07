@@ -59,15 +59,15 @@ export const languages = [
     "locale": "sa",
     "pages": [
       {
-        "slug": "basics",
-        "title": "Basics",
-        "description": "Start with Sanskrit sounds, script, and first reading patterns.",
+        "slug": "vowels",
+        "title": "Vowels",
+        "description": "Lesson 1 - Learn the Sanskrit vowels (svara) in Devanagari with IAST transliteration.",
         "order": 1
       },
       {
-        "slug": "grammar",
-        "title": "Grammar",
-        "description": "A gentle introduction to agreement and sentence structure.",
+        "slug": "consonants",
+        "title": "Consonants",
+        "description": "Lesson 2 - Learn the Sanskrit consonants (vyañjana): the 25 categorized stops, the uncategorized semivowels and sibilants, and special letters.",
         "order": 2
       },
       {
@@ -105,6 +105,33 @@ export const languages = [
         "title": "Markdown Features",
         "description": "Use built-in Markdown patterns to shape clear language-learning notes.",
         "order": 8
+      },
+      {
+        "slug": "basics",
+        "title": "Basics",
+        "description": "Start with Sanskrit sounds, script, and first reading patterns.",
+        "order": 9
+      },
+      {
+        "slug": "grammar",
+        "title": "Grammar",
+        "description": "A gentle introduction to agreement and sentence structure.",
+        "order": 10
+      }
+    ]
+  },
+  {
+    "slug": "studio",
+    "title": "Studio",
+    "nativeName": "लेखन",
+    "description": "Reference guide for Lexora authoring directives, letter boards, and content patterns.",
+    "locale": "en",
+    "pages": [
+      {
+        "slug": "letter-directives",
+        "title": "Letter Directives",
+        "description": "How to use :letter and :letterGrid to display script cards and full alphabet charts in any lesson.",
+        "order": 1
       }
     ]
   }

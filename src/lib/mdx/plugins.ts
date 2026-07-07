@@ -419,6 +419,64 @@ export function remarkSentenceCards() {
   };
 }
 
+export function remarkLetterCards() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "letter") {
+        return;
+      }
+
+      const glyph = node.children?.[0]?.value?.trim() ?? node.attributes?.glyph ?? "";
+      const transliteration = node.attributes?.transliteration ?? node.attributes?.iast ?? "";
+      const meaning = node.attributes?.meaning ?? "";
+      const highlight = node.attributes?.highlight ?? "false";
+      const size = node.attributes?.size ?? "normal";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-letter",
+        hProperties: {
+          glyph,
+          transliteration,
+          meaning,
+          highlight,
+          size
+        }
+      };
+    });
+  };
+}
+
+export function remarkLetterGrid() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "letterGrid") {
+        return;
+      }
+
+      const title = node.children?.[0]?.value?.trim() ?? node.attributes?.title ?? "";
+      const items = node.attributes?.items ?? "";
+      const rows = node.attributes?.rows ?? "4";
+      const cols = node.attributes?.cols ?? "";
+      const layout = node.attributes?.layout ?? "inline";
+      const variant = node.attributes?.variant ?? "board";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-letter-grid",
+        hProperties: {
+          title,
+          items,
+          rows,
+          cols,
+          layout,
+          variant
+        }
+      };
+    });
+  };
+}
+
 export function remarkArticleImages() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {
