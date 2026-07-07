@@ -17,9 +17,8 @@ export function LandingPageClient({
   firstDocPath: string;
   languages: readonly LanguageConfig[];
 }) {
-  const { logout, status } = useAuth();
+  const { logout, status, openLoginModal } = useAuth();
   const isAuthenticated = status === "authenticated";
-  const heroLabel = isAuthenticated ? "Continue learning" : "Login to learn";
 
   return (
     <main className={styles.page}>
@@ -43,9 +42,9 @@ export function LandingPageClient({
               Logout
             </button>
           ) : (
-            <ButtonLink href={firstDocPath} variant="secondary">
+            <button className={styles.logoutButton} type="button" onClick={() => openLoginModal()}>
               Login
-            </ButtonLink>
+            </button>
           )}
         </div>
       </nav>
@@ -67,9 +66,15 @@ export function LandingPageClient({
             </div>
           ) : null}
           <div className={styles.heroActions}>
-            <ButtonLink href={firstDocPath}>
-              {heroLabel} <ArrowRight size={18} aria-hidden />
-            </ButtonLink>
+            {isAuthenticated ? (
+              <ButtonLink href={firstDocPath}>
+                Continue learning <ArrowRight size={18} aria-hidden />
+              </ButtonLink>
+            ) : (
+              <button className={styles.heroCta} type="button" onClick={() => openLoginModal()}>
+                Login to learn <ArrowRight size={18} aria-hidden />
+              </button>
+            )}
             <ButtonLink href="#languages" variant="secondary">
               View languages
             </ButtonLink>

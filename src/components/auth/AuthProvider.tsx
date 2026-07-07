@@ -1,9 +1,12 @@
 "use client";
 
+import { LoginModal } from "@/components/auth/LoginModal";
 import { loadAuthConfig, type AuthConfig } from "@/lib/auth/config";
 import { sha1 } from "@/lib/auth/crypto";
 import { clearStoredSession, readStoredSession, writeStoredSession } from "@/lib/auth/session";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "@/components/auth/AuthGate.module.css";
 
 type AuthStatus = "checking" | "authenticated" | "anonymous";
 
@@ -21,6 +24,9 @@ type AuthContextValue = {
   config: AuthConfig | null;
   login: (username: string, password: string) => Promise<LoginResult>;
   logout: () => Promise<void>;
+  openLoginModal: (redirectTo?: string) => void;
+  closeLoginModal: () => void;
+  loginModalOpen: boolean;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -28,6 +34,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<AuthStatus>("checking");
   const [config, setConfig] = useState<AuthConfig | null>(null);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const pendingRedirectRef = useRef<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     let cancelled = false;
@@ -60,6 +69,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  const openLoginModal = useCallback((redirectTo?: string) => {
+    pendingRedirectRef.current = redirectTo ?? null;
+    setLoginModalOpen(true);
+  }, []);
+
+  const closeLoginModal = useCallback(() => {
+    setLoginModalOpen(false);
+    pendingRedirectRef.current = null;
+  }, []);
+
   const login = useCallback(
     async (username: string, password: string): Promise<LoginResult> => {
       const trimmedUsername = username.trim();
@@ -81,10 +100,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       await writeStoredSession(trimmedUsername, config.hash);
       setStatus("authenticated");
+      setLoginModalOpen(false);
+
+      const redirect = pendingRedirectRef.current;
+      pendingRedirectRef.current = null;
+      if (redirect) {
+        router.push(redirect);
+      }
 
       return { ok: true };
     },
-    [config]
+    [config, router]
   );
 
   const logout = useCallback(async () => {
@@ -97,12 +123,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       status,
       config,
       login,
-      logout
+      logout,
+      openLoginModal,
+      closeLoginModal,
+      loginModalOpen,
     }),
-    [status, config, login, logout]
+    [status, config, login, logout, openLoginModal, closeLoginModal, loginModalOpen]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+      {loginModalOpen && (
+        <div className={styles.overlay}>
+          <LoginModal onClose={closeLoginModal} />
+        </div>
+      )}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
