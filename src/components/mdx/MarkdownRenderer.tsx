@@ -13,6 +13,8 @@ import {
   remarkHighlights,
   remarkImageWords,
   remarkIcons,
+  remarkLetterCards,
+  remarkLetterGrid,
   remarkRevealBlanks,
   remarkSentenceCards,
   remarkTextWords
@@ -552,6 +554,120 @@ function boolProp(value?: string) {
   return value === "true";
 }
 
+function LetterCard({
+  glyph,
+  transliteration,
+  meaning,
+  highlight,
+  size
+}: {
+  glyph?: string;
+  transliteration?: string;
+  meaning?: string;
+  highlight?: string;
+  size?: string;
+}) {
+  const sizeClass =
+    size === "big" ? styles.letterBig : size === "small" ? styles.letterSmall : styles.letterNormal;
+  const readableLabel = [glyph, transliteration, meaning].filter(Boolean).join(" ");
+
+  return (
+    <span
+      className={`${styles.letterCard} ${sizeClass} ${highlight === "true" ? styles.letterCardHighlight : ""}`}
+      role="group"
+      aria-label={readableLabel}
+    >
+      <span className={styles.letterGlyph}>{glyph}</span>
+      {transliteration ? <span className={styles.letterTranslit}>{transliteration}</span> : null}
+      {meaning ? <span className={styles.letterMeaning}>{meaning}</span> : null}
+    </span>
+  );
+}
+
+type LetterGridItem = {
+  glyph: string;
+  transliteration: string;
+  highlighted: boolean;
+};
+
+function parseLetterGridItems(raw?: string): LetterGridItem[] {
+  if (!raw) {
+    return [];
+  }
+
+  return raw
+    .split(",")
+    .map((chunk) => chunk.trim())
+    .filter(Boolean)
+    .map((chunk) => {
+      const highlighted = chunk.startsWith("*");
+      const body = highlighted ? chunk.slice(1) : chunk;
+      const separator = body.indexOf("=");
+      const glyph = (separator === -1 ? body : body.slice(0, separator)).trim();
+      const transliteration = separator === -1 ? "" : body.slice(separator + 1).trim();
+
+      return { glyph, transliteration, highlighted };
+    });
+}
+
+function LetterGrid({
+  title,
+  items,
+  rows,
+  cols,
+  layout,
+  variant
+}: {
+  title?: string;
+  items?: string;
+  rows?: string;
+  cols?: string;
+  layout?: string;
+  variant?: string;
+}) {
+  const parsed = parseLetterGridItems(items);
+  const colCount = Number.parseInt(cols ?? "", 10);
+  const useColumns = Number.isFinite(colCount) && colCount > 0;
+  const rowCount = Math.max(1, Number.parseInt(rows ?? "4", 10) || 4);
+  const cellStyle: CSSProperties = useColumns
+    ? { gridTemplateColumns: `repeat(${colCount}, auto)`, gridAutoFlow: "row" }
+    : { gridTemplateRows: `repeat(${rowCount}, auto)`, gridAutoFlow: "column" };
+  const isStacked = layout === "stack";
+  const readableLabel = [title, ...parsed.map((item) => `${item.glyph} ${item.transliteration}`)]
+    .filter(Boolean)
+    .join(" ");
+
+  if (parsed.length === 0) {
+    return null;
+  }
+
+  return (
+    <span
+      className={`${styles.letterGridBoard} ${variant === "plain" ? styles.letterGridPlain : ""}`}
+      role="group"
+      aria-label={readableLabel}
+    >
+      {title ? <span className={styles.letterGridTitle}>{title}</span> : null}
+      <span
+        className={`${styles.letterGridCells} ${isStacked ? styles.letterGridStack : ""}`}
+        style={cellStyle}
+      >
+        {parsed.map((item, index) => (
+          <span
+            key={`${item.glyph}-${index}`}
+            className={`${styles.letterGridCell} ${item.highlighted ? styles.letterGridCellHighlight : ""}`}
+          >
+            <span className={styles.letterGridGlyph}>{item.glyph}</span>
+            {item.transliteration ? (
+              <span className={styles.letterGridTranslit}>{item.transliteration}</span>
+            ) : null}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
 function dimensionValue(value?: string) {
   if (!value) {
     return undefined;
@@ -782,6 +898,29 @@ const markdownComponents = {
       />
     );
   },
+  "lexora-letter"({ node }: NodeProps) {
+    return (
+      <LetterCard
+        glyph={nodeProperty(node, "glyph")}
+        transliteration={nodeProperty(node, "transliteration")}
+        meaning={nodeProperty(node, "meaning")}
+        highlight={nodeProperty(node, "highlight")}
+        size={nodeProperty(node, "size")}
+      />
+    );
+  },
+  "lexora-letter-grid"({ node }: NodeProps) {
+    return (
+      <LetterGrid
+        title={nodeProperty(node, "title")}
+        items={nodeProperty(node, "items")}
+        rows={nodeProperty(node, "rows")}
+        cols={nodeProperty(node, "cols")}
+        layout={nodeProperty(node, "layout")}
+        variant={nodeProperty(node, "variant")}
+      />
+    );
+  },
   "lexora-article-image"({ node }: NodeProps) {
     return (
       <ArticleImage
@@ -817,6 +956,8 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkHighlights,
           remarkImageWords,
           remarkIcons,
+          remarkLetterCards,
+          remarkLetterGrid,
           remarkRevealBlanks,
           remarkSentenceCards,
           remarkTextWords

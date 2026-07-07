@@ -30,24 +30,6 @@ export const languages = [
         "title": "Basics",
         "description": "Learn Kannada script basics and early reading patterns.",
         "order": 1
-      },
-      {
-        "slug": "greetings",
-        "title": "Greetings",
-        "description": "Common Kannada greetings and polite expressions.",
-        "order": 2
-      },
-      {
-        "slug": "words",
-        "title": "Words",
-        "description": "Everyday Kannada words for first practice.",
-        "order": 3
-      },
-      {
-        "slug": "sentences",
-        "title": "Sentences",
-        "description": "Practice short Kannada sentences.",
-        "order": 4
       }
     ]
   },
@@ -59,27 +41,48 @@ export const languages = [
     "locale": "sa",
     "pages": [
       {
-        "slug": "basics",
-        "title": "Basics",
-        "description": "Start with Sanskrit sounds, script, and first reading patterns.",
+        "slug": "vowels",
+        "title": "Vowels",
+        "description": "Lesson 1 - Learn the Sanskrit vowels (svara) in Devanagari with IAST transliteration.",
         "order": 1
       },
       {
-        "slug": "grammar",
-        "title": "Grammar",
-        "description": "A gentle introduction to agreement and sentence structure.",
+        "slug": "consonants",
+        "title": "Consonants",
+        "description": "Lesson 2 - Learn the Sanskrit consonants (vyañjana): the 25 categorized stops, the uncategorized semivowels and sibilants, and special letters.",
+        "order": 2
+      }
+    ]
+  },
+  {
+    "slug": "studio",
+    "title": "Studio",
+    "nativeName": "கலையகம்",
+    "description": "Reference guide for Lexora authoring directives, letter boards, and content patterns.",
+    "locale": "en",
+    "pages": [
+      {
+        "slug": "letter-directives",
+        "title": "Letter Directives",
+        "description": "How to use :letter and :letterGrid to display script cards and full alphabet charts in any lesson.",
+        "order": 1
+      },
+      {
+        "slug": "basics",
+        "title": "Basics",
+        "description": "Start with Sanskrit sounds, script, and first reading patterns.",
         "order": 2
       },
       {
-        "slug": "words",
-        "title": "Words",
-        "description": "Useful Sanskrit words for first practice.",
+        "slug": "basics-kannada",
+        "title": "Kananda Basics",
+        "description": "Learn Kannada script basics and early reading patterns.",
         "order": 3
       },
       {
-        "slug": "sentences",
-        "title": "Sentences",
-        "description": "Practice simple Sanskrit sentences.",
+        "slug": "highlights",
+        "title": "Highlights",
+        "description": "Color and style important words in lessons.",
         "order": 4
       },
       {
@@ -89,9 +92,9 @@ export const languages = [
         "order": 5
       },
       {
-        "slug": "highlights",
-        "title": "Highlights",
-        "description": "Color and style important words in lessons.",
+        "slug": "markdown-features",
+        "title": "Markdown Features",
+        "description": "Use built-in Markdown patterns to shape clear language-learning notes.",
         "order": 6
       },
       {
@@ -99,12 +102,6 @@ export const languages = [
         "title": "Video Embeds",
         "description": "Embed lesson videos from YouTube, Shorts, Instagram, Facebook, and TikTok.",
         "order": 7
-      },
-      {
-        "slug": "markdown-features",
-        "title": "Markdown Features",
-        "description": "Use built-in Markdown patterns to shape clear language-learning notes.",
-        "order": 8
       }
     ]
   }
