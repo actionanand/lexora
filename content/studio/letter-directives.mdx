@@ -84,7 +84,17 @@ Every item is a `glyph=transliteration` pair. Separate pairs with commas. Prefix
 *ङ=ṅ
 ```
 
-Items with no `=` part are shown with only the glyph and no transliteration.
+Add an optional Tamil pronunciation after a `|` pipe as a third field:
+
+```
+अः=aḥ|அஹ
+```
+
+The Tamil text renders in a smaller muted colour below the transliteration, wrapped in parentheses. Items with no `=` part are shown with only the glyph.
+
+Example with all three fields:
+
+:letterGrid[Visarga ः]{cols="6" layout="stack" items="अः=aḥ|அஹ, आः=āḥ|ஆஹ, इः=iḥ|இஹ, ईः=īḥ|ஈஹ, उः=uḥ|உஹ, ऊः=ūḥ|ஊஹ"}
 
 ---
 

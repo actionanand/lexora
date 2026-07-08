@@ -51,6 +51,12 @@ export const languages = [
         "title": "Consonants",
         "description": "Lesson 2 - Learn the Sanskrit consonants (vyañjana): the 25 categorized stops, the uncategorized semivowels and sibilants, and special letters.",
         "order": 2
+      },
+      {
+        "slug": "vowel-marks",
+        "title": "Vowel Marks",
+        "description": "Lesson 3 - How consonants combine with vowels through mātrā, and how the anusvāra and visarga attach to every vowel.",
+        "order": 3
       }
     ]
   },

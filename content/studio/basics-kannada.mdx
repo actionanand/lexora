@@ -23,18 +23,69 @@ Read slowly at first. Accuracy matters more than speed while the script is still
 
 ## Reveal Practice
 
-Use double brackets around the answer and a sentence template to make reveal practice. If the template does not include `___`, Lexora places the blank at the end of the sentence.
+Wrap the answer in `[[answer]]`. Add a template after `|` to control what the learner sees. Use `___` to place the blank anywhere inside the sentence; if you leave `___` out the blank appears at the end automatically.
 
-Write it like this:
+### Syntax
 
-- Blank at the end: `[[Kannada|The Kannada word ಕನ್ನಡ means]]`
-- Blank anywhere: `[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]`
+```
+[[answer]]
+[[answer|sentence prefix]]
+[[answer|sentence ___ rest of sentence]]
+```
 
-It appears like this:
+**Text formatters — `**bold**`, `*italic*`, `` `code` ``, `==highlight==` — work inside the template.**
+
+### Examples
+
+**Answer only — blank at end, no template needed:**
+
+```md
+नमस्ते means [[hello]].
+```
+
+नमस्ते means [[hello]].
+
+**Blank placed at the end — no `___` required:**
+
+```md
+[[Kannada|The Kannada word ಕನ್ನಡ means]]
+```
 
 [[Kannada|The Kannada word ಕನ್ನಡ means]]
 
+**Blank anywhere in the sentence:**
+
+```md
 [[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]
+```
+
+[[ಕನ್ನಡ|The Kannada word ___ means Kannada.]]
+
+**Bold and highlight inside the template:**
+
+```md
+[[ā|**आ** is the ___ vowel in Sanskrit.]]
+[[short|The vowel **अ** is a ___ ==vowel==.]]
+```
+
+[[ā|**आ** is the ___ vowel in Sanskrit.]]
+
+[[short|The vowel **अ** is a ___ ==vowel==.]]
+
+**Italic and inline code in the template:**
+
+```md
+[[halant|The mark *्* is called the ___ in Sanskrit.]]
+[[ka|The syllable `क` reads as ___.]]
+```
+
+[[halant|The mark *्* is called the ___ in Sanskrit.]]
+
+[[ka|The syllable `क` reads as ___.]]
+
+:::tip
+The eye button always appears at the far right. The blank always expands to show the answer when clicked, regardless of where in the sentence it sits.
+:::
 
 ## Callout Examples
 
