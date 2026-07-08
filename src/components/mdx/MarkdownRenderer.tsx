@@ -693,6 +693,7 @@ function LetterCard({
 type LetterGridItem = {
   glyph: string;
   transliteration: string;
+  tamil?: string;
   highlighted: boolean;
 };
 
@@ -710,9 +711,12 @@ function parseLetterGridItems(raw?: string): LetterGridItem[] {
       const body = highlighted ? chunk.slice(1) : chunk;
       const separator = body.indexOf("=");
       const glyph = (separator === -1 ? body : body.slice(0, separator)).trim();
-      const transliteration = separator === -1 ? "" : body.slice(separator + 1).trim();
+      const afterGlyph = separator === -1 ? "" : body.slice(separator + 1);
+      const tamilSep = afterGlyph.indexOf("|");
+      const transliteration = (tamilSep === -1 ? afterGlyph : afterGlyph.slice(0, tamilSep)).trim();
+      const tamil = tamilSep === -1 ? undefined : afterGlyph.slice(tamilSep + 1).trim() || undefined;
 
-      return { glyph, transliteration, highlighted };
+      return { glyph, transliteration, tamil, highlighted };
     });
 }
 
@@ -739,7 +743,7 @@ function LetterGrid({
     ? { gridTemplateColumns: `repeat(${colCount}, auto)`, gridAutoFlow: "row" }
     : { gridTemplateRows: `repeat(${rowCount}, auto)`, gridAutoFlow: "column" };
   const isStacked = layout === "stack";
-  const readableLabel = [title, ...parsed.map((item) => `${item.glyph} ${item.transliteration}`)]
+  const readableLabel = [title, ...parsed.map((item) => `${item.glyph} ${item.transliteration} ${item.tamil}`.trim())]
     .filter(Boolean)
     .join(" ");
 
@@ -766,6 +770,9 @@ function LetterGrid({
             <span className={styles.letterGridGlyph}>{item.glyph}</span>
             {item.transliteration ? (
               <span className={styles.letterGridTranslit}>{item.transliteration}</span>
+            ) : null}
+            {item.tamil ? (
+              <span className={styles.letterGridTamil}>({item.tamil})</span>
             ) : null}
           </span>
         ))}

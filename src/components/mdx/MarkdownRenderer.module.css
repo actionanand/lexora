@@ -907,6 +907,24 @@
   line-height: 1;
 }
 
+.letterGridTamil {
+  font-size: clamp(0.65rem, 1.3vw, 0.85rem);
+  font-weight: 600;
+  line-height: 1;
+  color: color-mix(in srgb, #ffffff 55%, transparent);
+}
+
+.letterGridPlain .letterGridTamil {
+  color: var(--muted);
+}
+
+.letterGridTamil {
+  font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1;
+  opacity: 0.6;
+}
+
 .letterGridCellHighlight .letterGridGlyph {
   color: #fde047;
 }
