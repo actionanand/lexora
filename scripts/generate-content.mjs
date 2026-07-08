@@ -41,21 +41,32 @@ function normalizeSiteUrl(value) {
 }
 
 function revealText(value) {
-  const separatorIndex = value.indexOf("|");
+  const [answerPart = "", templatePart = "", ...metaParts] = value.split("|");
+  const answer = answerPart.trim();
+  const template = templatePart;
+  const metadata = [];
 
-  if (separatorIndex === -1) {
-    return value;
+  for (const part of metaParts) {
+    const trimmed = part.trim();
+
+    if (!trimmed) {
+      continue;
+    }
+
+    const separator = trimmed.indexOf("=");
+    const rawValue = separator === -1 ? trimmed : trimmed.slice(separator + 1).trim();
+
+    metadata.push(rawValue.replace(/^["']|["']$/g, ""));
   }
 
-  const answer = value.slice(0, separatorIndex).trim();
-  const template = value.slice(separatorIndex + 1);
+  if (!template) {
+    return [answer, ...metadata].filter(Boolean).join(" ");
+  }
+
   const blankPattern = /_{3,}/;
+  const reveal = blankPattern.test(template) ? template.replace(blankPattern, answer) : `${template} ${answer}`;
 
-  if (blankPattern.test(template)) {
-    return template.replace(blankPattern, answer);
-  }
-
-  return `${template} ${answer}`;
+  return [reveal, ...metadata].filter(Boolean).join(" ");
 }
 
 function highlightText(value) {
@@ -249,7 +260,7 @@ function stripMarkdown(markdown) {
   return markdown
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`([^`]+)`/g, "$1")
-    .replace(/:::\w+/g, " ")
+    .replace(/:::\w+(?:\{[^}]*\}|\[[^\]]*\])?/g, " ")
     .replace(/:::/g, " ")
     .replace(/\[>\]/g, " ")
     .replace(/:(\w+)\[([^\]]+)\](\{[^}]+\})?/g, (_, name, value, attributes = "") =>

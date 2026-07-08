@@ -477,6 +477,44 @@ export function remarkLetterGrid() {
   };
 }
 
+function textContent(node: MdxNode): string {
+  if (node.type === "text") {
+    return node.value ?? "";
+  }
+
+  if (node.type === "break") {
+    return "\n";
+  }
+
+  const content = (node.children ?? []).map((child) => textContent(child)).join("");
+
+  return node.type === "paragraph" ? `${content}\n` : content;
+}
+
+export function remarkVocabularyGrid() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "containerDirective" || node.name !== "vocabGrid") {
+        return;
+      }
+
+      const title = node.attributes?.title ?? "";
+      const cols = node.attributes?.cols ?? "4";
+      const items = textContent(node).trim();
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-vocab-grid",
+        hProperties: {
+          title,
+          cols,
+          items
+        }
+      };
+    });
+  };
+}
+
 export function remarkArticleImages() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {

@@ -57,6 +57,18 @@ export const languages = [
         "title": "Vowel Marks",
         "description": "Lesson 3 - How consonants combine with vowels through mātrā, and how the anusvāra and visarga attach to every vowel.",
         "order": 3
+      },
+      {
+        "slug": "conjuncts",
+        "title": "Conjunct Consonants",
+        "description": "Learn how Sanskrit joins pure consonants into conjunct consonants and how to read common clusters.",
+        "order": 4
+      },
+      {
+        "slug": "vocabulary-practice",
+        "title": "Vocabulary Practice",
+        "description": "Practice Sanskrit words in a revealable grid with transliteration and meaning toggles.",
+        "order": 5
       }
     ]
   },

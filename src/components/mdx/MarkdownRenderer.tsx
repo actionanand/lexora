@@ -16,7 +16,8 @@ import {
   remarkLetterCards,
   remarkLetterGrid,
   remarkSentenceCards,
-  remarkTextWords
+  remarkTextWords,
+  remarkVocabularyGrid
 } from "@/lib/mdx/plugins";
 import { withBasePath } from "@/lib/base-path";
 import * as Icons from "lucide-react";
@@ -37,6 +38,79 @@ function escapeAttr(s: string): string {
     .replace(/"/g, "&quot;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
+}
+
+function stripWrappingQuotes(value: string) {
+  const trimmed = value.trim();
+  const quoted = trimmed.match(/^["'](.*)["']$/);
+
+  return quoted ? quoted[1] : trimmed;
+}
+
+function parseRevealInner(inner: string) {
+  const [answerPart = "", templatePart = "", ...metaParts] = inner.split("|");
+  const positional: string[] = [];
+  let transliteration = "";
+  let meaning = "";
+
+  for (const part of metaParts) {
+    const trimmed = part.trim();
+
+    if (!trimmed) {
+      continue;
+    }
+
+    const separator = trimmed.indexOf("=");
+
+    if (separator !== -1) {
+      const key = trimmed.slice(0, separator).trim().toLowerCase();
+      const value = stripWrappingQuotes(trimmed.slice(separator + 1));
+
+      if (key === "transliteration" || key === "translit" || key === "iast") {
+        transliteration = value;
+        continue;
+      }
+
+      if (key === "meaning" || key === "translation") {
+        meaning = value;
+        continue;
+      }
+    }
+
+    positional.push(stripWrappingQuotes(trimmed));
+  }
+
+  if (!transliteration && positional.length >= 2) {
+    transliteration = positional[0];
+  }
+
+  if (!meaning && positional.length >= 2) {
+    meaning = positional[1];
+  }
+
+  const answer = answerPart.trim();
+  const template = templatePart;
+  let prefix = "";
+  let suffix = "";
+
+  if (template) {
+    const blankMatch = /_{3,}/.exec(template);
+
+    if (!blankMatch) {
+      prefix = template.endsWith(" ") ? template : `${template} `;
+    } else {
+      prefix = template.slice(0, blankMatch.index);
+      suffix = template.slice(blankMatch.index + blankMatch[0].length);
+    }
+  }
+
+  return {
+    answer,
+    prefix,
+    suffix,
+    transliteration,
+    meaning
+  };
 }
 
 function preprocessRevealBlanks(source: string): string {
@@ -70,34 +144,10 @@ function preprocessRevealBlanks(source: string): string {
     parts.push(source.slice(cursor, match.index));
     cursor = match.index + match[0].length;
 
-    const inner = match[1];
-    const sepIdx = inner.indexOf("|");
-    let answer: string;
-    let template: string;
-
-    if (sepIdx === -1) {
-      answer = inner.trim();
-      template = "";
-    } else {
-      answer = inner.slice(0, sepIdx).trim();
-      template = inner.slice(sepIdx + 1);
-    }
-
-    let prefix = "";
-    let suffix = "";
-
-    if (template) {
-      const blankMatch = /_{3,}/.exec(template);
-      if (!blankMatch) {
-        prefix = template.endsWith(" ") ? template : `${template} `;
-      } else {
-        prefix = template.slice(0, blankMatch.index);
-        suffix = template.slice(blankMatch.index + blankMatch[0].length);
-      }
-    }
+    const reveal = parseRevealInner(match[1]);
 
     parts.push(
-      `<lexora-blank answer="${escapeAttr(answer)}" prefix="${escapeAttr(prefix)}" suffix="${escapeAttr(suffix)}"></lexora-blank>`
+      `<lexora-blank answer="${escapeAttr(reveal.answer)}" prefix="${escapeAttr(reveal.prefix)}" suffix="${escapeAttr(reveal.suffix)}" transliteration="${escapeAttr(reveal.transliteration)}" meaning="${escapeAttr(reveal.meaning)}"></lexora-blank>`
     );
   }
 
@@ -140,32 +190,50 @@ function renderInlineMarkdown(text: string): ReactNode {
 
 function RevealBlank({
   answer,
+  meaning,
   prefix,
-  suffix
+  suffix,
+  transliteration
 }: {
   answer?: string;
+  meaning?: string;
   prefix?: string;
   suffix?: string;
+  transliteration?: string;
 }) {
   const [revealed, setRevealed] = useState(false);
   const label = revealed ? "Hide answer" : "Reveal answer";
+  const hasDetails = Boolean(transliteration || meaning);
 
   return (
-    <span className={styles.revealPractice}>
-      {prefix ? <span>{renderInlineMarkdown(prefix)}</span> : null}
-      <span className={`${styles.revealBlank} ${revealed ? styles.revealBlankOpen : ""}`}>
-        <span className={styles.blankText}>{revealed ? answer : null}</span>
+    <span className={`${styles.revealPractice} ${hasDetails ? styles.revealPracticeDetailed : ""}`}>
+      <span className={styles.revealLine}>
+        {prefix ? <span>{renderInlineMarkdown(prefix)}</span> : null}
+        <span className={`${styles.revealBlank} ${revealed ? styles.revealBlankOpen : ""}`}>
+          <span className={styles.blankText}>{revealed ? answer : null}</span>
+        </span>
+        {suffix ? <span>{renderInlineMarkdown(suffix)}</span> : null}
+        <button
+          className={styles.revealButton}
+          type="button"
+          onClick={() => setRevealed((current) => !current)}
+          aria-label={label}
+          title={label}
+        >
+          {revealed ? <Icons.EyeOff size={16} aria-hidden /> : <Icons.Eye size={16} aria-hidden />}
+        </button>
       </span>
-      {suffix ? <span>{renderInlineMarkdown(suffix)}</span> : null}
-      <button
-        className={styles.revealButton}
-        type="button"
-        onClick={() => setRevealed((current) => !current)}
-        aria-label={label}
-        title={label}
-      >
-        {revealed ? <Icons.EyeOff size={16} aria-hidden /> : <Icons.Eye size={16} aria-hidden />}
-      </button>
+      {hasDetails ? (
+        <span className={`${styles.revealDetails} ${transliteration && meaning ? styles.revealDetailsSplit : ""}`}>
+          {transliteration ? <span className={styles.revealTransliteration}>({transliteration})</span> : null}
+          {transliteration && meaning ? (
+            <span className={styles.wordDivider} aria-hidden>
+              -
+            </span>
+          ) : null}
+          {meaning ? <span className={styles.revealMeaning}>{meaning}</span> : null}
+        </span>
+      ) : null}
     </span>
   );
 }
@@ -781,6 +849,101 @@ function LetterGrid({
   );
 }
 
+type VocabGridItem = {
+  word: string;
+  transliteration: string;
+  meaning: string;
+};
+
+function parseVocabGridItems(raw?: string): VocabGridItem[] {
+  if (!raw) {
+    return [];
+  }
+
+  return raw
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [word = "", transliteration = "", meaning = ""] = line.split("|").map((part) => part.trim());
+
+      return {
+        word,
+        transliteration,
+        meaning
+      };
+    })
+    .filter((item) => item.word);
+}
+
+function VocabularyGrid({
+  cols,
+  items,
+  title
+}: {
+  cols?: string;
+  items?: string;
+  title?: string;
+}) {
+  const [mode, setMode] = useState<"none" | "transliteration" | "meaning">("none");
+  const parsed = parseVocabGridItems(items);
+  const colCount = Math.max(2, Math.min(8, Number.parseInt(cols ?? "4", 10) || 4));
+  const gridStyle: CSSProperties = {
+    gridTemplateColumns: `repeat(${colCount}, minmax(92px, 1fr))`
+  };
+  const readableLabel = [title, ...parsed.map((item) => `${item.word} ${item.transliteration} ${item.meaning}`)]
+    .filter(Boolean)
+    .join(" ");
+
+  if (parsed.length === 0) {
+    return null;
+  }
+
+  function toggleMode(nextMode: "transliteration" | "meaning") {
+    setMode((current) => (current === nextMode ? "none" : nextMode));
+  }
+
+  return (
+    <span className={styles.vocabPractice} role="group" aria-label={readableLabel}>
+      <span className={styles.vocabPracticeHeader}>
+        {title ? <span className={styles.vocabPracticeTitle}>{title}</span> : null}
+        <span className={styles.vocabPracticeControls} aria-label="Vocabulary reveal controls">
+          <button
+            type="button"
+            className={`${styles.vocabToggle} ${mode === "transliteration" ? styles.vocabToggleActive : ""}`}
+            onClick={() => toggleMode("transliteration")}
+            aria-pressed={mode === "transliteration"}
+          >
+            {mode === "transliteration" ? <Icons.EyeOff size={16} aria-hidden /> : <Icons.Eye size={16} aria-hidden />}
+            <span>Transliteration</span>
+          </button>
+          <button
+            type="button"
+            className={`${styles.vocabToggle} ${mode === "meaning" ? styles.vocabToggleActive : ""}`}
+            onClick={() => toggleMode("meaning")}
+            aria-pressed={mode === "meaning"}
+          >
+            {mode === "meaning" ? <Icons.EyeOff size={16} aria-hidden /> : <Icons.Eye size={16} aria-hidden />}
+            <span>Meaning</span>
+          </button>
+        </span>
+      </span>
+      <span className={styles.vocabGrid} style={gridStyle}>
+        {parsed.map((item, index) => {
+          const helper = mode === "transliteration" ? item.transliteration : mode === "meaning" ? item.meaning : "";
+
+          return (
+            <span className={styles.vocabCell} key={`${item.word}-${index}`}>
+              <span className={styles.vocabWord}>{item.word}</span>
+              {helper ? <span className={styles.vocabHelper}>({helper})</span> : null}
+            </span>
+          );
+        })}
+      </span>
+    </span>
+  );
+}
+
 function dimensionValue(value?: string) {
   if (!value) {
     return undefined;
@@ -954,8 +1117,10 @@ const markdownComponents = {
     return (
       <RevealBlank
         answer={nodeProperty(node, "answer")}
+        meaning={nodeProperty(node, "meaning")}
         prefix={nodeProperty(node, "prefix")}
         suffix={nodeProperty(node, "suffix")}
+        transliteration={nodeProperty(node, "transliteration")}
       />
     );
   },
@@ -1034,6 +1199,15 @@ const markdownComponents = {
       />
     );
   },
+  "lexora-vocab-grid"({ node }: NodeProps) {
+    return (
+      <VocabularyGrid
+        cols={nodeProperty(node, "cols")}
+        items={nodeProperty(node, "items")}
+        title={nodeProperty(node, "title")}
+      />
+    );
+  },
   "lexora-article-image"({ node }: NodeProps) {
     return (
       <ArticleImage
@@ -1072,7 +1246,8 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkLetterCards,
           remarkLetterGrid,
           remarkSentenceCards,
-          remarkTextWords
+          remarkTextWords,
+          remarkVocabularyGrid
         ]}
         rehypePlugins={[rehypeRaw, rehypeSlug]}
         components={markdownComponents}
