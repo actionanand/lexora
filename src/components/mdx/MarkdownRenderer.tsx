@@ -154,7 +154,7 @@ function preprocessRevealBlanks(source: string): string {
     const reveal = parseRevealInner(match[1]);
 
     parts.push(
-      `<lexora-blank answer="${escapeAttr(reveal.answer)}" prefix="${escapeAttr(reveal.prefix)}" suffix="${escapeAttr(reveal.suffix)}" transliteration="${escapeAttr(reveal.transliteration)}" meaning="${escapeAttr(reveal.meaning)}" meaningTamil="${escapeAttr(reveal.meaningTamil)}"></lexora-blank>`
+      `<lexora-blank answer="${escapeAttr(reveal.answer)}" prefix="${escapeAttr(reveal.prefix)}" suffix="${escapeAttr(reveal.suffix)}" transliteration="${escapeAttr(reveal.transliteration)}" meaning="${escapeAttr(reveal.meaning)}" meaningtamil="${escapeAttr(reveal.meaningTamil)}"></lexora-blank>`
     );
   }
 
@@ -1052,7 +1052,12 @@ type NodeProps = {
 };
 
 function nodeProperty(node: MarkdownNode | undefined, key: string) {
-  const value = node?.properties?.[key];
+  const properties = node?.properties;
+  const lowerKey = key.toLowerCase();
+  const value =
+    properties?.[key] ??
+    properties?.[lowerKey] ??
+    Object.entries(properties ?? {}).find(([propertyKey]) => propertyKey.toLowerCase() === lowerKey)?.[1];
 
   return typeof value === "string" || typeof value === "number" ? String(value) : "";
 }
@@ -1135,7 +1140,7 @@ const markdownComponents = {
         prefix={nodeProperty(node, "prefix")}
         suffix={nodeProperty(node, "suffix")}
         transliteration={nodeProperty(node, "transliteration")}
-        meaningTamil={nodeProperty(node, "meaningTamil")}
+        meaningTamil={nodeProperty(node, "meaningtamil")}
       />
     );
   },
