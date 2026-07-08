@@ -15,7 +15,6 @@ import {
   remarkIcons,
   remarkLetterCards,
   remarkLetterGrid,
-  remarkRevealBlanks,
   remarkSentenceCards,
   remarkTextWords
 } from "@/lib/mdx/plugins";
@@ -32,6 +31,113 @@ import rehypeSlug from "rehype-slug";
 import remarkDirective from "remark-directive";
 import remarkGfm from "remark-gfm";
 
+function escapeAttr(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function preprocessRevealBlanks(source: string): string {
+  // Scan positions of fenced code blocks and inline code spans so we can skip
+  // [[...]] patterns that are literally inside code (e.g. in a code example).
+  // Inline code that appears *inside* [[...]] is fine — it should not be skipped.
+  const codeRanges: [number, number][] = [];
+  const codePat = /```[\s\S]*?```|`[^`\n]+`/g;
+  let cm: RegExpExecArray | null;
+
+  while ((cm = codePat.exec(source)) !== null) {
+    codeRanges.push([cm.index, cm.index + cm[0].length]);
+  }
+
+  // A [[...]] is "inside" a code block/span only when its own start position
+  // falls within a code range.  A code span that lives inside [[...]] does NOT
+  // disqualify the outer pattern.
+  const startsInCode = (pos: number) =>
+    codeRanges.some(([cs, ce]) => pos >= cs && pos < ce);
+
+  const pattern = /\[\[([^\][\n]+)\]\]/g;
+  const parts: string[] = [];
+  let cursor = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(source)) !== null) {
+    if (startsInCode(match.index)) {
+      continue; // leave the [[...]] untouched inside a code example
+    }
+
+    parts.push(source.slice(cursor, match.index));
+    cursor = match.index + match[0].length;
+
+    const inner = match[1];
+    const sepIdx = inner.indexOf("|");
+    let answer: string;
+    let template: string;
+
+    if (sepIdx === -1) {
+      answer = inner.trim();
+      template = "";
+    } else {
+      answer = inner.slice(0, sepIdx).trim();
+      template = inner.slice(sepIdx + 1);
+    }
+
+    let prefix = "";
+    let suffix = "";
+
+    if (template) {
+      const blankMatch = /_{3,}/.exec(template);
+      if (!blankMatch) {
+        prefix = template.endsWith(" ") ? template : `${template} `;
+      } else {
+        prefix = template.slice(0, blankMatch.index);
+        suffix = template.slice(blankMatch.index + blankMatch[0].length);
+      }
+    }
+
+    parts.push(
+      `<lexora-blank answer="${escapeAttr(answer)}" prefix="${escapeAttr(prefix)}" suffix="${escapeAttr(suffix)}"></lexora-blank>`
+    );
+  }
+
+  parts.push(source.slice(cursor));
+  return parts.join("");
+}
+
+function renderInlineMarkdown(text: string): ReactNode {
+  if (!text) return null;
+  const pieces: ReactNode[] = [];
+  // Order matters: ** before * so bold is matched first
+  const pattern = /\*\*(.+?)\*\*|\*([^*\n]+?)\*|`([^`\n]+?)`|==(.+?)==/g;
+  let cursor = 0;
+  let match;
+  let idx = 0;
+
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > cursor) {
+      pieces.push(text.slice(cursor, match.index));
+    }
+    const key = `ilmd-${idx++}`;
+    if (match[1] !== undefined) {
+      pieces.push(<strong key={key}>{match[1]}</strong>);
+    } else if (match[2] !== undefined) {
+      pieces.push(<em key={key}>{match[2]}</em>);
+    } else if (match[3] !== undefined) {
+      pieces.push(<code key={key}>{match[3]}</code>);
+    } else if (match[4] !== undefined) {
+      pieces.push(<HighlightText key={key} raw={match[4]} />);
+    }
+    cursor = match.index + match[0].length;
+  }
+  if (cursor < text.length) {
+    pieces.push(text.slice(cursor));
+  }
+  if (pieces.length === 0) return null;
+  if (pieces.length === 1 && typeof pieces[0] === "string") return pieces[0] as string;
+  return <>{pieces}</>;
+}
+
 function RevealBlank({
   answer,
   prefix,
@@ -46,11 +152,11 @@ function RevealBlank({
 
   return (
     <span className={styles.revealPractice}>
-      {prefix ? <span>{prefix}</span> : null}
+      {prefix ? <span>{renderInlineMarkdown(prefix)}</span> : null}
       <span className={`${styles.revealBlank} ${revealed ? styles.revealBlankOpen : ""}`}>
         <span className={styles.blankText}>{revealed ? answer : null}</span>
       </span>
-      {suffix ? <span>{suffix}</span> : null}
+      {suffix ? <span>{renderInlineMarkdown(suffix)}</span> : null}
       <button
         className={styles.revealButton}
         type="button"
@@ -958,14 +1064,13 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkIcons,
           remarkLetterCards,
           remarkLetterGrid,
-          remarkRevealBlanks,
           remarkSentenceCards,
           remarkTextWords
         ]}
         rehypePlugins={[rehypeRaw, rehypeSlug]}
         components={markdownComponents}
       >
-        {source}
+        {preprocessRevealBlanks(source)}
       </ReactMarkdown>
     </div>
   );
