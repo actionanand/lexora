@@ -1040,11 +1040,11 @@
 
 .vocabWord {
   max-width: 100%;
-  overflow-wrap: anywhere;
   text-align: center;
-  font-size: clamp(0.96rem, 1.45vw, 1.38rem);
+  font-size: clamp(0.94rem, 1.35vw, 1.32rem);
   font-weight: 850;
   line-height: 1.05;
+  white-space: nowrap;
 }
 
 .vocabHelper {
@@ -1126,13 +1126,4 @@
     flex-direction: column;
   }
 
-  .vocabGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-@media (min-width: 721px) and (max-width: 1180px) {
-  .vocabGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
 }

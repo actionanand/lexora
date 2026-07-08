@@ -902,8 +902,9 @@ function VocabularyGrid({
   const [mode, setMode] = useState<"none" | "transliteration" | "meaning">("none");
   const parsed = parseVocabGridItems(items);
   const colCount = Math.max(2, Math.min(7, Number.parseInt(cols ?? "4", 10) || 4));
+  const tileMinWidth = colCount >= 7 ? "136px" : "128px";
   const gridStyle: CSSProperties = {
-    gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))`
+    gridTemplateColumns: `repeat(auto-fit, minmax(min(100%, ${tileMinWidth}), 1fr))`
   };
   const readableLabel = [title, ...parsed.map((item) => `${item.word} ${item.transliteration} ${item.meaning}`)]
     .filter(Boolean)
