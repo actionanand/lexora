@@ -49,7 +49,7 @@ export const languages = [
       {
         "slug": "consonants",
         "title": "Consonants",
-        "description": "Lesson 2 - Learn the Sanskrit consonants (vyañjana): the 25 categorized stops, the uncategorized semivowels and sibilants, and special letters.",
+        "description": "Lesson 2 - Sanskrit consonants: 25 categorized stops (vargīya), uncategorized consonants (avargīya), semivowels, sibilants, and special letters.",
         "order": 2
       },
       {
