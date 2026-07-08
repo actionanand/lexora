@@ -321,6 +321,12 @@
   font-weight: 740;
 }
 
+.revealTamilMeaning {
+  color: color-mix(in srgb, #c026d3 84%, var(--text));
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .inlineIcon {
   display: inline-block;
   margin: 0 4px;
@@ -958,7 +964,7 @@
   display: block;
   margin: 28px 0 34px;
   padding: 18px;
-  overflow-x: auto;
+  overflow: hidden;
   border: 1px solid color-mix(in srgb, #0f766e 28%, var(--border));
   border-radius: 14px;
   background:
@@ -1013,14 +1019,16 @@
 .vocabGrid {
   display: grid;
   gap: 10px;
+  width: 100%;
 }
 
 .vocabCell {
+  min-width: 0;
   min-height: 58px;
   display: inline-grid;
   place-items: center;
   gap: 3px;
-  padding: 10px 12px;
+  padding: 9px 7px;
   border: 3px solid color-mix(in srgb, #ffffff 86%, #bfdbfe);
   border-radius: 9px;
   background: linear-gradient(180deg, #0758bd, #064aa2);
@@ -1031,17 +1039,22 @@
 }
 
 .vocabWord {
-  font-size: clamp(1.15rem, 2.2vw, 1.58rem);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font-size: clamp(0.96rem, 1.45vw, 1.38rem);
   font-weight: 850;
   line-height: 1.05;
 }
 
 .vocabHelper {
+  max-width: 100%;
   color: color-mix(in srgb, #ffffff 72%, transparent);
   font-size: 0.78rem;
   font-style: italic;
   font-weight: 650;
   line-height: 1.1;
+  overflow-wrap: anywhere;
   text-align: center;
 }
 
@@ -1102,5 +1115,24 @@
   .characterRight .characterBubble::before {
     right: auto;
     left: -9px;
+  }
+
+  .vocabPractice {
+    padding: 14px;
+  }
+
+  .vocabPracticeHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vocabGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1180px) {
+  .vocabGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
 }

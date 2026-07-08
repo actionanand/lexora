@@ -61,14 +61,8 @@ export const languages = [
       {
         "slug": "conjuncts",
         "title": "Conjunct Consonants",
-        "description": "Learn how Sanskrit joins pure consonants into conjunct consonants and how to read common clusters.",
+        "description": "Learn common Sanskrit consonant clusters, read them inside words, and practise compact vocabulary sets.",
         "order": 4
-      },
-      {
-        "slug": "vocabulary-practice",
-        "title": "Vocabulary Practice",
-        "description": "Practice Sanskrit words in a revealable grid with transliteration and meaning toggles.",
-        "order": 5
       }
     ]
   },
@@ -120,6 +114,12 @@ export const languages = [
         "title": "Video Embeds",
         "description": "Embed lesson videos from YouTube, Shorts, Instagram, Facebook, and TikTok.",
         "order": 7
+      },
+      {
+        "slug": "practice-widgets",
+        "title": "Practice Widgets",
+        "description": "Authoring notes for fill-in blanks and vocabulary grids.",
+        "order": 8
       }
     ]
   }

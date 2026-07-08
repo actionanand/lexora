@@ -52,6 +52,7 @@ function parseRevealInner(inner: string) {
   const positional: string[] = [];
   let transliteration = "";
   let meaning = "";
+  let meaningTamil = "";
 
   for (const part of metaParts) {
     const trimmed = part.trim();
@@ -73,6 +74,11 @@ function parseRevealInner(inner: string) {
 
       if (key === "meaning" || key === "translation") {
         meaning = value;
+        continue;
+      }
+
+      if (key === "meaningtamil" || key === "tamil") {
+        meaningTamil = value;
         continue;
       }
     }
@@ -109,7 +115,8 @@ function parseRevealInner(inner: string) {
     prefix,
     suffix,
     transliteration,
-    meaning
+    meaning,
+    meaningTamil
   };
 }
 
@@ -147,7 +154,7 @@ function preprocessRevealBlanks(source: string): string {
     const reveal = parseRevealInner(match[1]);
 
     parts.push(
-      `<lexora-blank answer="${escapeAttr(reveal.answer)}" prefix="${escapeAttr(reveal.prefix)}" suffix="${escapeAttr(reveal.suffix)}" transliteration="${escapeAttr(reveal.transliteration)}" meaning="${escapeAttr(reveal.meaning)}"></lexora-blank>`
+      `<lexora-blank answer="${escapeAttr(reveal.answer)}" prefix="${escapeAttr(reveal.prefix)}" suffix="${escapeAttr(reveal.suffix)}" transliteration="${escapeAttr(reveal.transliteration)}" meaning="${escapeAttr(reveal.meaning)}" meaningTamil="${escapeAttr(reveal.meaningTamil)}"></lexora-blank>`
     );
   }
 
@@ -191,19 +198,21 @@ function renderInlineMarkdown(text: string): ReactNode {
 function RevealBlank({
   answer,
   meaning,
+  meaningTamil,
   prefix,
   suffix,
   transliteration
 }: {
   answer?: string;
   meaning?: string;
+  meaningTamil?: string;
   prefix?: string;
   suffix?: string;
   transliteration?: string;
 }) {
   const [revealed, setRevealed] = useState(false);
   const label = revealed ? "Hide answer" : "Reveal answer";
-  const hasDetails = Boolean(transliteration || meaning);
+  const hasDetails = Boolean(transliteration || meaning || meaningTamil);
 
   return (
     <span className={`${styles.revealPractice} ${hasDetails ? styles.revealPracticeDetailed : ""}`}>
@@ -224,14 +233,19 @@ function RevealBlank({
         </button>
       </span>
       {hasDetails ? (
-        <span className={`${styles.revealDetails} ${transliteration && meaning ? styles.revealDetailsSplit : ""}`}>
+        <span className={`${styles.revealDetails} ${transliteration && (meaning || meaningTamil) ? styles.revealDetailsSplit : ""}`}>
           {transliteration ? <span className={styles.revealTransliteration}>({transliteration})</span> : null}
-          {transliteration && meaning ? (
+          {transliteration && (meaning || meaningTamil) ? (
             <span className={styles.wordDivider} aria-hidden>
               -
             </span>
           ) : null}
-          {meaning ? <span className={styles.revealMeaning}>{meaning}</span> : null}
+          {meaning || meaningTamil ? (
+            <span className={styles.wordMeaningGroup}>
+              {meaning ? <span className={styles.revealMeaning}>{meaning}</span> : null}
+              {meaningTamil ? <span className={styles.revealTamilMeaning}>{meaningTamil}</span> : null}
+            </span>
+          ) : null}
         </span>
       ) : null}
     </span>
@@ -887,9 +901,9 @@ function VocabularyGrid({
 }) {
   const [mode, setMode] = useState<"none" | "transliteration" | "meaning">("none");
   const parsed = parseVocabGridItems(items);
-  const colCount = Math.max(2, Math.min(8, Number.parseInt(cols ?? "4", 10) || 4));
+  const colCount = Math.max(2, Math.min(7, Number.parseInt(cols ?? "4", 10) || 4));
   const gridStyle: CSSProperties = {
-    gridTemplateColumns: `repeat(${colCount}, minmax(92px, 1fr))`
+    gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))`
   };
   const readableLabel = [title, ...parsed.map((item) => `${item.word} ${item.transliteration} ${item.meaning}`)]
     .filter(Boolean)
@@ -1121,6 +1135,7 @@ const markdownComponents = {
         prefix={nodeProperty(node, "prefix")}
         suffix={nodeProperty(node, "suffix")}
         transliteration={nodeProperty(node, "transliteration")}
+        meaningTamil={nodeProperty(node, "meaningTamil")}
       />
     );
   },
