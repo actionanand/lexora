@@ -58,6 +58,24 @@ Use `imageBlank` when the learner should guess the missing word. The answer goes
 
 In `imageBlank`, the meaning is visible before reveal. Transliteration appears only after clicking the eye button.
 
+## Transliteration And Meaning Tables
+
+Use `tableCell` when a table cell needs a main value with a small helper line below it. This is useful for pronoun tables, noun groups, and examples where Sanskrit should stay prominent while transliteration or meaning sits quietly underneath.
+
+```md
+| Near object | Gender | Far object |
+| --- | --- | --- |
+| :tableCell[एषः]{sub="eṣaḥ"} | masculine | :tableCell[सः]{sub="saḥ"} |
+| :tableCell[एषा]{sub="eṣā"} | feminine | :tableCell[सा]{sub="sā"} |
+| :tableCell[एतत्]{sub="etat"} | neuter | :tableCell[तत्]{sub="tat"} |
+```
+
+| Near object | Gender | Far object |
+| --- | --- | --- |
+| :tableCell[एषः]{sub="eṣaḥ"} | masculine | :tableCell[सः]{sub="saḥ"} |
+| :tableCell[एषा]{sub="eṣā"} | feminine | :tableCell[सा]{sub="sā"} |
+| :tableCell[एतत्]{sub="etat"} | neuter | :tableCell[तत्]{sub="tat"} |
+
 ## Options
 
 | Attribute | Works On | Notes |
