@@ -60,21 +60,21 @@ In `imageBlank`, the meaning is visible before reveal. Transliteration appears o
 
 ## Transliteration And Meaning Tables
 
-Use `tableCell` when a table cell needs a main value with a small helper line below it. This is useful for pronoun tables, noun groups, and examples where Sanskrit should stay prominent while transliteration or meaning sits quietly underneath.
+Use `tableCell` when a table cell needs a main value with a small helper line below it. This is useful for pronoun tables, noun groups, and examples where Sanskrit should stay prominent while transliteration or meaning sits quietly underneath. The main value also supports `==highlight==`.
 
 ```md
-| Near object | Gender | Far object |
+| :tableCell[==समीपः==]{sub="samīpaḥ"} | :tableCell[लिङ्गम्]{sub="liṅgam"} | :tableCell[==दूरः==]{sub="dūraḥ"} |
 | --- | --- | --- |
-| :tableCell[एषः]{sub="eṣaḥ"} | masculine | :tableCell[सः]{sub="saḥ"} |
-| :tableCell[एषा]{sub="eṣā"} | feminine | :tableCell[सा]{sub="sā"} |
-| :tableCell[एतत्]{sub="etat"} | neuter | :tableCell[तत्]{sub="tat"} |
+| :tableCell[एषः]{sub="eṣaḥ"} | :tableCell[पुल्लिङ्गम्]{sub="pulliṅgam"} | :tableCell[सः]{sub="saḥ"} |
+| :tableCell[एषा]{sub="eṣā"} | :tableCell[स्त्रीलिङ्गम्]{sub="strīliṅgam"} | :tableCell[सा]{sub="sā"} |
+| :tableCell[एतत्]{sub="etat"} | :tableCell[नपुंसकलिङ्गम्]{sub="napuṃsakaliṅgam"} | :tableCell[तत्]{sub="tat"} |
 ```
 
-| Near object | Gender | Far object |
+| :tableCell[==समीपः==]{sub="samīpaḥ"} | :tableCell[लिङ्गम्]{sub="liṅgam"} | :tableCell[==दूरः==]{sub="dūraḥ"} |
 | --- | --- | --- |
-| :tableCell[एषः]{sub="eṣaḥ"} | masculine | :tableCell[सः]{sub="saḥ"} |
-| :tableCell[एषा]{sub="eṣā"} | feminine | :tableCell[सा]{sub="sā"} |
-| :tableCell[एतत्]{sub="etat"} | neuter | :tableCell[तत्]{sub="tat"} |
+| :tableCell[एषः]{sub="eṣaḥ"} | :tableCell[पुल्लिङ्गम्]{sub="pulliṅgam"} | :tableCell[सः]{sub="saḥ"} |
+| :tableCell[एषा]{sub="eṣā"} | :tableCell[स्त्रीलिङ्गम्]{sub="strīliṅgam"} | :tableCell[सा]{sub="sā"} |
+| :tableCell[एतत्]{sub="etat"} | :tableCell[नपुंसकलिङ्गम्]{sub="napuṃsakaliṅgam"} | :tableCell[तत्]{sub="tat"} |
 
 ## Options
 

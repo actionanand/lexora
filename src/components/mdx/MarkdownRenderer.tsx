@@ -901,7 +901,7 @@ function ImageRevealBlank({
 function TableCellValue({ sub, value }: { sub?: string; value?: string }) {
   return (
     <span className={styles.tableCellValue}>
-      <span className={styles.tableCellMain}>{value}</span>
+      <span className={styles.tableCellMain}>{highlightedParts(value ?? "")}</span>
       {sub ? <span className={styles.tableCellSub}>({sub})</span> : null}
     </span>
   );
