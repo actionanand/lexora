@@ -1038,6 +1038,14 @@
     0 8px 16px color-mix(in srgb, #1e3a8a 20%, transparent);
 }
 
+.vocabCellHighlight {
+  border-color: color-mix(in srgb, #fde047 72%, #ffffff);
+  background: linear-gradient(180deg, #0b65d1, #0752ad);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 28%, transparent),
+    0 10px 20px color-mix(in srgb, #ca8a04 22%, transparent);
+}
+
 .vocabWord {
   max-width: 100%;
   text-align: center;
@@ -1045,6 +1053,11 @@
   font-weight: 850;
   line-height: 1.05;
   white-space: nowrap;
+}
+
+.vocabCellHighlight .vocabWord {
+  color: #fde047;
+  text-shadow: 0 1px 0 color-mix(in srgb, #1e3a8a 55%, transparent);
 }
 
 .vocabWordLong {

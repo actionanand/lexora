@@ -864,6 +864,7 @@ function LetterGrid({
 }
 
 type VocabGridItem = {
+  highlighted: boolean;
   word: string;
   transliteration: string;
   meaning: string;
@@ -880,9 +881,12 @@ function parseVocabGridItems(raw?: string): VocabGridItem[] {
     .filter(Boolean)
     .map((line) => {
       const [word = "", transliteration = "", meaning = ""] = line.split("|").map((part) => part.trim());
+      const highlighted = word.startsWith("*");
+      const cleanWord = highlighted ? word.slice(1).trim() : word;
 
       return {
-        word,
+        highlighted,
+        word: cleanWord,
         transliteration,
         meaning
       };
@@ -949,7 +953,10 @@ function VocabularyGrid({
           const isLongWord = item.word.length > 10 || item.word.includes("/") || item.word.includes(" ");
 
           return (
-            <span className={styles.vocabCell} key={`${item.word}-${index}`}>
+            <span
+              className={`${styles.vocabCell} ${item.highlighted ? styles.vocabCellHighlight : ""}`}
+              key={`${item.word}-${index}`}
+            >
               <span className={`${styles.vocabWord} ${isLongWord ? styles.vocabWordLong : ""}`}>
                 {item.word}
               </span>
