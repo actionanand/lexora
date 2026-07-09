@@ -11,11 +11,14 @@ import {
   remarkEmojiCards,
   remarkExplore,
   remarkHighlights,
+  remarkImageBlanks,
+  remarkImageSentences,
   remarkImageWords,
   remarkIcons,
   remarkLetterCards,
   remarkLetterGrid,
   remarkSentenceCards,
+  remarkTableCells,
   remarkTextWords,
   remarkVocabularyGrid
 } from "@/lib/mdx/plugins";
@@ -213,6 +216,7 @@ function RevealBlank({
   const [revealed, setRevealed] = useState(false);
   const label = revealed ? "Hide answer" : "Reveal answer";
   const hasDetails = Boolean(transliteration || meaning || meaningTamil);
+  const hasVisibleDetails = Boolean((revealed && transliteration) || meaning || meaningTamil);
 
   return (
     <span className={`${styles.revealPractice} ${hasDetails ? styles.revealPracticeDetailed : ""}`}>
@@ -232,10 +236,14 @@ function RevealBlank({
           {revealed ? <Icons.EyeOff size={16} aria-hidden /> : <Icons.Eye size={16} aria-hidden />}
         </button>
       </span>
-      {hasDetails ? (
-        <span className={`${styles.revealDetails} ${transliteration && (meaning || meaningTamil) ? styles.revealDetailsSplit : ""}`}>
-          {transliteration ? <span className={styles.revealTransliteration}>({transliteration})</span> : null}
-          {transliteration && (meaning || meaningTamil) ? (
+      {hasDetails && hasVisibleDetails ? (
+        <span
+          className={`${styles.revealDetails} ${
+            revealed && transliteration && (meaning || meaningTamil) ? styles.revealDetailsSplit : ""
+          }`}
+        >
+          {revealed && transliteration ? <span className={styles.revealTransliteration}>({transliteration})</span> : null}
+          {revealed && transliteration && (meaning || meaningTamil) ? (
             <span className={styles.wordDivider} aria-hidden>
               -
             </span>
@@ -398,6 +406,63 @@ function renderableImageSource(value: string | undefined, format?: string) {
   }
 
   return source;
+}
+
+function articleImageSource(image: string | undefined, format?: string) {
+  const imageKey = normalizeImageWordKey(image ?? "");
+  const imageFormat = normalizeImageWordKey(format ?? "");
+  const articleSources = articleImageSources as Record<string, string>;
+  const wordSources = imageWordSources as Record<string, string>;
+  const source = imageFormat
+    ? articleSources[`${imageFormat}:${imageKey}`] ?? wordSources[`${imageFormat}:${imageKey}`]
+    : articleSources[`png:${imageKey}`] ??
+      articleSources[`svg:${imageKey}`] ??
+      wordSources[`png:${imageKey}`] ??
+      wordSources[`svg:${imageKey}`];
+
+  return renderableImageSource(source, imageFormat);
+}
+
+function imageSentenceSizeClass(size?: string) {
+  return size === "normal"
+    ? styles.imageSentenceNormal
+    : size === "big"
+      ? styles.imageSentenceBig
+      : size === "huge"
+        ? styles.imageSentenceHuge
+        : styles.imageSentenceMedium;
+}
+
+function ImageSentenceMedia({
+  emoji,
+  format,
+  image,
+  size
+}: {
+  emoji?: string;
+  format?: string;
+  image?: string;
+  size?: string;
+}) {
+  const src = articleImageSource(image, format);
+
+  if (src) {
+    return <img className={styles.imageSentenceImage} src={src} alt="" loading="lazy" aria-hidden />;
+  }
+
+  if (emoji) {
+    return (
+      <span className={styles.imageSentenceEmoji} role="img" aria-hidden>
+        {emoji}
+      </span>
+    );
+  }
+
+  return (
+    <span className={styles.imageSentenceFallback} aria-hidden>
+      <Icons.Image size={size === "huge" ? 44 : 32} />
+    </span>
+  );
 }
 
 function ImageWordCard({
@@ -738,6 +803,110 @@ function SentenceCard({
   );
 }
 
+function ImageSentenceCard({
+  boxed,
+  emoji,
+  format,
+  image,
+  meaning,
+  meaningTamil,
+  sentence,
+  size,
+  transliteration
+}: {
+  boxed?: string;
+  emoji?: string;
+  format?: string;
+  image?: string;
+  meaning?: string;
+  meaningTamil?: string;
+  sentence?: string;
+  size?: string;
+  transliteration?: string;
+}) {
+  const readableLabel = [sentence, transliteration, meaning, meaningTamil].filter(Boolean).join(" ");
+
+  return (
+    <span
+      className={`${styles.imageSentenceCard} ${imageSentenceSizeClass(size)} ${boolProp(boxed) ? styles.imageSentenceBoxed : ""}`}
+      role="group"
+      aria-label={readableLabel}
+    >
+      <span className={styles.imageSentenceMedia}>
+        <ImageSentenceMedia emoji={emoji} format={format} image={image} size={size} />
+      </span>
+      <span className={styles.imageSentenceBody}>
+        <SentenceCard
+          sentence={sentence}
+          transliteration={transliteration}
+          meaning={meaning}
+          meaningTamil={meaningTamil}
+        />
+      </span>
+    </span>
+  );
+}
+
+function ImageRevealBlank({
+  answer,
+  boxed,
+  emoji,
+  format,
+  image,
+  meaning,
+  meaningTamil,
+  size,
+  template,
+  transliteration
+}: {
+  answer?: string;
+  boxed?: string;
+  emoji?: string;
+  format?: string;
+  image?: string;
+  meaning?: string;
+  meaningTamil?: string;
+  size?: string;
+  template?: string;
+  transliteration?: string;
+}) {
+  const blankMatch = /_{3,}/.exec(template ?? "");
+  const prefix = blankMatch ? template?.slice(0, blankMatch.index) : template ? `${template} ` : "";
+  const suffix = blankMatch ? template?.slice(blankMatch.index + blankMatch[0].length) : "";
+  const readableLabel = [template, answer, transliteration, meaning, meaningTamil].filter(Boolean).join(" ");
+
+  return (
+    <span
+      className={`${styles.imageSentenceCard} ${imageSentenceSizeClass(size)} ${boolProp(boxed) ? styles.imageSentenceBoxed : ""}`}
+      role="group"
+      aria-label={readableLabel}
+    >
+      <span className={styles.imageSentenceMedia}>
+        <ImageSentenceMedia emoji={emoji} format={format} image={image} size={size} />
+      </span>
+      <span className={styles.imageSentenceBody}>
+        <RevealBlank
+          answer={answer}
+          prefix={prefix}
+          suffix={suffix}
+          transliteration={transliteration}
+          meaning={meaning}
+          meaningTamil={meaningTamil}
+        />
+      </span>
+    </span>
+  );
+}
+
+function TableCellValue({ sub, value }: { sub?: string; value?: string }) {
+  return (
+    <span className={styles.tableCellValue}>
+      <span className={styles.tableCellMain}>{value}</span>
+      {sub ? <span className={styles.tableCellSub}>({sub})</span> : null}
+    </span>
+  );
+}
+
 function boolProp(value?: string) {
   return value === "true";
 }
@@ -864,6 +1033,7 @@ function LetterGrid({
 }
 
 type VocabGridItem = {
+  highlighted: boolean;
   word: string;
   transliteration: string;
   meaning: string;
@@ -880,9 +1050,12 @@ function parseVocabGridItems(raw?: string): VocabGridItem[] {
     .filter(Boolean)
     .map((line) => {
       const [word = "", transliteration = "", meaning = ""] = line.split("|").map((part) => part.trim());
+      const highlighted = word.startsWith("*");
+      const cleanWord = highlighted ? word.slice(1).trim() : word;
 
       return {
-        word,
+        highlighted,
+        word: cleanWord,
         transliteration,
         meaning
       };
@@ -946,10 +1119,16 @@ function VocabularyGrid({
       <span className={styles.vocabGrid} style={gridStyle}>
         {parsed.map((item, index) => {
           const helper = mode === "transliteration" ? item.transliteration : mode === "meaning" ? item.meaning : "";
+          const isLongWord = item.word.length > 10 || item.word.includes("/") || item.word.includes(" ");
 
           return (
-            <span className={styles.vocabCell} key={`${item.word}-${index}`}>
-              <span className={styles.vocabWord}>{item.word}</span>
+            <span
+              className={`${styles.vocabCell} ${item.highlighted ? styles.vocabCellHighlight : ""}`}
+              key={`${item.word}-${index}`}
+            >
+              <span className={`${styles.vocabWord} ${isLongWord ? styles.vocabWordLong : ""}`}>
+                {item.word}
+              </span>
               {helper ? <span className={styles.vocabHelper}>({helper})</span> : null}
             </span>
           );
@@ -1197,6 +1376,40 @@ const markdownComponents = {
       />
     );
   },
+  "lexora-image-sentence"({ node }: NodeProps) {
+    return (
+      <ImageSentenceCard
+        boxed={nodeProperty(node, "boxed")}
+        emoji={nodeProperty(node, "emoji")}
+        format={nodeProperty(node, "format")}
+        image={nodeProperty(node, "image")}
+        meaning={nodeProperty(node, "meaning")}
+        meaningTamil={nodeProperty(node, "meaningTamil")}
+        sentence={nodeProperty(node, "sentence")}
+        size={nodeProperty(node, "size")}
+        transliteration={nodeProperty(node, "transliteration")}
+      />
+    );
+  },
+  "lexora-image-blank"({ node }: NodeProps) {
+    return (
+      <ImageRevealBlank
+        answer={nodeProperty(node, "answer")}
+        boxed={nodeProperty(node, "boxed")}
+        emoji={nodeProperty(node, "emoji")}
+        format={nodeProperty(node, "format")}
+        image={nodeProperty(node, "image")}
+        meaning={nodeProperty(node, "meaning")}
+        meaningTamil={nodeProperty(node, "meaningTamil")}
+        size={nodeProperty(node, "size")}
+        template={nodeProperty(node, "template")}
+        transliteration={nodeProperty(node, "transliteration")}
+      />
+    );
+  },
+  "lexora-table-cell"({ node }: NodeProps) {
+    return <TableCellValue value={nodeProperty(node, "value")} sub={nodeProperty(node, "sub")} />;
+  },
   "lexora-letter"({ node }: NodeProps) {
     return (
       <LetterCard
@@ -1262,11 +1475,14 @@ export function MarkdownRenderer({ source }: { source: string }) {
           remarkCharacterDialogues,
           remarkEmojiCards,
           remarkHighlights,
+          remarkImageBlanks,
+          remarkImageSentences,
           remarkImageWords,
           remarkIcons,
           remarkLetterCards,
           remarkLetterGrid,
           remarkSentenceCards,
+          remarkTableCells,
           remarkTextWords,
           remarkVocabularyGrid
         ]}

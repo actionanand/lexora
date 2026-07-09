@@ -104,15 +104,19 @@ function extractImageWordNames(markdown) {
 
 function extractArticleImageNames(markdown) {
   const names = new Set();
-  const pattern = /:(bigImage|bigSvg)\[([^\]]+)\]/g;
+  const pattern = /:(bigImage|bigSvg|imageSentence|imageBlank)\[([^\]]+)\](\{[^}]+\})?/g;
   let match;
 
   while ((match = pattern.exec(markdown)) !== null) {
-    const [, directive, name] = match;
-    const format = directive === "bigSvg" ? "svg" : "png";
-    const imageName = normalizeImageWordKey(name);
+    const [, directive, name, attributes = ""] = match;
+    const image = directive === "bigImage" || directive === "bigSvg" ? name : /image="([^"]+)"/.exec(attributes)?.[1];
+    const format =
+      /format="([^"]+)"/.exec(attributes)?.[1] ??
+      (directive === "bigSvg" ? "svg" : "png");
 
-    names.add(`${format}:${imageName}`);
+    if (image) {
+      names.add(`${format}:${normalizeImageWordKey(image)}`);
+    }
   }
 
   return names;
@@ -224,6 +228,8 @@ function directiveText(name, value, attributes = "") {
   const label = /label="([^"]+)"/.exec(attributes)?.[1];
   const meaning = /meaning="([^"]+)"/.exec(attributes)?.[1];
   const meaningTamil = /meaningTamil="([^"]+)"/.exec(attributes)?.[1];
+  const sentence = /(?:sentence|template)="([^"]+)"/.exec(attributes)?.[1];
+  const sub = /sub="([^"]+)"/.exec(attributes)?.[1];
   const transliteration = /transliteration="([^"]+)"/.exec(attributes)?.[1];
 
   if (name === "bigImage" || name === "bigSvg") {
@@ -234,10 +240,13 @@ function directiveText(name, value, attributes = "") {
     name === "emoji" ||
     name === "imageWord" ||
     name === "svgWord" ||
+    name === "imageSentence" ||
+    name === "imageBlank" ||
+    name === "tableCell" ||
     name === "textWord" ||
     name === "sentence"
   ) {
-    return [stripHighlightSyntax(value), label, transliteration, meaning, meaningTamil]
+    return [stripHighlightSyntax(sentence ?? value), label, transliteration, meaning, meaningTamil, sub]
       .filter(Boolean)
       .join(" ");
   }

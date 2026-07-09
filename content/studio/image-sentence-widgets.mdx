@@ -1,0 +1,95 @@
+---
+title: "Image Sentence Widgets"
+description: "Use images or emoji inside sentence cards and fill-in practice."
+order: 9
+date: 09-07-2026
+icon: "Image"
+---
+
+Use image sentence widgets when a learner should connect a picture with a sentence, pronoun, noun, or grammar pattern.
+
+## Image Sources
+
+`imageSentence` and `imageBlank` use the same image lookup style as article images:
+
+1. Lexora checks `src/app/bigDataImg/png` or `src/app/bigDataImg/svg` first.
+2. If the image is not there, it falls back to `src/app/dataImg/png` or `src/app/dataImg/svg`.
+3. Only image names used in MDX are included in the generated image registry.
+
+Use `format="svg"` for SVG exports. PNG is the default.
+
+## Image Sentence
+
+Use `imageSentence` when the whole sentence should be visible.
+
+```md
+:imageSentence[एषः ==बालकः==]{image="boy" transliteration="eṣaḥ bālakaḥ" meaning="This is a boy." size="big"}
+
+:imageSentence[सः ==बालकः==]{emoji="👦" transliteration="saḥ bālakaḥ" meaning="That is a boy." meaningTamil="அவன் ஒரு சிறுவன்." size="big"}
+```
+
+:imageSentence[एषः ==बालकः==]{image="boy" transliteration="eṣaḥ bālakaḥ" meaning="This is a boy." size="big"}
+
+:imageSentence[सः ==बालकः==]{emoji="👦" transliteration="saḥ bālakaḥ" meaning="That is a boy." meaningTamil="அவன் ஒரு சிறுவன்." size="big"}
+
+By default there is no outer box, so two compact examples can sit on one row when the article has room.
+
+Add `boxed="true"` when a card needs a soft background and border.
+
+```md
+:imageSentence[एषा ==बालिका==]{image="girl" transliteration="eṣā bālikā" meaning="This is a girl." meaningTamil="இவள் ஒரு சிறுமி." size="big" boxed="true"}
+```
+
+:imageSentence[एषा ==बालिका==]{image="girl" transliteration="eṣā bālikā" meaning="This is a girl." meaningTamil="இவள் ஒரு சிறுமி." size="big" boxed="true"}
+
+## Image Fill In Blank
+
+Use `imageBlank` when the learner should guess the missing word. The answer goes inside square brackets. The visible sentence goes in `template`.
+
+```md
+:imageBlank[बालकः]{image="boy" template="एषः ___" transliteration="eṣaḥ bālakaḥ" meaning="This is a boy." size="big"}
+
+:imageBlank[बालकः]{emoji="👦" template="सः ___" transliteration="saḥ bālakaḥ" meaning="That is a boy." meaningTamil="அவன் ஒரு சிறுவன்." size="big"}
+```
+
+:imageBlank[बालकः]{image="boy" template="एषः ___" transliteration="eṣaḥ bālakaḥ" meaning="This is a boy." size="big"}
+
+:imageBlank[बालकः]{emoji="👦" template="सः ___" transliteration="saḥ bālakaḥ" meaning="That is a boy." meaningTamil="அவன் ஒரு சிறுவன்." size="big"}
+
+In `imageBlank`, the meaning is visible before reveal. Transliteration appears only after clicking the eye button.
+
+## Transliteration And Meaning Tables
+
+Use `tableCell` when a table cell needs a main value with a small helper line below it. This is useful for pronoun tables, noun groups, and examples where Sanskrit should stay prominent while transliteration or meaning sits quietly underneath.
+
+```md
+| Near object | Gender | Far object |
+| --- | --- | --- |
+| :tableCell[एषः]{sub="eṣaḥ"} | masculine | :tableCell[सः]{sub="saḥ"} |
+| :tableCell[एषा]{sub="eṣā"} | feminine | :tableCell[सा]{sub="sā"} |
+| :tableCell[एतत्]{sub="etat"} | neuter | :tableCell[तत्]{sub="tat"} |
+```
+
+| Near object | Gender | Far object |
+| --- | --- | --- |
+| :tableCell[एषः]{sub="eṣaḥ"} | masculine | :tableCell[सः]{sub="saḥ"} |
+| :tableCell[एषा]{sub="eṣā"} | feminine | :tableCell[सा]{sub="sā"} |
+| :tableCell[एतत्]{sub="etat"} | neuter | :tableCell[तत्]{sub="tat"} |
+
+## Options
+
+| Attribute | Works On | Notes |
+| --- | --- | --- |
+| `image` | both | Exported image name, such as `boy`, `house`, or `grammar-chart`. |
+| `format` | both | Use `png` or `svg`. Default is `png`. |
+| `emoji` | both | Use a pasted emoji like `👦`, or a supported emoji name such as `boy`. |
+| `transliteration` | both | Shown below `imageSentence`; hidden until reveal for `imageBlank`. |
+| `meaning` | both | English meaning. |
+| `meaningTamil` | both | Optional Tamil meaning in a separate accent color. |
+| `size` | both | `normal`, `medium`, `big`, or `huge`. Default is `medium`. |
+| `boxed` | both | Use `boxed="true"` to show an outer background and border. Default is no outer box. |
+| `template` | `imageBlank` | Sentence with `___` where the answer should appear. |
+
+:::tip
+Use `==highlight==` inside `imageSentence` text when one word should stand out.
+:::
