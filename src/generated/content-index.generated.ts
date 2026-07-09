@@ -63,6 +63,12 @@ export const languages = [
         "title": "Conjunct Consonants",
         "description": "Learn common Sanskrit consonant clusters, read them inside words, and practise compact vocabulary sets.",
         "order": 4
+      },
+      {
+        "slug": "padam-namapadam",
+        "title": "Padam And Namapadam",
+        "description": "Understand Sanskrit words, noun words, and pronoun words with simple image-based practice.",
+        "order": 5
       }
     ]
   },
@@ -120,6 +126,12 @@ export const languages = [
         "title": "Practice Widgets",
         "description": "Authoring notes for fill-in blanks and vocabulary grids.",
         "order": 8
+      },
+      {
+        "slug": "image-sentence-widgets",
+        "title": "Image Sentence Widgets",
+        "description": "Use images or emoji inside sentence cards and fill-in practice.",
+        "order": 9
       }
     ]
   }
