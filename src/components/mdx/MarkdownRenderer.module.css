@@ -39,6 +39,11 @@
   line-height: 1.28;
 }
 
+.markdown :global(p):has(.imageSentenceCard) {
+  display: inline;
+  margin: 0;
+}
+
 .markdown :global(p):has(.articleImageFigure) {
   margin: 0;
 }
@@ -51,25 +56,37 @@
 .markdown :global(table) {
   width: 100%;
   margin: 20px 0 28px;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface-1);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--heading) 5%, transparent);
 }
 
 .markdown :global(th),
 .markdown :global(td) {
   padding: 12px 14px;
   border-bottom: 1px solid var(--border);
+  border-right: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   text-align: left;
   vertical-align: top;
 }
 
+.markdown :global(th:last-child),
+.markdown :global(td:last-child) {
+  border-right: 0;
+}
+
 .markdown :global(th) {
   color: var(--heading);
-  background: var(--surface-2);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-2));
   font-size: 0.86rem;
+}
+
+.markdown :global(tbody tr:nth-child(even) td) {
+  background: color-mix(in srgb, var(--surface-2) 42%, transparent);
 }
 
 .markdown :global(tr:last-child td) {
@@ -725,6 +742,106 @@
   font-weight: 680;
 }
 
+.imageSentenceCard {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  width: min(100%, 348px);
+  max-width: calc(50% - 12px);
+  margin: 8px 12px 10px 0;
+  padding: 2px 0;
+  vertical-align: middle;
+}
+
+.imageSentenceBoxed {
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface-1) 86%, var(--accent) 6%);
+}
+
+.imageSentenceMedia {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  min-width: 0;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface-2));
+}
+
+.imageSentenceImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.imageSentenceEmoji,
+.imageSentenceFallback {
+  display: grid;
+  place-items: center;
+  color: var(--accent-strong);
+  line-height: 1;
+}
+
+.imageSentenceEmoji {
+  font-size: 2.2rem;
+}
+
+.imageSentenceBody {
+  min-width: 0;
+  display: grid;
+}
+
+.imageSentenceNormal .imageSentenceMedia {
+  width: 48px;
+}
+
+.imageSentenceNormal .imageSentenceEmoji {
+  font-size: 1.8rem;
+}
+
+.imageSentenceBig .imageSentenceMedia {
+  width: 82px;
+}
+
+.imageSentenceBig .imageSentenceEmoji {
+  font-size: 2.8rem;
+}
+
+.imageSentenceHuge {
+  gap: 16px;
+}
+
+.imageSentenceHuge .imageSentenceMedia {
+  width: 112px;
+}
+
+.imageSentenceHuge .imageSentenceEmoji {
+  font-size: 3.6rem;
+}
+
+.tableCellValue {
+  display: inline-grid;
+  gap: 3px;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.tableCellMain {
+  color: var(--heading);
+  font-weight: 740;
+}
+
+.tableCellSub {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
 .articleImageFigure {
   display: grid;
   gap: 10px;
@@ -1135,6 +1252,13 @@
   .characterRight .characterBubble::before {
     right: auto;
     left: -9px;
+  }
+
+  .imageSentenceCard {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: auto minmax(0, 1fr);
+    margin-right: 0;
   }
 
   .vocabPractice {

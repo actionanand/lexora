@@ -36,6 +36,12 @@ const EMOJI_NAMES: Record<string, string> = {
   word: "🔤"
 };
 
+function emojiValue(value?: string) {
+  const trimmed = value?.trim() ?? "";
+
+  return EMOJI_NAMES[trimmed.toLowerCase()] ?? trimmed;
+}
+
 type MdxNode = Node & {
   name?: string;
   value?: string;
@@ -413,6 +419,102 @@ export function remarkSentenceCards() {
           meaning,
           meaningTamil,
           transliteration
+        }
+      };
+    });
+  };
+}
+
+export function remarkImageSentences() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "imageSentence") {
+        return;
+      }
+
+      const sentence = node.children?.[0]?.value?.trim() ?? node.attributes?.text ?? "";
+      const boxed = node.attributes?.boxed ?? "false";
+      const emoji = emojiValue(node.attributes?.emoji);
+      const format = node.attributes?.format ?? "png";
+      const image = node.attributes?.image ?? "";
+      const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
+      const size = node.attributes?.size ?? "medium";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-image-sentence",
+        hProperties: {
+          emoji,
+          boxed,
+          format,
+          image,
+          meaning,
+          meaningTamil,
+          sentence,
+          size,
+          transliteration
+        }
+      };
+    });
+  };
+}
+
+export function remarkImageBlanks() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "imageBlank") {
+        return;
+      }
+
+      const answer = node.children?.[0]?.value?.trim() ?? node.attributes?.answer ?? "";
+      const boxed = node.attributes?.boxed ?? "false";
+      const emoji = emojiValue(node.attributes?.emoji);
+      const format = node.attributes?.format ?? "png";
+      const image = node.attributes?.image ?? "";
+      const meaning = node.attributes?.meaning ?? "";
+      const meaningTamil = node.attributes?.meaningTamil ?? "";
+      const size = node.attributes?.size ?? "medium";
+      const template = node.attributes?.template ?? node.attributes?.sentence ?? "";
+      const transliteration = node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-image-blank",
+        hProperties: {
+          answer,
+          boxed,
+          emoji,
+          format,
+          image,
+          meaning,
+          meaningTamil,
+          size,
+          template,
+          transliteration
+        }
+      };
+    });
+  };
+}
+
+export function remarkTableCells() {
+  return (tree: MdxNode) => {
+    visit(tree, (node: MdxNode) => {
+      if (node.type !== "textDirective" || node.name !== "tableCell") {
+        return;
+      }
+
+      const value = node.children?.[0]?.value?.trim() ?? node.attributes?.value ?? "";
+      const sub = node.attributes?.sub ?? node.attributes?.meaning ?? node.attributes?.transliteration ?? "";
+
+      node.children = [];
+      node.data = {
+        hName: "lexora-table-cell",
+        hProperties: {
+          value,
+          sub
         }
       };
     });
