@@ -67,6 +67,60 @@ export const docsContent = {
     }
   },
   "sanskrit": {
+    "conjuncts": {
+      "title": "Conjunct Consonants",
+      "description": "Learn common Sanskrit consonant clusters, read them inside words, and practise compact vocabulary sets.",
+      "date": "08-07-2026",
+      "body": "Conjunct consonants appear when two or more consonants join closely. Read them slowly at first, then let the sound become one smooth unit.\n\n:::tip[Reading Rhythm]\nThe halant removes the natural **a** sound. When consonants combine, listen for the joined sound rather than reading each letter separately.\n:::\n\n## Basic Patterns\n\n| Joining letters | Conjunct | IAST | Sound |\n| --- | --- | --- | --- |\n| क् + ष | क्ष | kṣa | like **ksha** |\n| त् + र | त्र | tra | like **tra** |\n| ज् + ञ | ज्ञ | jña | like **gya / jnya** |\n| द् + य | द्य | dya | like **dya** |\n| क् + त | क्त | kta | like **kta** |\n| त् + त | त्त | tta | like **tta** |\n\n## Visual Practice\n\n::letterGrid{title=\"Conjunct Consonants\" cols=\"2\" layout=\"stack\" items=\"क्ष=kṣa, त्र=tra, ज्ञ=jña, द्य=dya, क्त=kta, त्त=tta\"}\n\n## Words With Conjuncts\n\n| Word | Breakdown | Meaning |\n| --- | --- | --- |\n| कुक्कुटः | कु + क् + कु + टः | rooster |\n| अस्मिन् | अ + स् + मि + न् | in this |\n| किञ्चित् | कि + ञ् + चि + त् | a little |\n| अश्रुणि | अ + श्रु + णि | tears |\n| सत्यम् | स + त् + य + म् | truth |\n| रिक्तम् | रि + क् + त + म् | empty |\n| शिक्षकः | शि + क् + ष + कः | teacher |\n| परिशुद्धः | प + रि + शु + द् + धः | pure |\n| मध्याह्ने | म + ध् + या + ह् + ने | at noon |\n| स्त्रीः | स् + त् + रीः | woman |\n\n## Words To Alphabets\n\n::letterGrid{title=\"Word Breaks\" cols=\"1\" variant=\"plain\" items=\"कुक्कुटः=कु + क् + कु + टः, अस्मिन्=अ + स् + मि + न्, किञ्चित्=कि + ञ् + चि + त्, अश्रुणि=अ + श्रु + णि, सत्यम्=स् + अ + त् + य + म्, शिक्षकः=शि + क् + ष + कः, परिशुद्धः=प + अ + रि + शु + द् + धः, मध्याह्ने=म + अ + ध् + या + ह् + ने, स्त्रीः=स् + त् + रीः\"}\n\n## Fill In Practice\n\nRead the sentence, reveal the missing word, then say the whole sentence aloud.\n\nसिंहः [[धावति|___|meaning=The lion runs]]\n\nसिंहः [[धावति|___|transliteration=siṃhaḥ dhāvati|meaning=The lion runs|meaningTamil=சிங்கம் ஓடுகிறது]]\n\n[[फलानि|बालकः उद्याने ___ खादति।|transliteration=bālakaḥ udyāne phalāni khādati|meaning=The boy eats fruits in the garden.|meaningTamil=சிறுவன் தோட்டத்தில் பழங்களை சாப்பிடுகிறான்]]\n\n:::note\nCover the helper line with your hand once, read the Devanagari sentence, and reveal only after your first attempt.\n:::\n\n## Read Aloud Words\n\n:::vocabGrid{title=\"Words - Consonants With Vowels\" cols=\"7\"}\nमाता|mātā|mother\nपिता|pitā|father\nगुरुः|guruḥ|teacher\nईशः|īśaḥ|lord\nवीणा|vīṇā|lute\nतारा|tārā|star\nधेनुः|dhenuḥ|cow\nमयूरः|mayūraḥ|peacock\nएकम्|ekam|one\nपादः|pādaḥ|foot\nमुखम्|mukham|face\nकमलम्|kamalam|lotus\nकाकः|kākaḥ|crow\nकपोतः|kapotaḥ|dove\nफलम्|phalam|fruit\nरथः|rathaḥ|chariot\nघटः|ghaṭaḥ|pot\nजलम्|jalam|water\nसिंहः|siṃhaḥ|lion\nगजः|gajaḥ|elephant\nलता|latā|creeper\nछदः|chadaḥ|cover\nभयम्|bhayam|fear\nवृषभः|vṛṣabhaḥ|bull\nमीनः|mīnaḥ|fish\nवानरः|vānaraḥ|monkey\nशशः|śaśaḥ|hare\nचषकः|caṣakaḥ|cup\nचमसः|camasaḥ|spoon\nछाया|chāyā|shadow\nशिखा|śikhā|tuft\nदीपः|dīpaḥ|lamp\nवीथी|vīthī|street\nशुनकः|śunakaḥ|dog\nशुकः|śukaḥ|parrot\nतैलम्|tailam|oil\nरोगी|rogī|patient\nमोहः|mohaḥ|delusion\nकोपः|kopaḥ|anger\nमूढः|mūḍhaḥ|foolish person\nशूरः|śūraḥ|brave person\nधूलिः|dhūliḥ|dust\nमृगः|mṛgaḥ|deer\nमौनम्|maunam|silence\nगौरी|gaurī|fair one\nपिबति|pibati|drinks\nहसति|hasati|laughs\nगृहम्|gṛham|house\nशृगालः|śṛgālaḥ|jackal\nवेणी|veṇī|braid\nधावति|dhāvati|runs\nनमति|namati|bows\nअहम्|aham|I\nपठामि|paṭhāmi|I read\n:::\n\n## Dictation Set\n\n:::vocabGrid{title=\"Listen And Verify\" cols=\"7\"}\nगायकः|gāyakaḥ|singer\nबालकः|bālakaḥ|boy\nघटः|ghaṭaḥ|pot\nपटः|paṭaḥ|cloth\nनखः|nakhaḥ|nail\nवानरः|vānaraḥ|monkey\nकमलम्|kamalam|lotus\nघण्टा|ghaṇṭā|bell\nचलचित्रम्|calacitram|movie\nतन्तुवायः|tantuvāyaḥ|weaver\nरजकः|rajakaḥ|washerman\nनगरम्|nagaram|city\nकागदम्|kāgadam|paper\nगिरिः|giriḥ|mountain\nहोमः|homaḥ|sacred fire ritual\nसहोदरः|sahodaraḥ|brother\nवेगः|vegaḥ|speed\nढक्का|ḍhakkā|drum\nरङ्गवल्ली|raṅgavallī|decorative floor design\nशय्या|śayyā|bed\nषडाननः|ṣaḍānanaḥ|six-faced one\nदुन्दुभिः|dundubhiḥ|kettledrum\nपेटिका|peṭikā|box\nभोजनम्|bhojanam|food\nमीनः|mīnaḥ|fish\nभाषा|bhāṣā|language\nगुणः|guṇaḥ|quality\nदोषः|doṣaḥ|fault\nघट्कोणः|ghaṭkoṇaḥ|hexagon\nतरङ्गः|taraṅgaḥ|wave\nऊर्ध्वम्|ūrdhvam|upward\nऋतुः|ṛtuḥ|season\nजनः|janaḥ|person\nओदनम्|odanam|cooked rice\nकूपः|kūpaḥ|well\nघटी|ghaṭī|small pot\nऊर्णी|ūrṇī|wool\nअजः|ajaḥ|goat\nऔदार्यम्|audāryam|generosity\nकपिः|kapiḥ|monkey\nआकाशवाणी|ākāśavāṇī|radio\nपक्षः|pakṣaḥ|side\nबकः|bakaḥ|crane\nटीका|ṭīkā|commentary\nअंशुमान्|aṃśumān|sun\nफलकम्|phalakam|board\nसर्पः|sarpaḥ|snake\nललाटम्|lalāṭam|forehead\nसज्जीतम्|sajjītam|prepared\nशकटः|śakaṭaḥ|cart\nआभरणम्|ābharaṇam|ornament\nटिप्पणी|ṭippaṇī|note\nखड्गः|khaḍgaḥ|sword\nधनम्|dhanam|wealth\nरक्षकः|rakṣakaḥ|protector\nपत्रम्|patram|leaf\nनदी|nadī|river\nनयनम्|nayanam|eye\nजलम्|jalam|water\nत्यक्त्वा|tyaktvā|having left\nअपसराः|apsarāḥ|celestial maiden\nतडागः|taḍāgaḥ|pond\nब्राह्मणः|brāhmaṇaḥ|brahmin\nमहात्मा|mahātmā|great soul\nसंस्कृतिः|saṃskṛtiḥ|culture\nब्रह्मसिद्धिः|brahmasiddhiḥ|spiritual attainment\n:::\n\n## Advanced Word Set\n\n:::vocabGrid{title=\"Longer Practice Words\" cols=\"7\"}\nकष्टम्|kaṣṭam|difficulty\nकाष्ठम्|kāṣṭham|wood\nज्येष्ठः|jyeṣṭhaḥ|elder\nअन्नम्|annam|food\nभ्रातः|bhrātaḥ|brother\nकुलकलः|kulakalaḥ|family sound\nभ्रमणम्|bhramaṇam|wandering\nकिञ्चित्|kiñcit|a little\nचक्रम्|cakram|wheel\nग्रामः|grāmaḥ|village\nसत्यम्|satyam|truth\nसुगन्धः|sugandhaḥ|fragrance\nअश्रुणि|aśruṇi|tears\nकथन|kathana|speaking\nपृष्ठतः|pṛṣṭhataḥ|behind\nदुर्दिनम्|durdinam|bad day\nभाग्यम्|bhāgyam|fortune\nरक्षकः|rakṣakaḥ|protector\nकुक्कुटः|kukkuṭaḥ|rooster\nरिक्तम्|riktam|empty\nशिक्षकः|śikṣakaḥ|teacher\nतस्मिन्|tasmin|in that\nअस्मिन्|asmin|in this\nप्रचलन|pracalana|movement\nभिन्नम्|bhinnam|different\nनाट्यम्|nāṭyam|dance\nउद्यानम्|udyānam|garden\nध्वजः|dhvajaḥ|flag\nतथास्तु|tathāstu|so be it\nप्राप्तम्|prāptam|obtained\nचिन्ता|cintā|worry\nगुह्यः|guhyaḥ|secret\nउल्लासः|ullāsaḥ|joy\nशय्या|śayyā|bed\nपण्डितः|paṇḍitaḥ|scholar\nउद्योगः|udyogaḥ|effort\nपरक्षः|parakṣaḥ|remote\nपरिशुद्धः|pariśuddhaḥ|pure\nपरस्मै|parasmai|for another\nश्रुत्वा|śrutvā|having heard\nअमृतुः|amṛtuḥ|immortal one\nअम्बरः|ambaraḥ|sky\nभिक्षुकः|bhikṣukaḥ|beggar\nसमृद्धिः|samṛddhiḥ|prosperity\nमध्याह्ने|madhyāhne|at noon\nगोधी|godhī|wheat\nउष्णम्|uṣṇam|hot\nआश्रमः|āśramaḥ|hermitage\nजिह्वा|jihvā|tongue\nस्त्रीः|strīḥ|woman\nशत्रुः|śatruḥ|enemy\nदरिद्रः|daridraḥ|poor person\nअध्यक्षः|adhyakṣaḥ|leader\nतृप्तिः|tṛptiḥ|satisfaction\nश्रेयसम्|śreyasam|the better good\nइत्यादयः|ityādayaḥ|and so on\n:::\n\n## Quick Check\n\n1. Read each conjunct once by itself.\n2. Read the same sound inside a word.\n3. Reveal transliteration only if your pronunciation feels unsure.\n4. Reveal the meaning after you can read the word smoothly.",
+      "toc": [
+        {
+          "id": "basic-patterns",
+          "text": "Basic Patterns",
+          "depth": 2
+        },
+        {
+          "id": "visual-practice",
+          "text": "Visual Practice",
+          "depth": 2
+        },
+        {
+          "id": "words-with-conjuncts",
+          "text": "Words With Conjuncts",
+          "depth": 2
+        },
+        {
+          "id": "words-to-alphabets",
+          "text": "Words To Alphabets",
+          "depth": 2
+        },
+        {
+          "id": "fill-in-practice",
+          "text": "Fill In Practice",
+          "depth": 2
+        },
+        {
+          "id": "read-aloud-words",
+          "text": "Read Aloud Words",
+          "depth": 2
+        },
+        {
+          "id": "dictation-set",
+          "text": "Dictation Set",
+          "depth": 2
+        },
+        {
+          "id": "advanced-word-set",
+          "text": "Advanced Word Set",
+          "depth": 2
+        },
+        {
+          "id": "quick-check",
+          "text": "Quick Check",
+          "depth": 2
+        }
+      ],
+      "mediaEmbeds": []
+    },
     "consonants": {
       "title": "Consonants",
       "description": "Lesson 2 - Sanskrit consonants: 25 categorized stops (vargīya), uncategorized consonants (avargīya), semivowels, sibilants, and special letters.",
@@ -500,6 +554,25 @@ export const docsContent = {
         {
           "id": "exercise-example",
           "text": "Exercise Example",
+          "depth": 2
+        }
+      ],
+      "mediaEmbeds": []
+    },
+    "practice-widgets": {
+      "title": "Practice Widgets",
+      "description": "Authoring notes for fill-in blanks and vocabulary grids.",
+      "date": "08-07-2026",
+      "body": "Practice widgets are useful when a lesson needs quick recall, pronunciation checking, or meaning review without giving away the answer immediately.\n\n## Fill In The Blank\n\nUse a reveal blank when the learner should guess a missing word first. Put the whole visible sentence in the template so the eye button stays at the end of the practice line.\n\n```md\n[[answer]]\n[[answer|sentence prefix]]\n[[answer|sentence ___ rest of sentence]]\n```\n\nThe blank can include optional **transliteration**, **meaning**, and **meaningTamil** helper text.\n\n```md\n[[धावति|सिंहः ___|meaning=The lion runs]]\n\n[[धावति|सिंहः ___|transliteration=siṃhaḥ dhāvati|meaning=The lion runs|meaningTamil=சிங்கம் ஓடுகிறது]]\n\n[[फलानि|बालकः उद्याने ___ खादति।|transliteration=bālakaḥ udyāne phalāni khādati|meaning=The boy eats fruits in the garden.|meaningTamil=சிறுவன் தோட்டத்தில் பழங்களை சாப்பிடுகிறான்]]\n```\n\n[[धावति|सिंहः ___|meaning=The lion runs]]\n\n[[धावति|सिंहः ___|transliteration=siṃhaḥ dhāvati|meaning=The lion runs|meaningTamil=சிங்கம் ஓடுகிறது]]\n\n[[फलानि|बालकः उद्याने ___ खादति।|transliteration=bālakaḥ udyāne phalāni khādati|meaning=The boy eats fruits in the garden.|meaningTamil=சிறுவன் தோட்டத்தில் பழங்களை சாப்பிடுகிறான்]]\n\nWhen both transliteration and meaning are present, the transliteration appears in muted italics and the meaning appears beside it. Tamil meaning is optional and uses a separate accent color. If the template has no `___`, Lexora places the blank at the end automatically.\n\n## Vocabulary Grid\n\nUse a vocabulary grid for read-aloud practice, dictation, or compact review sets. The learner can toggle either transliteration or meaning with the eye buttons.\n\n```md\n:::vocabGrid{title=\"Read Aloud Words\" cols=\"7\"}\nअम्बा|ambā|mother\nपिता|pitā|father\nगुरुः|guruḥ|teacher\nईशः|īśaḥ|lord\nकमलम्|kamalam|lotus\nकिञ्चित्|kiñcit|a little\nब्रह्मसिद्धिः|brahmasiddhiḥ|spiritual attainment\n:::\n```\n\n:::vocabGrid{title=\"Read Aloud Words\" cols=\"7\"}\nअम्बा|ambā|mother\nपिता|pitā|father\nगुरुः|guruḥ|teacher\nईशः|īśaḥ|lord\nकमलम्|kamalam|lotus\nकिञ्चित्|kiñcit|a little\nब्रह्मसिद्धिः|brahmasiddhiḥ|spiritual attainment\n:::\n\n`cols=\"7\"` is the maximum recommended width. On narrower screens, the grid automatically reduces columns so the tiles stay inside the article area.",
+      "toc": [
+        {
+          "id": "fill-in-the-blank",
+          "text": "Fill In The Blank",
+          "depth": 2
+        },
+        {
+          "id": "vocabulary-grid",
+          "text": "Vocabulary Grid",
           "depth": 2
         }
       ],

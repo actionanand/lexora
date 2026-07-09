@@ -1,0 +1,65 @@
+---
+title: "Practice Widgets"
+description: "Authoring notes for fill-in blanks and vocabulary grids."
+order: 8
+date: 08-07-2026
+icon: "GraduationCap"
+---
+
+Practice widgets are useful when a lesson needs quick recall, pronunciation checking, or meaning review without giving away the answer immediately.
+
+## Fill In The Blank
+
+Use a reveal blank when the learner should guess a missing word first. Put the whole visible sentence in the template so the eye button stays at the end of the practice line.
+
+```md
+[[answer]]
+[[answer|sentence prefix]]
+[[answer|sentence ___ rest of sentence]]
+```
+
+The blank can include optional **transliteration**, **meaning**, and **meaningTamil** helper text.
+
+```md
+[[धावति|सिंहः ___|meaning=The lion runs]]
+
+[[धावति|सिंहः ___|transliteration=siṃhaḥ dhāvati|meaning=The lion runs|meaningTamil=சிங்கம் ஓடுகிறது]]
+
+[[फलानि|बालकः उद्याने ___ खादति।|transliteration=bālakaḥ udyāne phalāni khādati|meaning=The boy eats fruits in the garden.|meaningTamil=சிறுவன் தோட்டத்தில் பழங்களை சாப்பிடுகிறான்]]
+```
+
+[[धावति|सिंहः ___|meaning=The lion runs]]
+
+[[धावति|सिंहः ___|transliteration=siṃhaḥ dhāvati|meaning=The lion runs|meaningTamil=சிங்கம் ஓடுகிறது]]
+
+[[फलानि|बालकः उद्याने ___ खादति।|transliteration=bālakaḥ udyāne phalāni khādati|meaning=The boy eats fruits in the garden.|meaningTamil=சிறுவன் தோட்டத்தில் பழங்களை சாப்பிடுகிறான்]]
+
+When both transliteration and meaning are present, the transliteration appears in muted italics and the meaning appears beside it. Tamil meaning is optional and uses a separate accent color. If the template has no `___`, Lexora places the blank at the end automatically.
+
+## Vocabulary Grid
+
+Use a vocabulary grid for read-aloud practice, dictation, or compact review sets. The learner can toggle either transliteration or meaning with the eye buttons.
+
+```md
+:::vocabGrid{title="Read Aloud Words" cols="7"}
+अम्बा|ambā|mother
+पिता|pitā|father
+गुरुः|guruḥ|teacher
+ईशः|īśaḥ|lord
+कमलम्|kamalam|lotus
+किञ्चित्|kiñcit|a little
+ब्रह्मसिद्धिः|brahmasiddhiḥ|spiritual attainment
+:::
+```
+
+:::vocabGrid{title="Read Aloud Words" cols="7"}
+अम्बा|ambā|mother
+पिता|pitā|father
+गुरुः|guruḥ|teacher
+ईशः|īśaḥ|lord
+कमलम्|kamalam|lotus
+किञ्चित्|kiñcit|a little
+ब्रह्मसिद्धिः|brahmasiddhiḥ|spiritual attainment
+:::
+
+`cols="7"` is the maximum recommended width. On narrower screens, the grid automatically reduces columns so the tiles stay inside the article area.
