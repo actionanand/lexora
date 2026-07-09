@@ -1047,6 +1047,13 @@
   white-space: nowrap;
 }
 
+.vocabWordLong {
+  font-size: clamp(0.76rem, 1vw, 1.02rem);
+  line-height: 1.08;
+  white-space: normal;
+  word-break: keep-all;
+}
+
 .vocabHelper {
   max-width: 100%;
   color: color-mix(in srgb, #ffffff 72%, transparent);

@@ -946,10 +946,13 @@ function VocabularyGrid({
       <span className={styles.vocabGrid} style={gridStyle}>
         {parsed.map((item, index) => {
           const helper = mode === "transliteration" ? item.transliteration : mode === "meaning" ? item.meaning : "";
+          const isLongWord = item.word.length > 10 || item.word.includes("/") || item.word.includes(" ");
 
           return (
             <span className={styles.vocabCell} key={`${item.word}-${index}`}>
-              <span className={styles.vocabWord}>{item.word}</span>
+              <span className={`${styles.vocabWord} ${isLongWord ? styles.vocabWordLong : ""}`}>
+                {item.word}
+              </span>
               {helper ? <span className={styles.vocabHelper}>({helper})</span> : null}
             </span>
           );
