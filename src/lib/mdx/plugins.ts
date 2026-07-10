@@ -552,7 +552,7 @@ export function remarkLetterCards() {
 export function remarkLetterGrid() {
   return (tree: MdxNode) => {
     visit(tree, (node: MdxNode) => {
-      if (node.type !== "textDirective" || node.name !== "letterGrid") {
+      if ((node.type !== "textDirective" && node.type !== "leafDirective") || node.name !== "letterGrid") {
         return;
       }
 

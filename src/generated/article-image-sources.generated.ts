@@ -3,14 +3,20 @@
 
 import { BOY as articleImageSources_0 } from "@/app/dataImg/png/boy";
 import { GIRL as articleImageSources_1 } from "@/app/dataImg/png/girl";
-import { LANDSCAPE as articleImageSources_2 } from "@/app/bigDataImg/png/landscape";
-import { HOUSE as articleImageSources_3 } from "@/app/bigDataImg/svg/house";
-import { PEACOCK as articleImageSources_4 } from "@/app/dataImg/svg/peacock";
+import { IVY as articleImageSources_2 } from "@/app/bigDataImg/png/ivy";
+import { KING as articleImageSources_3 } from "@/app/bigDataImg/png/king";
+import { LANDSCAPE as articleImageSources_4 } from "@/app/bigDataImg/png/landscape";
+import { STICK as articleImageSources_5 } from "@/app/bigDataImg/png/stick";
+import { HOUSE as articleImageSources_6 } from "@/app/bigDataImg/svg/house";
+import { PEACOCK as articleImageSources_7 } from "@/app/dataImg/svg/peacock";
 
 export const articleImageSources = {
   "png:boy": articleImageSources_0,
   "png:girl": articleImageSources_1,
-  "png:landscape": articleImageSources_2,
-  "svg:house": articleImageSources_3,
-  "svg:peacock": articleImageSources_4
+  "png:ivy": articleImageSources_2,
+  "png:king": articleImageSources_3,
+  "png:landscape": articleImageSources_4,
+  "png:stick": articleImageSources_5,
+  "svg:house": articleImageSources_6,
+  "svg:peacock": articleImageSources_7
 } as const;
