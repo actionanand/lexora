@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[522016,["/lexora/_next/static/chunks/0h1-jdq3ndqn8.js","/lexora/_next/static/chunks/1ntn7efqc-iiw.js","/lexora/_next/static/chunks/0k4-ojig21nwu.js"],""]
+3:I[897367,["/lexora/_next/static/chunks/0h1-jdq3ndqn8.js","/lexora/_next/static/chunks/1ntn7efqc-iiw.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"className":"not-found-page","children":[["$","h1",null,{"children":"Page not found"}],["$","p",null,{"children":"The language or lesson you requested is not available yet."}],["$","$L2",null,{"href":"/","children":"Return home","className":"ButtonLink-module__854jQa__button ButtonLink-module__854jQa__primary "}]]}],[["$","script","script-0",{"src":"/lexora/_next/static/chunks/0k4-ojig21nwu.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"ABstPBBQ1Cdoa5oRjMayb"}
+5:null

@@ -1,0 +1,3 @@
+:HL["/lexora/_next/static/chunks/1khl5iio_whn3.css","style"]
+:HL["/lexora/_next/static/chunks/2st6w7816g14t.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"docs","param":null,"prefetchHints":0,"slots":{"children":{"name":"parts","param":{"type":"oc","key":"sanskrit/conjuncts","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"ABstPBBQ1Cdoa5oRjMayb"}
