@@ -219,7 +219,10 @@ function RevealBlank({
   const hasVisibleDetails = Boolean((revealed && transliteration) || meaning || meaningTamil);
 
   return (
-    <span className={`${styles.revealPractice} ${hasDetails ? styles.revealPracticeDetailed : ""}`}>
+    <span
+      className={`${styles.revealPractice} ${hasDetails ? styles.revealPracticeDetailed : ""}`}
+      data-lexora-practice="blank"
+    >
       <span className={styles.revealLine}>
         {prefix ? <span>{renderInlineMarkdown(prefix)}</span> : null}
         <span className={`${styles.revealBlank} ${revealed ? styles.revealBlankOpen : ""}`}>
@@ -770,6 +773,7 @@ function SentenceCard({
   return (
     <span
       className={`${styles.sentenceCard} ${splitLayout ? styles.sentenceSplit : styles.sentenceStack}`}
+      data-lexora-practice="sentence"
       role="group"
       aria-label={readableLabel}
     >
